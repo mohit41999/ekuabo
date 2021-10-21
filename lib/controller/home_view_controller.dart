@@ -23,6 +23,17 @@ class HomeViewController extends GetxController {
     _getHomeMarketPlace();
   }
 
+  Future getMostRecentBlogs() async {
+    var result = await _homeViewRepository.getMostRecentNewsFeed();
+    if (result != null) {
+      MostRecentNewFeed mostRecentNewFeed = result;
+      if (mostRecentNewFeed.status) {
+        mostRecentNewsFeeds = mostRecentNewFeed.data;
+      }
+    }
+    _getHomeMarketPlace();
+  }
+
   void _getHomeMarketPlace() async {
     var result = await _homeViewRepository.getHomeMarketPlace();
     if (result != null) {

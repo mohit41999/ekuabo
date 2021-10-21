@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:ekuabo/controller/blog_controller.dart';
 import 'package:ekuabo/controller/home_controller.dart';
 import 'package:ekuabo/controller/home_view_controller.dart';
 
@@ -11,6 +12,7 @@ import 'package:ekuabo/widgets/UnderlineWidget.dart';
 import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:get/get.dart';
 import 'package:velocity_x/velocity_x.dart';
 
@@ -25,24 +27,7 @@ class _HomeViewState extends State<HomeView> {
   final _homeController = Get.find<HomeController>();
 
   final _con = Get.find<HomeViewController>();
-
-  var mostRecentFeeds = [
-    MostRecentFeedModel(
-        img: EkuaboAsset.demo_img2,
-        title: "Fashion",
-        subtitle: "Welcome to our group",
-        days: "15 days ago"),
-    MostRecentFeedModel(
-        img: EkuaboAsset.demo_img,
-        title: "Francis",
-        subtitle: "Welcome to our group",
-        days: "15 days ago"),
-    MostRecentFeedModel(
-        img: EkuaboAsset.demo_img2,
-        title: "Fashion",
-        subtitle: "Welcome to our group",
-        days: "15 days ago"),
-  ];
+  final _blogcon = Get.find<BlogController>();
 
   @override
   Widget build(BuildContext context) {
@@ -58,6 +43,7 @@ class _HomeViewState extends State<HomeView> {
           onRefresh: () {
             setState(() {
               _con.getMostRecentNewsFeed();
+              _blogcon.getMostRecent();
             });
             return _con.getMostRecentNewsFeed();
           },
@@ -288,98 +274,91 @@ class _HomeViewState extends State<HomeView> {
                     .pOnly(left: 16),
                 16.heightBox,
                 // Latest Blog
-                Container(
-                  height: 290,
-                  child: ListView.builder(
-                      physics: const BouncingScrollPhysics(),
-                      shrinkWrap: true,
-                      scrollDirection: Axis.horizontal,
-                      itemCount: mostRecentFeeds.length,
-                      itemBuilder: (ctx, index) {
-                        return VxCard(Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Image.asset(
-                              mostRecentFeeds[index].img,
-                              height: 110,
-                              fit: BoxFit.cover,
-                              width: 220,
-                            ),
-                            10.heightBox,
-                            "Lorem ipsum dolor sit amet"
-                                .text
-                                .size(12)
-                                .bold
-                                .black
-                                .make()
-                                .pOnly(left: 10),
-                            "Lorem ipsum dolor sit amet,\n consetetur sadipscing elitr"
-                                .text
-                                .light
-                                .size(10)
-                                .make()
-                                .pOnly(left: 10, top: 16),
-                            10.heightBox,
-                            Row(
-                              children: [
-                                Row(
-                                  children: [
-                                    Image.asset(
-                                      EkuaboAsset.ic_user2,
-                                      color: MyColor.mainColor,
-                                      width: 14,
-                                      height: 14,
-                                    ),
-                                    5.widthBox,
-                                    "YUSUF ADETELA"
-                                        .text
+                _blogcon.mostRecentBlogs.isEmpty
+                    ? EkuaboString.no_results_found.text
+                        .size(14)
+                        .medium
+                        .color(Colors.grey)
+                        .make()
+                        .objectTopLeft()
+                        .pOnly(left: 16)
+                    : Container(
+                        height: 290,
+                        child: ListView.builder(
+                            physics: const BouncingScrollPhysics(),
+                            shrinkWrap: true,
+                            scrollDirection: Axis.horizontal,
+                            itemCount: 4,
+                            itemBuilder: (ctx, index) {
+                              return VxCard(Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Image.network(
+                                    _blogcon.mostRecentBlogs[index].blog_image,
+                                    height: 110,
+                                    fit: BoxFit.cover,
+                                    width: 220,
+                                  ),
+                                  10.heightBox,
+                                  _blogcon
+                                      .mostRecentBlogs[index].blog_title.text
+                                      .size(12)
+                                      .bold
+                                      .black
+                                      .make()
+                                      .pOnly(left: 10),
+                                  (_blogcon.mostRecentBlogs[index].blog_desc
+                                              .length <=
+                                          50)
+                                      ? Html(
+                                          data: _blogcon
+                                              .mostRecentBlogs[index].blog_desc,
+                                        )
+                                      : Html(
+                                          data: _blogcon.mostRecentBlogs[index]
+                                                  .blog_desc
+                                                  .substring(0, 51) +
+                                              '...',
+                                        ),
+                                  10.heightBox,
+                                  Row(
+                                    children: [
+                                      Icon(
+                                        Icons.access_time_rounded,
+                                        color: MyColor.mainColor,
+                                        size: 14,
+                                      ),
+                                      5.widthBox,
+                                      _blogcon
+                                          .mostRecentBlogs[index].created.text
+                                          .size(10)
+                                          .light
+                                          .black
+                                          .make()
+                                    ],
+                                  ).pOnly(left: 10, right: 10),
+                                  MaterialButton(
+                                    onPressed: () {},
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(20),
+                                        side: BorderSide(
+                                            color: MyColor.mainColor,
+                                            width: 0.8)),
+                                    color: Colors.white,
+                                    child: EkuaboString.viewDetails.text
                                         .size(10)
-                                        .light
-                                        .black
-                                        .make()
-                                  ],
-                                ),
-                                10.widthBox,
-                                Row(
-                                  children: [
-                                    Icon(
-                                      Icons.access_time_rounded,
-                                      color: MyColor.mainColor,
-                                      size: 14,
-                                    ),
-                                    5.widthBox,
-                                    mostRecentFeeds[index]
-                                        .days
-                                        .text
-                                        .size(10)
-                                        .light
-                                        .black
-                                        .make()
-                                  ],
-                                ),
-                              ],
-                            ).pOnly(left: 10, right: 10),
-                            MaterialButton(
-                              onPressed: () {},
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20),
-                                  side: BorderSide(
-                                      color: MyColor.mainColor, width: 0.8)),
-                              color: Colors.white,
-                              child: EkuaboString.viewDetails.text
-                                  .size(10)
-                                  .medium
-                                  .color(MyColor.mainColor)
-                                  .make(),
-                            ).pOnly(left: 50, top: 16)
-                          ],
-                        ))
-                            .elevation(10)
-                            .bottomLeftRounded(value: 12)
-                            .make()
-                            .pOnly(left: 10);
-                      }),
-                ),
+                                        .medium
+                                        .color(MyColor.mainColor)
+                                        .make(),
+                                  ).pOnly(left: 50, top: 16)
+                                ],
+                              ))
+                                  .elevation(10)
+                                  .bottomLeftRounded(value: 12)
+                                  .make()
+                                  .pOnly(left: 10);
+                            }),
+                      ),
 // Market Place
                 20.heightBox,
                 EkuaboString.market_place.text
@@ -545,7 +524,10 @@ class _HomeViewState extends State<HomeView> {
           ),
         ),
       ),
-      initState: (_) => _con.getMostRecentNewsFeed(),
+      initState: (_) {
+        _con.getMostRecentNewsFeed();
+        _blogcon.getMostRecent();
+      },
     );
   }
 }

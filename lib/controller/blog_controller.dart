@@ -8,7 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
 class BlogController extends GetxController {
-  List<MostRecentBlogData> mostRecentBlogs;
+  List<MostRecentBlogData> mostRecentBlogs = [];
   BlogRepository _blogRepository;
   BlogController() {
     _blogRepository = Get.find<BlogRepository>();
