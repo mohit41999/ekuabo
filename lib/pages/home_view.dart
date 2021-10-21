@@ -24,6 +24,19 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    setState(() {
+      _blogcon.getMostRecent().then((value) {
+        setState(() {
+          _blogcon.mostRecentBlogs;
+        });
+      });
+    });
+  }
+
   final _homeController = Get.find<HomeController>();
 
   final _con = Get.find<HomeViewController>();
@@ -37,6 +50,7 @@ class _HomeViewState extends State<HomeView> {
       Get.parameters = {};
     } else
       fromSignup = false;
+
     return GetBuilder<HomeViewController>(
       builder: (_) => Scaffold(
         body: RefreshIndicator(
