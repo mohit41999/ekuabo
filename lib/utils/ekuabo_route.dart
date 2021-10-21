@@ -1,0 +1,32 @@
+class EkuaboRoute{
+static const rootName="/";
+static const splashScreen="/splash";
+static const signInScreen="/sign_in";
+static const signUpScreen="/sign_up";
+static const forgotPasswordScreen="/forgot_password";
+static const otpVerificationScreen="/otp_verification";
+static const homeScreen="/home_page";
+static const homeView="/";
+static const marketPlace="/market_place";
+static const newsFeed="/news_feed";
+static const blog="/blog";
+static const more="/more";
+static const newsFeedsViewAll="/news_feeds_view_all";
+static const marketPlaceListing="/market_place_listing";
+static const blog_detail="/blog_detail";
+static const postBlog="/post_blog";
+static const postNewListing="/post_new_listing";
+static const myPostBannerAd="/my_post_banner_ad";
+static const myGroup="/my_group";
+static const postNewGroup="/post_new_group";
+static const groupInvitation="/group_invitation";
+static const groupJoinRequest="/group_join_request";
+static const transactionHistory="/transaction_history";
+static const setting="/setting";
+static const editProfile="/edit_profile";
+static const createMyAd="/create_my_ad";
+static const privateMessageBoard="/private_message_board";
+static const chatConversation="/chat_conversation";
+static const editMarketPlaceInfo="/edit_market_place_info";
+static const payment_web_view="/payment_web_view";
+}
