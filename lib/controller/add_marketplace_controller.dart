@@ -1,6 +1,8 @@
 import 'package:ekuabo/model/apimodel/market_place/category_bean.dart';
 import 'package:ekuabo/model/apimodel/market_place/sub_category_bean.dart';
+import 'package:ekuabo/model/apimodel/user_bean.dart';
 import 'package:ekuabo/network/repository/market_place_repository.dart';
+import 'package:ekuabo/utils/pref_manager.dart';
 import 'package:ekuabo/utils/utils.dart';
 import 'package:ekuabo/widgets/progress_view.dart';
 import 'package:flutter/cupertino.dart';
@@ -24,6 +26,16 @@ class AddMarketPlaceController extends GetxController {
   AddMarketPlaceController() {
     _marketPlaceRepository = Get.find<MarketPlaceRepository>();
   }
+
+  void clearcontrollers() {
+    titlecontroller.clear();
+    listlocationcontroller.clear();
+    listdesccontroller.clear();
+    productpricecontroller.clear();
+    emailcontroller.clear();
+    mobilenumbercontroller.clear();
+  }
+
   void getCategory() async {
     selectedCategory = null;
     selectedSubCategory = null;

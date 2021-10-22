@@ -11,57 +11,59 @@ import 'package:ekuabo/utils/pref_manager.dart';
 import 'package:ekuabo/utils/utils.dart';
 import 'package:get/get.dart';
 
-class PrivateMsgRepository
-{
+class PrivateMsgRepository {
   HttpService _httpService;
 
-  PrivateMsgRepository(){
+  PrivateMsgRepository() {
     _httpService = HttpServiceImpl();
     _httpService.init();
   }
-  Future<ChatBean> getChatList() async
-  {
+  Future<ChatBean> getChatList() async {
     try {
-      var userBean=await PrefManager.getUser();
-      var response = await _httpService.postRequest('message/get_chat_user_list.php',{'user_id':userBean.data.id});
+      var userBean = await PrefManager.getUser();
+      var response = await _httpService.postRequest(
+          'message/get_chat_user_list.php', {'user_id': userBean.data.id});
       // var response = await _httpService.postRequest('message/get_chat_user_list.php',{'user_id':'1'});
       var jsonString = json.decode(response.data);
       return ChatBean.fromJson(jsonString);
     } on HttpException catch (e) {
-      Utils().showSnackBar(Get.context,e.response);
+      Utils().showSnackBar(Get.context, e.response);
     }
     return null;
   }
-  Future<BaseBean> deleteChat(Map<String,String> param) async
-  {
+
+  Future<BaseBean> deleteChat(Map<String, String> param) async {
     try {
-      var response = await _httpService.postRequest('message/get_chat_user_list.php',param);
+      var response =
+          await _httpService.postRequest('message/delete_chat_user.php', param);
       var jsonString = json.decode(response.data);
       return BaseBean.fromJson(jsonString);
     } on HttpException catch (e) {
-      Utils().showSnackBar(Get.context,e.response);
+      Utils().showSnackBar(Get.context, e.response);
     }
     return null;
   }
-  Future<UserChatBean> getUserChatList(Map<String,String> param) async
-  {
+
+  Future<UserChatBean> getUserChatList(Map<String, String> param) async {
     try {
-      var response = await _httpService.postRequest('message/get_chat.php',param);
+      var response =
+          await _httpService.postRequest('message/get_chat.php', param);
       var jsonString = json.decode(response.data);
       return UserChatBean.fromJson(jsonString);
     } on HttpException catch (e) {
-      Utils().showSnackBar(Get.context,e.response);
+      Utils().showSnackBar(Get.context, e.response);
     }
     return null;
   }
-  Future<BaseBean> sendMsg(Map<String,String> param) async
-  {
+
+  Future<BaseBean> sendMsg(Map<String, String> param) async {
     try {
-      var response = await _httpService.postRequest('message/send_msg.php',param);
+      var response =
+          await _httpService.postRequest('message/send_msg.php', param);
       var jsonString = json.decode(response.data);
       return BaseBean.fromJson(jsonString);
     } on HttpException catch (e) {
-      Utils().showSnackBar(Get.context,e.response);
+      Utils().showSnackBar(Get.context, e.response);
     }
     return null;
   }

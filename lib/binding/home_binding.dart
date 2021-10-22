@@ -6,6 +6,7 @@ import 'package:ekuabo/controller/chat_conversation_controller.dart';
 import 'package:ekuabo/controller/edit_profile_controller.dart';
 import 'package:ekuabo/controller/group_invitation_controller.dart';
 import 'package:ekuabo/controller/group_join_request_controller.dart';
+import 'package:ekuabo/controller/group_new_feed_controller.dart';
 import 'package:ekuabo/controller/home_controller.dart';
 import 'package:ekuabo/controller/home_view_controller.dart';
 import 'package:ekuabo/controller/market_place_controller.dart';
@@ -23,6 +24,7 @@ import 'package:ekuabo/controller/transaction_history_controller.dart';
 import 'package:ekuabo/network/repository/banner_repository.dart';
 import 'package:ekuabo/network/repository/blog_repository.dart';
 import 'package:ekuabo/network/repository/edit_profile_repository.dart';
+import 'package:ekuabo/network/repository/group_post_new_feed_repository.dart';
 import 'package:ekuabo/network/repository/home_view_repository.dart';
 import 'package:ekuabo/network/repository/market_place_repository.dart';
 import 'package:ekuabo/network/repository/more_repository.dart';
@@ -33,7 +35,7 @@ import 'package:ekuabo/network/repository/setting_repository.dart';
 import 'package:ekuabo/network/repository/transaction_history_repository.dart';
 import 'package:get/get.dart';
 
-class HomeBinding extends Bindings{
+class HomeBinding extends Bindings {
   @override
   void dependencies() {
     Get.put(HomeController());
@@ -54,11 +56,14 @@ class HomeBinding extends Bindings{
     Get.put(NewFeedController());
 
     /// My Groups
+    ///
     Get.put(MyGroupRepository());
+    Get.put(GroupNewFeedRepository());
     Get.put(MyGroupController());
     Get.put(PostNewGroupController());
     Get.put(GroupInvitationController());
     Get.put(GroupJoinRequestController());
+    Get.put(GroupNewFeedController());
 
     /// Setting
     Get.put(SettingRepository());

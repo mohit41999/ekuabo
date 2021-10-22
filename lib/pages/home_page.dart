@@ -148,7 +148,7 @@ class HomePage extends StatelessWidget {
                           width: 24,
                           height: 24,
                         ).p(10),
-                        label: EkuaboString.viewAll),
+                        label: EkuaboString.most_recent_postings),
                     BottomNavigationBarItem(
                         icon: Image.asset(
                           _con.selectedIndex == 3

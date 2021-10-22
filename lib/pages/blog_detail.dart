@@ -36,7 +36,7 @@ class BlogDetail extends StatelessWidget {
                 )),
                 10.widthBox,
                 Flexible(
-                  child: mostRecentBlogData.blog_title
+                  child: mostRecentBlogData.blogTitle
                       .text
                   .maxLines(1)
                   .ellipsis
@@ -60,7 +60,7 @@ class BlogDetail extends StatelessWidget {
                          child: Hero(
                            tag: "Blog",
                              child:CachedNetworkImage(
-                           imageUrl: mostRecentBlogData.blog_image,
+                           imageUrl: mostRecentBlogData.blogImage,
                            placeholder: (context,url)=>const CircularProgressIndicator(),
                          ))
                        )
@@ -97,7 +97,7 @@ class BlogDetail extends StatelessWidget {
                  ],
                ),
                10.heightBox,
-               Html(data:mostRecentBlogData.blog_desc,
+               Html(data:mostRecentBlogData.blogDesc,
                        /*.text
                    .align(TextAlign.justify)
                    .size(12)
@@ -154,7 +154,7 @@ class BlogDetail extends StatelessWidget {
                      Image.asset(EkuaboAsset.ic_send2,
                      width: 16,
                        height: 16,
-                     ).onTap(()=>_con.callAddCommentApi(context,mostRecentBlogData.blog_id))
+                     ).onTap(()=>_con.callAddCommentApi(context,mostRecentBlogData.blogId))
                    ],
                  ).p(10)
                )

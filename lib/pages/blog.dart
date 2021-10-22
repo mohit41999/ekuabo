@@ -160,10 +160,21 @@ class _BlogState extends State<Blog> {
                                               child: CachedNetworkImage(
                                                 imageUrl: _con
                                                     .mostRecentBlogs[index]
-                                                    .blog_image,
+                                                    .blogImage,
                                                 fit: BoxFit.cover,
                                                 placeholder: (context, url) =>
                                                     const CircularProgressIndicator(),
+                                                errorWidget: (_, __, ___) {
+                                                  return Container(
+                                                    width: 100,
+                                                    height: 100,
+                                                    decoration: BoxDecoration(
+                                                        image: DecorationImage(
+                                                            image: AssetImage(
+                                                                'asset/images/error_img.jpg'),
+                                                            fit: BoxFit.cover)),
+                                                  );
+                                                },
                                               ),
                                             ))
                                                 .width(100)
@@ -179,7 +190,7 @@ class _BlogState extends State<Blog> {
                                                 _showPopupMenu(context, index)),
                                           ],
                                         ),
-                                        _con.mostRecentBlogs[index].blog_title
+                                        _con.mostRecentBlogs[index].blogTitle
                                             .text
                                             .maxLines(1)
                                             .ellipsis
@@ -193,7 +204,7 @@ class _BlogState extends State<Blog> {
                                           height: 60,
                                           child: Html(
                                             data: _con.mostRecentBlogs[index]
-                                                .blog_desc,
+                                                .blogDesc,
                                             /*.text
                                 .maxLines(4)
                                 .color(MyColor.blackColor.withOpacity(0.6))
@@ -206,16 +217,47 @@ class _BlogState extends State<Blog> {
                                         Row(
                                           children: [
                                             CircleAvatar(
-                                              child: Image.asset(
-                                                  EkuaboAsset.avatar),
+                                              backgroundImage: (_con
+                                                          .mostRecentBlogs[
+                                                              index]
+                                                          .profileDetails
+                                                          .profile
+                                                          .toString() ==
+                                                      null.toString())
+                                                  ? AssetImage(
+                                                      'asset/images/error_img.jpg')
+                                                  : NetworkImage(_con
+                                                      .mostRecentBlogs[index]
+                                                      .profileDetails
+                                                      .profile),
                                             ),
                                             10.widthBox,
-                                            "Lorem Ipsum"
-                                                .text
-                                                .color(MyColor.lightBlueColor)
-                                                .size(10)
-                                                .medium
-                                                .make()
+                                            Flexible(
+                                              child: (_con
+                                                          .mostRecentBlogs[
+                                                              index]
+                                                          .profileDetails
+                                                          .username
+                                                          .toString() ==
+                                                      null.toString())
+                                                  ? 'Anonymous'
+                                                      .text
+                                                      .color(MyColor
+                                                          .lightBlueColor)
+                                                      .size(10)
+                                                      .medium
+                                                      .make()
+                                                  : _con
+                                                      .mostRecentBlogs[index]
+                                                      .profileDetails
+                                                      .username
+                                                      .text
+                                                      .color(MyColor
+                                                          .lightBlueColor)
+                                                      .size(10)
+                                                      .medium
+                                                      .make(),
+                                            )
                                           ],
                                         ).pOnly(left: 16),
                                         Row(

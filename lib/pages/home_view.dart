@@ -213,17 +213,18 @@ class _HomeViewState extends State<HomeView> {
                                       child: (_con.mostRecentNewsFeeds[index]
                                                   .feed_msg.length <=
                                               50)
-                                          ? Text(
-                                              _con.mostRecentNewsFeeds[index]
+                                          ? Html(
+                                              data: _con
+                                                  .mostRecentNewsFeeds[index]
                                                   .feed_msg,
-                                              style: TextStyle(fontSize: 13),
                                             )
-                                          : Text(
-                                              _con.mostRecentNewsFeeds[index]
+                                          : Html(
+                                              data: _con
+                                                      .mostRecentNewsFeeds[
+                                                          index]
                                                       .feed_msg
                                                       .substring(0, 51) +
                                                   '...',
-                                              style: TextStyle(fontSize: 13),
                                             ),
                                     ),
 
@@ -304,68 +305,92 @@ class _HomeViewState extends State<HomeView> {
                             scrollDirection: Axis.horizontal,
                             itemCount: 4,
                             itemBuilder: (ctx, index) {
-                              return VxCard(Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Image.network(
-                                    _blogcon.mostRecentBlogs[index].blog_image,
-                                    height: 110,
-                                    fit: BoxFit.cover,
-                                    width: 220,
-                                  ),
-                                  10.heightBox,
-                                  _blogcon
-                                      .mostRecentBlogs[index].blog_title.text
-                                      .size(12)
-                                      .bold
-                                      .black
-                                      .make()
-                                      .pOnly(left: 10),
-                                  (_blogcon.mostRecentBlogs[index].blog_desc
-                                              .length <=
-                                          50)
-                                      ? Html(
-                                          data: _blogcon
-                                              .mostRecentBlogs[index].blog_desc,
-                                        )
-                                      : Html(
-                                          data: _blogcon.mostRecentBlogs[index]
-                                                  .blog_desc
-                                                  .substring(0, 51) +
-                                              '...',
+                              return VxCard(Container(
+                                width: 220,
+                                child: Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    CachedNetworkImage(
+                                      imageUrl: _blogcon.mostRecentBlogs[index]
+                                              .blogImage ??
+                                          '',
+                                      placeholder: (ctx, _) => const SizedBox(
+                                        width: 20,
+                                        height: 20,
+                                        child: Center(
+                                          child: CircularProgressIndicator(),
                                         ),
-                                  10.heightBox,
-                                  Row(
-                                    children: [
-                                      Icon(
-                                        Icons.access_time_rounded,
-                                        color: MyColor.mainColor,
-                                        size: 14,
                                       ),
-                                      5.widthBox,
-                                      _blogcon
-                                          .mostRecentBlogs[index].created.text
+                                      height: 110,
+                                      width: 220,
+                                      fit: BoxFit.fill,
+                                    ),
+                                    _blogcon
+                                        .mostRecentBlogs[index].blogTitle.text
+                                        .size(12)
+                                        .bold
+                                        .black
+                                        .make()
+                                        .pOnly(left: 10),
+                                    (_blogcon.mostRecentBlogs[index].blogDesc
+                                                .length <=
+                                            50)
+                                        ? Flexible(
+                                            child: Html(
+                                              data: _blogcon
+                                                  .mostRecentBlogs[index]
+                                                  .blogDesc,
+                                            ),
+                                          )
+                                        : Flexible(
+                                            child: Html(
+                                              data: _blogcon
+                                                      .mostRecentBlogs[index]
+                                                      .blogDesc
+                                                      .substring(0, 51) +
+                                                  '...',
+                                            ),
+                                          ),
+                                    Row(
+                                      children: [
+                                        Icon(
+                                          Icons.access_time_rounded,
+                                          color: MyColor.mainColor,
+                                          size: 14,
+                                        ),
+                                        5.widthBox,
+                                        _blogcon
+                                            .mostRecentBlogs[index].created.text
+                                            .size(10)
+                                            .light
+                                            .black
+                                            .make()
+                                      ],
+                                    ).pOnly(left: 10, right: 10),
+                                    MaterialButton(
+                                      onPressed: () {
+                                        Navigator.pushNamed(
+                                            context, EkuaboRoute.blog_detail,
+                                            arguments: _blogcon
+                                                .mostRecentBlogs[index]);
+                                      },
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(20),
+                                          side: BorderSide(
+                                              color: MyColor.mainColor,
+                                              width: 0.8)),
+                                      color: Colors.white,
+                                      child: EkuaboString.viewDetails.text
                                           .size(10)
-                                          .light
-                                          .black
-                                          .make()
-                                    ],
-                                  ).pOnly(left: 10, right: 10),
-                                  MaterialButton(
-                                    onPressed: () {},
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(20),
-                                        side: BorderSide(
-                                            color: MyColor.mainColor,
-                                            width: 0.8)),
-                                    color: Colors.white,
-                                    child: EkuaboString.viewDetails.text
-                                        .size(10)
-                                        .medium
-                                        .color(MyColor.mainColor)
-                                        .make(),
-                                  ).pOnly(left: 50, top: 16)
-                                ],
+                                          .medium
+                                          .color(MyColor.mainColor)
+                                          .make(),
+                                    ).pOnly(left: 50, top: 16)
+                                  ],
+                                ),
                               ))
                                   .elevation(10)
                                   .bottomLeftRounded(value: 12)
@@ -373,7 +398,6 @@ class _HomeViewState extends State<HomeView> {
                                   .pOnly(left: 10);
                             }),
                       ),
-// Market Place
                 20.heightBox,
                 EkuaboString.market_place.text
                     .size(16)

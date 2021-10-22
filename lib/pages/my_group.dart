@@ -224,6 +224,8 @@ class MyGroups extends StatelessWidget {
                                                   _con.myGroups[index].image,
                                               grp_name: _con
                                                   .myGroups[index].groupName,
+                                              members: _con
+                                                  .myGroups[index].totalMember,
                                             )));
                               });
                             }),

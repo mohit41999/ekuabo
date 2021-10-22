@@ -3,6 +3,7 @@ import 'package:ekuabo/main.dart';
 import 'package:ekuabo/model/apimodel/group/GroupdetailsModel.dart';
 import 'package:ekuabo/network/repository/group_details_services.dart';
 import 'package:ekuabo/pages/group_members.dart';
+import 'package:ekuabo/pages/post_new_groupFeed.dart';
 import 'package:ekuabo/utils/color.dart';
 import 'package:ekuabo/utils/ekuabo_asset.dart';
 import 'package:ekuabo/utils/ekuabo_string.dart';
@@ -18,13 +19,15 @@ class GroupDetails extends StatefulWidget {
   final String created_date;
   final String image_url;
   final String grp_name;
+  final String members;
 
   const GroupDetails(
       {Key key,
       @required this.group_id,
       @required this.created_date,
       @required this.image_url,
-      @required this.grp_name})
+      @required this.grp_name,
+      this.members})
       : super(key: key);
 
   @override
@@ -36,20 +39,23 @@ class _GroupDetailsState extends State<GroupDetails> {
   GroupDetailsModel _groupModel;
   bool loading = true;
   bool isgroupfeed = false;
+  void inititalize() {
+    groupmodel =
+        GroupDetailsServices().getgroupdetails(widget.group_id).then((value) {
+      setState(() {
+        _groupModel = value;
+        print(value);
+        loading = false;
+      });
+      return value;
+    });
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     setState(() {
-      groupmodel =
-          GroupDetailsServices().getgroupdetails(widget.group_id).then((value) {
-        setState(() {
-          _groupModel = value;
-          print(value);
-
-          loading = false;
-        });
-        return value;
-      });
+      inititalize();
     });
     super.initState();
   }
@@ -57,6 +63,20 @@ class _GroupDetailsState extends State<GroupDetails> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => PostNewGroupFeed(
+                        group_id: widget.group_id,
+                      ))).then((value) {
+            inititalize();
+          });
+        },
+        child: Icon(Icons.add),
+        backgroundColor: MyColor.mainColor,
+      ),
       appBar: EcuaboAppBar().getAppBar(),
       body: (loading)
           ? Center(child: CircularProgressIndicator())
@@ -83,7 +103,9 @@ class _GroupDetailsState extends State<GroupDetails> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => GroupMembers()));
+                                      builder: (context) => GroupMembers(
+                                            group_id: widget.group_id,
+                                          )));
                             }),
                             shadows: const [
                               BoxShadow(
@@ -119,7 +141,7 @@ class _GroupDetailsState extends State<GroupDetails> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 commonRow(
-                                    data: '0 Members',
+                                    data: '${widget.members} Members',
                                     iconData: Icons.people,
                                     iconColor: Colors.grey),
                                 SizedBox(
@@ -160,7 +182,9 @@ class _GroupDetailsState extends State<GroupDetails> {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => GroupMembers()));
+                                        builder: (context) => GroupMembers(
+                                              group_id: widget.group_id,
+                                            )));
                               }),
                               shadows: const [
                                 BoxShadow(

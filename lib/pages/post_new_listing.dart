@@ -329,55 +329,91 @@ class _PostNewListingState extends State<PostNewListing> {
                         ),
                       ),
                       16.heightBox,
-                      ElevatedButton(
-                        onPressed: () {
-                          showCurrencyPicker(
-                            context: context,
-                            showFlag: true,
-                            showCurrencyName: true,
-                            showCurrencyCode: true,
-                            onSelect: (Currency currency) {
-                              print('Select currency: ${currency.symbol}');
-                              setState(() {
-                                _con.currency_code = currency.symbol.toString();
-                              });
-                            },
-                            favorite: ['USD'],
-                          );
-                        },
-                        child: const Text('Show currency picker'),
-                      ),
+
                       // Enter Product Price
-                      ConstrainedBox(
-                        constraints:
-                            const BoxConstraints(minHeight: 10, maxHeight: 40),
-                        child: TextFormField(
-                          controller: _con.productpricecontroller,
-                          keyboardType: TextInputType.number,
-                          decoration: InputDecoration(
-                              filled: true,
-                              labelText:
-                                  EkuaboString.enter_product_price.toString() +
-                                      _con.currency_code,
-                              labelStyle: const TextStyle(
-                                  fontFamily: EkuaboAsset.CERA_PRO_FONT,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w200,
-                                  color: MyColor.secondColor),
-                              hintText:
-                                  EkuaboString.enter_product_price.toString() +
-                                      _con.currency_code,
-                              hintStyle: const TextStyle(
-                                  fontFamily: EkuaboAsset.CERA_PRO_FONT,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w200),
-                              fillColor: Colors.white,
-                              border: const OutlineInputBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(7)),
-                                  borderSide: BorderSide(
-                                      width: 1, color: MyColor.mainColor))),
-                        ),
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Expanded(
+                            flex: 1,
+                            child: GestureDetector(
+                              onTap: () {
+                                showCurrencyPicker(
+                                  context: context,
+                                  showFlag: true,
+                                  showCurrencyName: true,
+                                  showCurrencyCode: true,
+                                  onSelect: (Currency currency) {
+                                    print(
+                                        'Select currency: ${currency.symbol}');
+                                    setState(() {
+                                      _con.currency_code =
+                                          currency.symbol.toString();
+                                    });
+                                  },
+                                  favorite: ['USD'],
+                                );
+                              },
+                              child: Container(
+                                  height: 40,
+                                  decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      border:
+                                          Border.all(color: MyColor.mainColor),
+                                      borderRadius: BorderRadius.circular(7)),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      (_con.currency_code == '')
+                                          ? Text(
+                                              '\$',
+                                              style: TextStyle(fontSize: 20),
+                                            )
+                                          : Text(
+                                              _con.currency_code,
+                                              style: TextStyle(fontSize: 15),
+                                            ),
+                                      Icon(Icons.arrow_drop_down),
+                                    ],
+                                  )),
+                            ),
+                          ),
+                          5.widthBox,
+                          Expanded(
+                            flex: 5,
+                            child: Container(
+                              height: 40,
+                              child: TextFormField(
+                                controller: _con.productpricecontroller,
+                                keyboardType: TextInputType.number,
+                                decoration: InputDecoration(
+                                    filled: true,
+                                    labelText: EkuaboString.enter_product_price
+                                            .toString() +
+                                        _con.currency_code,
+                                    labelStyle: const TextStyle(
+                                        fontFamily: EkuaboAsset.CERA_PRO_FONT,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w200,
+                                        color: MyColor.secondColor),
+                                    hintText: EkuaboString.enter_product_price
+                                            .toString() +
+                                        _con.currency_code,
+                                    hintStyle: const TextStyle(
+                                        fontFamily: EkuaboAsset.CERA_PRO_FONT,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w200),
+                                    fillColor: Colors.white,
+                                    border: const OutlineInputBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(7)),
+                                        borderSide: BorderSide(
+                                            width: 1,
+                                            color: MyColor.mainColor))),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                       16.heightBox,
                       // Email
@@ -483,7 +519,7 @@ class _PostNewListingState extends State<PostNewListing> {
                   MaterialButton(
                     minWidth: 170,
                     onPressed: () {
-                      postListing();
+                      postListing().then((value) => _con.clearcontrollers());
                     },
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30)),

@@ -16,7 +16,7 @@ class NewsFeedsViewAllController extends GetxController {
   LgaBean lgaBean;
   HomeViewRepository _homeViewRepository;
   List<NewsFeedData> newsFeeds = [];
-  final commentCtl = TextEditingController();
+  TextEditingController commentCtl = TextEditingController();
   NewsFeedsViewAllController() {
     _homeViewRepository = Get.find<HomeViewRepository>();
   }

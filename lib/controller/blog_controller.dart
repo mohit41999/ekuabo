@@ -34,7 +34,7 @@ class BlogController extends GetxController {
     loader.show();
     var param = {
       'user_id': userBean.data.id,
-      'blog_id': mostRecentBlogs[index].blog_id
+      'blog_id': mostRecentBlogs[index].blogId
     };
     var result = await _blogRepository.deleteBlog(param);
 
