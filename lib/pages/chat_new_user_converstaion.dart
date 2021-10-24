@@ -1,7 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:ekuabo/controller/chat_conversation_controller.dart';
 import 'package:ekuabo/controller/home_controller.dart';
-import 'package:ekuabo/model/apimodel/chat/chat_bean.dart';
 import 'package:ekuabo/utils/color.dart';
 import 'package:ekuabo/utils/ekuabo_asset.dart';
 import 'package:ekuabo/utils/ekuabo_string.dart';
@@ -11,11 +10,21 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:velocity_x/velocity_x.dart';
 
-class ChatConversation extends StatelessWidget {
+class ChatNewUserConversation extends StatefulWidget {
+  final String chatId;
+  final String username;
+
+  const ChatNewUserConversation({Key key, this.chatId, this.username})
+      : super(key: key);
+  @override
+  _ChatNewUserConversationState createState() =>
+      _ChatNewUserConversationState();
+}
+
+class _ChatNewUserConversationState extends State<ChatNewUserConversation> {
   final _homeController = Get.find<HomeController>();
+
   final _con = Get.find<ChatConversationController>();
-  ChatDataBean chatBean;
-  ChatConversation({Key key, this.chatBean}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +48,7 @@ class ChatConversation extends StatelessWidget {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      "${EkuaboString.conversation_with} ${chatBean.username}"
+                      "${EkuaboString.conversation_with} ${widget.username}"
                           .text
                           .medium
                           .heightTight
@@ -58,7 +67,7 @@ class ChatConversation extends StatelessWidget {
                     reverse: true,
                     child: ListView.builder(
                       itemBuilder: (ctx, index) {
-                        return _con.chatList[index].toUserId != chatBean.chatId
+                        return _con.chatList[index].toUserId != widget.chatId
                             ? Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
@@ -229,7 +238,7 @@ class ChatConversation extends StatelessWidget {
                             EkuaboAsset.ic_send2,
                             width: 16,
                             height: 16,
-                          ).onTap(() => _con.sendMsg(chatBean.chatId)))
+                          ).onTap(() => _con.sendMsg(widget.chatId)))
                     ],
                   ).pOnly(left: 10, right: 10, bottom: 20)
                 ],
@@ -248,7 +257,7 @@ class ChatConversation extends StatelessWidget {
           ),
         ),
       ),
-      initState: (_) => _con.getUserChatList(chatBean.chatId),
+      initState: (_) => _con.getUserChatList(widget.chatId),
     );
   }
 }

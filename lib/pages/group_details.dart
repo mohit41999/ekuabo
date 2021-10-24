@@ -1,5 +1,4 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:ekuabo/main.dart';
 import 'package:ekuabo/model/apimodel/group/GroupdetailsModel.dart';
 import 'package:ekuabo/network/repository/group_details_services.dart';
 import 'package:ekuabo/pages/group_members.dart';
@@ -74,7 +73,10 @@ class _GroupDetailsState extends State<GroupDetails> {
             inititalize();
           });
         },
-        child: Icon(Icons.add),
+        child: Icon(
+          Icons.add,
+          color: Colors.white,
+        ),
         backgroundColor: MyColor.mainColor,
       ),
       appBar: EcuaboAppBar().getAppBar(),
@@ -105,6 +107,7 @@ class _GroupDetailsState extends State<GroupDetails> {
                                   MaterialPageRoute(
                                       builder: (context) => GroupMembers(
                                             group_id: widget.group_id,
+                                            group_name: widget.grp_name,
                                           )));
                             }),
                             shadows: const [
@@ -184,6 +187,7 @@ class _GroupDetailsState extends State<GroupDetails> {
                                     MaterialPageRoute(
                                         builder: (context) => GroupMembers(
                                               group_id: widget.group_id,
+                                              group_name: widget.grp_name,
                                             )));
                               }),
                               shadows: const [

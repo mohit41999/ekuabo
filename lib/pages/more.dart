@@ -1,8 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:ekuabo/controller/home_controller.dart';
 import 'package:ekuabo/controller/more_controller.dart';
-
-import 'package:ekuabo/pages/home_page.dart';
+import 'package:ekuabo/pages/edit_market_place_info.dart';
 import 'package:ekuabo/utils/color.dart';
 import 'package:ekuabo/utils/ekuabo_asset.dart';
 import 'package:ekuabo/utils/ekuabo_route.dart';
@@ -183,7 +182,8 @@ class More extends StatelessWidget {
                         onPressed: () {
                           _homeController.navigationQueue.addLast(4);
                           _homeController.bottomNavigatorKey.currentState
-                              .pushNamed(EkuaboRoute.editProfile);
+                              .pushNamed(EkuaboRoute.editProfile)
+                              .then((value) => _con.getUserProfile());
                         },
                         color: MyColor.mainColor,
                         height: 30,
@@ -258,6 +258,34 @@ class More extends StatelessWidget {
                           _con.userProfileDataBean.marketplaceInfo.message.text
                               .light
                               .make(),
+                          MaterialButton(
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          EditMarketPlaceInfo()));
+                            },
+                            color: MyColor.mainColor,
+                            height: 30,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16)),
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.edit,
+                                  color: Colors.white,
+                                  size: 16,
+                                ),
+                                10.widthBox,
+                                EkuaboString.edit_market_place_info_short.text
+                                    .size(10)
+                                    .medium
+                                    .white
+                                    .make()
+                              ],
+                            ),
+                          ),
                         ],
                       )
                     ],
@@ -265,11 +293,7 @@ class More extends StatelessWidget {
                       .elevation(7)
                       .withRounded(value: 10)
                       .make()
-                      .onTap(() {
-                    _homeController.navigationQueue.addLast(4);
-                    _homeController.bottomNavigatorKey.currentState
-                        .pushNamed(EkuaboRoute.editMarketPlaceInfo);
-                  }).pOnly(left: 16, right: 16),
+                      .pOnly(left: 16, right: 16),
                   16.heightBox,
                   EkuaboString.about.text
                       .size(14)

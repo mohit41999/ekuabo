@@ -1,21 +1,19 @@
 import 'dart:convert';
 
 import 'package:ekuabo/controller/home_controller.dart';
-import 'package:ekuabo/controller/market_place_controller.dart';
 import 'package:ekuabo/model/apimodel/market_place/marketplace_Details_model.dart';
 import 'package:ekuabo/model/apimodel/user_bean.dart';
 import 'package:ekuabo/pages/market_place.dart';
 import 'package:ekuabo/utils/color.dart';
 import 'package:ekuabo/utils/ekuabo_asset.dart';
-import 'package:ekuabo/utils/ekuabo_route.dart';
 import 'package:ekuabo/utils/ekuabo_string.dart';
 import 'package:ekuabo/utils/pref_manager.dart';
 import 'package:ekuabo/widgets/EcuaboAppBar.dart';
 import 'package:ekuabo/widgets/UnderlineWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:velocity_x/velocity_x.dart';
 import 'package:http/http.dart' as http;
+import 'package:velocity_x/velocity_x.dart';
 
 class MarketPlaceListing extends StatefulWidget {
   // const MarketPlaceListing();

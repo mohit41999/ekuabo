@@ -1,13 +1,42 @@
+import 'package:ekuabo/model/apimodel/user_bean.dart';
 import 'package:ekuabo/utils/color.dart';
 import 'package:ekuabo/utils/ekuabo_asset.dart';
 import 'package:ekuabo/utils/ekuabo_string.dart';
+import 'package:ekuabo/utils/pref_manager.dart';
 import 'package:ekuabo/widgets/EcuaboAppBar.dart';
 import 'package:ekuabo/widgets/UnderlineWidget.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:velocity_x/velocity_x.dart';
 
-class EditMarketPlaceInfo extends StatelessWidget {
-  const EditMarketPlaceInfo({Key key}) : super(key: key);
+class EditMarketPlaceInfo extends StatefulWidget {
+  final String market_id;
+  const EditMarketPlaceInfo({Key key, this.market_id}) : super(key: key);
+
+  @override
+  _EditMarketPlaceInfoState createState() => _EditMarketPlaceInfoState();
+}
+
+class _EditMarketPlaceInfoState extends State<EditMarketPlaceInfo> {
+  String Token = '123456789';
+
+  TextEditingController market_TitleCtl = TextEditingController();
+  TextEditingController market_DescCtl = TextEditingController();
+  TextEditingController market_AddressCtl = TextEditingController();
+  TextEditingController market_ContactnoCtl = TextEditingController();
+  TextEditingController market_WebsiteCtl = TextEditingController();
+
+  Future editMarketPlaceInfo() async {
+    UserBean userBean = await PrefManager.getUser();
+    var response = await http.post(
+        Uri.parse(
+            'https://eku-abo.com/api/marketplace/update_marketplace_info.php'),
+        body: {
+          'token': Token,
+          'user_id': userBean.data.id,
+          'market_id': '',
+        });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,16 +71,17 @@ class EditMarketPlaceInfo extends StatelessWidget {
                       constraints:
                           const BoxConstraints(minHeight: 10, maxHeight: 40),
                       child: TextFormField(
+                        controller: market_TitleCtl,
                         keyboardType: TextInputType.text,
                         decoration: InputDecoration(
                             filled: true,
-                            labelText: "username",
+                            labelText: "Market Title",
                             labelStyle: const TextStyle(
                                 fontFamily: EkuaboAsset.CERA_PRO_FONT,
                                 fontSize: 14,
                                 fontWeight: FontWeight.w200,
                                 color: MyColor.secondColor),
-                            hintText: "username",
+                            hintText: "Market Title",
                             hintStyle: const TextStyle(
                                 fontFamily: EkuaboAsset.CERA_PRO_FONT,
                                 fontSize: 12,
@@ -80,19 +110,20 @@ class EditMarketPlaceInfo extends StatelessWidget {
                     ),
                     16.heightBox,
                     TextFormField(
+                      controller: market_DescCtl,
                       keyboardType: TextInputType.multiline,
                       maxLines: 5,
                       minLines: 5,
                       decoration: InputDecoration(
                           filled: true,
                           alignLabelWithHint: true,
-                          labelText: "Lorem ipsum dolor sir amet",
+                          labelText: "MarketPlace Description",
                           labelStyle: const TextStyle(
                               fontFamily: EkuaboAsset.CERA_PRO_FONT,
                               fontSize: 14,
                               fontWeight: FontWeight.w200,
                               color: MyColor.secondColor),
-                          hintText: "Lorem ipsum dolor sir amet",
+                          hintText: "MarketPlace Description",
                           hintStyle: const TextStyle(
                               fontFamily: EkuaboAsset.CERA_PRO_FONT,
                               fontSize: 12,
@@ -119,16 +150,17 @@ class EditMarketPlaceInfo extends StatelessWidget {
                             constraints: const BoxConstraints(
                                 minHeight: 10, maxHeight: 40),
                             child: TextFormField(
+                              controller: market_AddressCtl,
                               keyboardType: TextInputType.text,
                               decoration: InputDecoration(
                                   filled: true,
-                                  labelText: "Lorem Ipsum",
+                                  labelText: "Market address",
                                   labelStyle: const TextStyle(
                                       fontFamily: EkuaboAsset.CERA_PRO_FONT,
                                       fontSize: 14,
                                       fontWeight: FontWeight.w200,
                                       color: MyColor.secondColor),
-                                  hintText: "Lorem Ipsum",
+                                  hintText: "Market address(Market Home town)",
                                   hintStyle: const TextStyle(
                                       fontFamily: EkuaboAsset.CERA_PRO_FONT,
                                       fontSize: 12,
@@ -149,16 +181,17 @@ class EditMarketPlaceInfo extends StatelessWidget {
                             constraints: const BoxConstraints(
                                 minHeight: 10, maxHeight: 40),
                             child: TextFormField(
-                              keyboardType: TextInputType.text,
+                              controller: market_ContactnoCtl,
+                              keyboardType: TextInputType.number,
                               decoration: InputDecoration(
                                   filled: true,
-                                  labelText: "Lorem Ipsum",
+                                  labelText: "contact_no",
                                   labelStyle: const TextStyle(
                                       fontFamily: EkuaboAsset.CERA_PRO_FONT,
                                       fontSize: 14,
                                       fontWeight: FontWeight.w200,
                                       color: MyColor.secondColor),
-                                  hintText: "Lorem Ipsum",
+                                  hintText: "contact_no",
                                   hintStyle: const TextStyle(
                                       fontFamily: EkuaboAsset.CERA_PRO_FONT,
                                       fontSize: 12,
@@ -183,16 +216,17 @@ class EditMarketPlaceInfo extends StatelessWidget {
                             constraints: const BoxConstraints(
                                 minHeight: 10, maxHeight: 40),
                             child: TextFormField(
+                              controller: market_WebsiteCtl,
                               keyboardType: TextInputType.emailAddress,
                               decoration: InputDecoration(
                                   filled: true,
-                                  labelText: "Lorem.ipsum@lorem.com",
+                                  labelText: "website",
                                   labelStyle: const TextStyle(
                                       fontFamily: EkuaboAsset.CERA_PRO_FONT,
                                       fontSize: 14,
                                       fontWeight: FontWeight.w200,
                                       color: MyColor.secondColor),
-                                  hintText: "Lorem.ipsum@lorem.com",
+                                  hintText: "website",
                                   hintStyle: const TextStyle(
                                       fontFamily: EkuaboAsset.CERA_PRO_FONT,
                                       fontSize: 12,

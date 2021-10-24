@@ -23,6 +23,17 @@ class EditProfileController extends GetxController {
   var interestCtl = TextEditingController();
   var funFactCtl = TextEditingController();
 
+  void clearControllers() {
+    nameCtl.clear();
+    emailCtl.clear();
+    contactNoCtl.clear();
+    homeContactCtl.clear();
+    homeTownCtl.clear();
+    occupationCtl.clear();
+    interestCtl.clear();
+    funFactCtl.clear();
+  }
+
   EditProfileController() {
     _repository = Get.find<EditProfileRepository>();
   }
@@ -48,18 +59,14 @@ class EditProfileController extends GetxController {
       var loader = ProgressView(context);
       var userBean = await PrefManager.getUser();
       loader.show();
-      userBean = UserBean(
-          data: UserDataBean(
-        id: userBean.data.id,
-        userName: nameCtl.text,
-        email: emailCtl.text,
-        homeContactNo: homeContactCtl.text,
-        mobileContactNo: contactNoCtl.text,
-        homeTown: homeTownCtl.text,
-        occupation: occupationCtl.text,
-        interests: interestCtl.text,
-        funFacts: funFactCtl.text,
-      ));
+      userBean.data.userName = nameCtl.text;
+      userBean.data.email = emailCtl.text;
+      userBean.data.homeContactNo = homeContactCtl.text;
+      userBean.data.homeTown = homeTownCtl.text;
+      userBean.data.mobileContactNo = contactNoCtl.text;
+      userBean.data.funFacts = funFactCtl.text;
+      userBean.data.occupation = occupationCtl.text;
+      userBean.data.interests = interestCtl.text;
       String jsonString = json.encode(userBean);
 
       PrefManager.putString(PrefManager.USER_DATA, jsonString);
@@ -76,6 +83,9 @@ class EditProfileController extends GetxController {
       };
       var result = await _repository.updateProfile(param);
       loader.dismiss();
+      clearControllers();
+      UserBean w = await PrefManager.getUser();
+      print(w.data.userName.toString() + 'heloooooooowowowowoooooooooo');
       if (result != null) {
         BaseBean baseBean = result;
         print('json string' + jsonString);

@@ -1,18 +1,13 @@
 import 'package:ekuabo/controller/home_controller.dart';
 import 'package:ekuabo/controller/market_place_controller.dart';
 import 'package:ekuabo/model/apimodel/market_place/category_bean.dart';
-import 'package:ekuabo/model/apimodel/user_bean.dart';
 import 'package:ekuabo/network/repository/market_place_repository.dart';
 import 'package:ekuabo/pages/marketplace_listing.dart';
 import 'package:ekuabo/pages/my_market_List.dart';
-
 import 'package:ekuabo/utils/color.dart';
 import 'package:ekuabo/utils/ekuabo_asset.dart';
-import 'package:ekuabo/utils/ekuabo_route.dart';
 import 'package:ekuabo/utils/ekuabo_string.dart';
 import 'package:ekuabo/utils/navigationDrawer.dart';
-import 'package:ekuabo/utils/pref_manager.dart';
-import 'package:ekuabo/widgets/EcuaboAppBar.dart';
 import 'package:ekuabo/widgets/UnderlineWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

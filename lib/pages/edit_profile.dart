@@ -237,32 +237,32 @@ class EditProfile extends StatelessWidget {
                         // )
                       ],
                     ),
-                    16.heightBox,
-                    VxBox(
-                      child: DropdownButtonHideUnderline(
-                        child: DropdownButton(
-                          items: [],
-                          hint: "Lorem ipsum"
-                              .text
-                              .size(14)
-                              .color(Colors.grey.withOpacity(0.6))
-                              .make(),
-                          icon: Image.asset(
-                            EkuaboAsset.ic_down_arrow,
-                            width: 15,
-                            height: 16,
-                          ),
-                          isExpanded: true,
-                        ),
-                      ).p(10),
-                    )
-                        .withDecoration(BoxDecoration(
-                            color: Colors.white,
-                            border: Border.all(color: Colors.black, width: 1),
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(7))))
-                        .height(40)
-                        .make(),
+                    // 16.heightBox,
+                    // VxBox(
+                    //   child: DropdownButtonHideUnderline(
+                    //     child: DropdownButton(
+                    //       items: [],
+                    //       hint: "Lorem ipsum"
+                    //           .text
+                    //           .size(14)
+                    //           .color(Colors.grey.withOpacity(0.6))
+                    //           .make(),
+                    //       icon: Image.asset(
+                    //         EkuaboAsset.ic_down_arrow,
+                    //         width: 15,
+                    //         height: 16,
+                    //       ),
+                    //       isExpanded: true,
+                    //     ),
+                    //   ).p(10),
+                    // )
+                    //     .withDecoration(BoxDecoration(
+                    //         color: Colors.white,
+                    //         border: Border.all(color: Colors.black, width: 1),
+                    //         borderRadius:
+                    //             const BorderRadius.all(Radius.circular(7))))
+                    //     .height(40)
+                    //     .make(),
                     16.heightBox,
                     ConstrainedBox(
                       constraints:

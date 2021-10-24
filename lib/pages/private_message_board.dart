@@ -1,15 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:ekuabo/controller/home_controller.dart';
 import 'package:ekuabo/controller/private_msg_controller.dart';
-
+import 'package:ekuabo/pages/users_list.dart';
 import 'package:ekuabo/utils/color.dart';
 import 'package:ekuabo/utils/ekuabo_asset.dart';
 import 'package:ekuabo/utils/ekuabo_route.dart';
 import 'package:ekuabo/utils/ekuabo_string.dart';
-import 'package:ekuabo/utils/log.dart';
 import 'package:ekuabo/widgets/EcuaboAppBar.dart';
 import 'package:ekuabo/widgets/UnderlineWidget.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:velocity_x/velocity_x.dart';
@@ -29,12 +27,38 @@ class PrivateMessageBoard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              EkuaboString.private_message_board.text.medium
-                  .size(18)
-                  .heightTight
-                  .make()
-                  .pOnly(left: 10),
-              UnderlineWidget().getUnderlineWidget().pOnly(left: 10),
+              10.heightBox,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    children: [
+                      EkuaboString.private_message_board.text.medium
+                          .size(18)
+                          .heightTight
+                          .make()
+                          .pOnly(left: 10),
+                      UnderlineWidget().getUnderlineWidget().pOnly(left: 10),
+                    ],
+                  ),
+                  VxCircle(
+                    backgroundColor: MyColor.mainColor,
+                    child: const Icon(
+                      Icons.add,
+                      color: Colors.white,
+                    ).onFeedBackTap(() async {
+                      Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => UsersList()))
+                          .then((value) => _con.getChatList());
+                    }),
+                    shadows: const [
+                      BoxShadow(color: MyColor.inactiveColor, blurRadius: 10)
+                    ],
+                  ).wh(40, 40).pOnly(right: 10)
+                ],
+              ),
               16.heightBox,
               ConstrainedBox(
                 constraints: BoxConstraints(minHeight: 400),
@@ -50,7 +74,7 @@ class PrivateMessageBoard extends StatelessWidget {
                         : ListView.builder(
                             itemBuilder: (ctx, index) {
                               return Dismissible(
-                                key: Key("$index"),
+                                key: UniqueKey(),
                                 onDismissed: (direction) =>
                                     _con.deleteChat(index),
                                 background: Icon(

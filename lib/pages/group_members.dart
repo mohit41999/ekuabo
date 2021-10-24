@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:ekuabo/model/apimodel/groups/group_member_model.dart';
 import 'package:ekuabo/model/apimodel/user_bean.dart';
+import 'package:ekuabo/utils/color.dart';
 import 'package:ekuabo/utils/pref_manager.dart';
 import 'package:ekuabo/widgets/EcuaboAppBar.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +10,9 @@ import 'package:http/http.dart' as http;
 
 class GroupMembers extends StatefulWidget {
   final String group_id;
-  const GroupMembers({Key key, this.group_id}) : super(key: key);
+  final String group_name;
+  const GroupMembers({Key key, this.group_id, this.group_name})
+      : super(key: key);
 
   @override
   _GroupMembersState createState() => _GroupMembersState();
@@ -50,22 +53,43 @@ class _GroupMembersState extends State<GroupMembers> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton.extended(
+        backgroundColor: MyColor.mainColor,
+        label: Text(
+          'Add Memebers +',
+          style: TextStyle(color: Colors.white),
+        ),
+        // tooltip: ,
+      ),
       appBar: EcuaboAppBar().getAppBar(),
       body: (loading)
           ? Center(
               child: CircularProgressIndicator(),
             )
-          : ListView.builder(
-              itemCount: memberdetail.data.length,
-              itemBuilder: (context, index) {
-                return ListTile(
-                  leading: CircleAvatar(
-                    backgroundImage:
-                        NetworkImage(memberdetail.data[index].profile),
-                  ),
-                  title: Text(memberdetail.data[index].username),
-                );
-              }),
+          : Column(
+              children: [
+                Text(
+                  widget.group_name,
+                  style: TextStyle(
+                      color: MyColor.mainColor,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold),
+                ),
+                Expanded(
+                  child: ListView.builder(
+                      itemCount: memberdetail.data.length,
+                      itemBuilder: (context, index) {
+                        return ListTile(
+                          leading: CircleAvatar(
+                            backgroundImage:
+                                NetworkImage(memberdetail.data[index].profile),
+                          ),
+                          title: Text(memberdetail.data[index].username),
+                        );
+                      }),
+                ),
+              ],
+            ),
     );
   }
 }

@@ -174,6 +174,7 @@ class EkuaboString {
 
   /// Edit MarketPlace Info
   static const edit_market_place_info = "Edit Marketplace Information";
+  static const edit_market_place_info_short = "Edit Marketplace Info ";
   static const market_place_info = "Marketplace Information";
   static const uploadLogoProfilePhoto = "Upload Logo or Profile Photo";
   static const delete = "Delete";
