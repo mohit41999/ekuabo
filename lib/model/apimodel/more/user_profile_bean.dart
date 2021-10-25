@@ -8,7 +8,9 @@ class UserProfileBean {
   UserProfileBean.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     message = json['message'];
-    data = json['data'] != null ? new UserProfileDataBean.fromJson(json['data']) : null;
+    data = json['data'] != null
+        ? new UserProfileDataBean.fromJson(json['data'])
+        : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -31,7 +33,7 @@ class UserProfileDataBean {
 
   UserProfileDataBean.fromJson(Map<String, dynamic> json) {
     profile =
-    json['profile'] != null ? new Profile.fromJson(json['profile']) : null;
+        json['profile'] != null ? new Profile.fromJson(json['profile']) : null;
     about = json['about'] != null ? new About.fromJson(json['about']) : null;
     marketplaceInfo = json['marketplace_info'] != null
         ? new MarketplaceInfo.fromJson(json['marketplace_info'])
@@ -67,15 +69,15 @@ class Profile {
 
   Profile(
       {this.id,
-        this.name,
-        this.mobileNo,
-        this.homeContactNo,
-        this.mobileContactNo,
-        this.address,
-        this.publicEmailId,
-        this.website,
-        this.profilePicture,
-        this.createdDate});
+      this.name,
+      this.mobileNo,
+      this.homeContactNo,
+      this.mobileContactNo,
+      this.address,
+      this.publicEmailId,
+      this.website,
+      this.profilePicture,
+      this.createdDate});
 
   Profile.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -133,6 +135,8 @@ class About {
 
 class MarketplaceInfo {
   String marketTitle;
+  String marketAddress;
+  String marketId;
   String message;
   String marketImage;
 
@@ -140,6 +144,8 @@ class MarketplaceInfo {
 
   MarketplaceInfo.fromJson(Map<String, dynamic> json) {
     marketTitle = json['market_title'];
+    marketAddress = json['market_address'];
+    marketId = json['market_id'];
     message = json['message'];
     marketImage = json['market_image'];
   }
@@ -147,6 +153,8 @@ class MarketplaceInfo {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['market_title'] = this.marketTitle;
+    data['market_address'] = this.marketAddress;
+    data['market_id'] = this.marketId;
     data['message'] = this.message;
     data['market_image'] = this.marketImage;
     return data;

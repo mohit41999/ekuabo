@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:ekuabo/model/apimodel/user_bean.dart';
 import 'package:ekuabo/utils/color.dart';
 import 'package:ekuabo/utils/ekuabo_asset.dart';
@@ -5,8 +7,10 @@ import 'package:ekuabo/utils/ekuabo_string.dart';
 import 'package:ekuabo/utils/pref_manager.dart';
 import 'package:ekuabo/widgets/EcuaboAppBar.dart';
 import 'package:ekuabo/widgets/UnderlineWidget.dart';
+import 'package:ekuabo/widgets/progress_view.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 class EditMarketPlaceInfo extends StatefulWidget {
@@ -25,18 +29,82 @@ class _EditMarketPlaceInfoState extends State<EditMarketPlaceInfo> {
   TextEditingController market_AddressCtl = TextEditingController();
   TextEditingController market_ContactnoCtl = TextEditingController();
   TextEditingController market_WebsiteCtl = TextEditingController();
+  final picker = ImagePicker();
+  PickedFile image;
 
   Future editMarketPlaceInfo() async {
+    var loader = ProgressView(context);
+    loader.show();
     UserBean userBean = await PrefManager.getUser();
     var response = await http.post(
         Uri.parse(
             'https://eku-abo.com/api/marketplace/update_marketplace_info.php'),
         body: {
-          'token': Token,
-          'user_id': userBean.data.id,
-          'market_id': '',
+          "token": Token,
+          "user_id": userBean.data.id,
+          "market_id": widget.market_id,
+          "market_title": market_TitleCtl.text,
+          "market_description": market_DescCtl.text,
+          "address": market_AddressCtl.text,
+          "contact_no": market_ContactnoCtl.text,
+          "website": market_WebsiteCtl.text,
         });
+    var Response = jsonDecode(response.body);
+    print(Response);
+    loader.dismiss();
   }
+
+  Future editMarketPlaceInfoImage(String i) async {
+    var loader = ProgressView(context);
+    loader.show();
+    UserBean userBean = await PrefManager.getUser();
+    var request = http.MultipartRequest(
+        "POST",
+        Uri.parse(
+            "https://eku-abo.com/api/marketplace/update_marketplace_info.php"));
+
+    request.fields['token'] = Token;
+    request.fields['user_id'] = userBean.data.id;
+    request.fields['market_id'] = widget.market_id;
+    request.fields['market_title'] = market_TitleCtl.text;
+    request.fields['market_description'] = market_DescCtl.text;
+    request.fields['address'] = market_AddressCtl.text;
+    request.fields['contact_no'] = market_ContactnoCtl.text;
+    request.fields['website'] = market_WebsiteCtl.text;
+
+    var pic = await http.MultipartFile.fromPath("market_image", i);
+    request.files.add(pic);
+    var response = await request.send();
+
+    //Get the response from the server
+    var responseData = await response.stream.toBytes();
+
+    var responseString = String.fromCharCodes(responseData);
+    print(responseString + 'kkkkkkkkkkkkkkkkkkkkkkkkk');
+    loader.dismiss();
+  }
+  // Future postImage(String imagePath) async {
+  //   UserBean userBean = await PrefManager.getUser();
+  //   var request = http.MultipartRequest(
+  //       "POST", Uri.parse("https://eku-abo.com/api/marketplace/update_marketplace_info.php"));
+  //   request.fields['user_id'] =userBean.data.id;
+  //   request.fields['market_id'] = '3';
+  //   request.fields['market_title'] =market_TitleCtl.text;
+  //   request.fields['market_description'] = market_DescCtl.text;
+  //   request.fields['address'] = market_AddressCtl.text;
+  //   request.fields['contact_no'] = market_ContactnoCtl.text;
+  //   request.fields['website'] =  market_WebsiteCtl.text;
+  //
+  //   var pic = await http.MultipartFile.fromPath("upload", imagePath);
+  //   request.files.add(pic);
+  //   var response = await request.send();
+  //
+  //   //Get the response from the server
+  //   var responseData = await response.stream.toBytes();
+  //
+  //   var responseString = String.fromCharCodes(responseData);
+  //   print(responseString + 'kkkkkkkkkkkkkkkkkkkkkkkkk');
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -97,9 +165,17 @@ class _EditMarketPlaceInfoState extends State<EditMarketPlaceInfo> {
                     16.heightBox,
                     Row(
                       children: [
-                        EkuaboString.uploadLogoProfilePhoto.text.medium
-                            .size(11)
-                            .make(),
+                        image == null
+                            ? EkuaboString.uploadLogoProfilePhoto.text.medium
+                                .size(11)
+                                .make()
+                            : image.path
+                                .substring(image.path.lastIndexOf('/') + 1,
+                                    image.path.length)
+                                .text
+                                .medium
+                                .size(11)
+                                .make(),
                         10.widthBox,
                         Image.asset(
                           EkuaboAsset.ic_upload,
@@ -107,7 +183,7 @@ class _EditMarketPlaceInfoState extends State<EditMarketPlaceInfo> {
                           height: 14,
                         )
                       ],
-                    ),
+                    ).onTap(() => _showPicker(context)),
                     16.heightBox,
                     TextFormField(
                       controller: market_DescCtl,
@@ -252,7 +328,11 @@ class _EditMarketPlaceInfoState extends State<EditMarketPlaceInfo> {
                 10.heightBox,
                 MaterialButton(
                   minWidth: 170,
-                  onPressed: () {},
+                  onPressed: () {
+                    (image == null)
+                        ? editMarketPlaceInfo()
+                        : editMarketPlaceInfoImage(image.path);
+                  },
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30)),
                   child: EkuaboString.submit
@@ -278,5 +358,51 @@ class _EditMarketPlaceInfoState extends State<EditMarketPlaceInfo> {
         ),
       ),
     );
+  }
+
+  void _showPicker(context) {
+    showModalBottomSheet(
+        context: context,
+        builder: (BuildContext bc) {
+          return SafeArea(
+            child: Container(
+              child: Wrap(
+                children: <Widget>[
+                  ListTile(
+                      leading: Icon(Icons.photo_library),
+                      title: Text('Photo Library'),
+                      onTap: () {
+                        _imgFromGallery();
+                        Navigator.of(context).pop();
+                      }),
+                  ListTile(
+                    leading: Icon(Icons.photo_camera),
+                    title: Text('Camera'),
+                    onTap: () {
+                      _imgFromCamera();
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
+  }
+
+  Future _imgFromCamera() async {
+    var imagepicked =
+        await picker.getImage(source: ImageSource.camera, imageQuality: 50);
+    setState(() {
+      image = imagepicked;
+    });
+  }
+
+  Future _imgFromGallery() async {
+    var imagepicked =
+        await picker.getImage(source: ImageSource.gallery, imageQuality: 50);
+    setState(() {
+      image = imagepicked;
+    });
   }
 }

@@ -6,26 +6,39 @@ import 'package:ekuabo/widgets/progress_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
-class GroupInvitationController extends GetxController
-{
+class GroupInvitationController extends GetxController {
   MyGroupRepository _groupRepository;
 
-  List<MyGroupDataBean> groupInvitations=[];
+  List<MyGroupDataBean> groupInvitations = [];
 
-  GroupInvitationController()
-  {
-    _groupRepository=Get.find<MyGroupRepository>();
+  GroupInvitationController() {
+    _groupRepository = Get.find<MyGroupRepository>();
   }
-  void getGroupInvitationList()async
-  {
-    var result=await _groupRepository.getGroupInvitationList();
-    if(result!=null)
-    {
-      MyGroupBean myGroupBean=result;
-      if(myGroupBean.status)
-      {
-        groupInvitations=myGroupBean.data;
+  void getGroupInvitationList() async {
+    var result = await _groupRepository.getGroupInvitationList();
+    if (result != null) {
+      MyGroupBean myGroupBean = result;
+      if (myGroupBean.status) {
+        groupInvitations = myGroupBean.data;
+      } else {
+        groupInvitations = [];
       }
+    }
+    update();
+  }
+
+  void AcceptGroupInvitation(String invite_id) async {
+    var result = await _groupRepository.AcceptGroupInvitationRequest(invite_id);
+    if (result != null) {
+      getGroupInvitationList();
+    }
+    update();
+  }
+
+  void RejectGroupInvitation(String invite_id) async {
+    var result = await _groupRepository.RejectGroupInvitationRequest(invite_id);
+    if (result != null) {
+      getGroupInvitationList();
     }
     update();
   }

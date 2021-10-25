@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:ekuabo/model/apimodel/groups/group_member_model.dart';
 import 'package:ekuabo/model/apimodel/user_bean.dart';
+import 'package:ekuabo/pages/AddGroupMembers.dart';
 import 'package:ekuabo/utils/color.dart';
 import 'package:ekuabo/utils/pref_manager.dart';
 import 'package:ekuabo/widgets/EcuaboAppBar.dart';
@@ -59,6 +60,14 @@ class _GroupMembersState extends State<GroupMembers> {
           'Add Memebers +',
           style: TextStyle(color: Colors.white),
         ),
+        onPressed: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => AddGroupMembers(
+                        group_name: widget.group_name,
+                      )));
+        },
         // tooltip: ,
       ),
       appBar: EcuaboAppBar().getAppBar(),

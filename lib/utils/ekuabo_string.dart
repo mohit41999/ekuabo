@@ -8,6 +8,7 @@ class EkuaboString {
   static const forgotPassword = "Forgot Password ?";
   static const rememberMe = "Remember Me";
   static const submit = "Submit";
+  static const editneighbourhood = "Edit Neighbourhood";
   static const notMemberYet = "Not a Member Yet ?";
   static const registerHere = "Register Here";
 

@@ -119,7 +119,7 @@ class MyGroupRepository {
     return null;
   }
 
-  Future<MyGroupBean> RejectGroupJoinRequest(String group_join_id) async {
+  Future RejectGroupJoinRequest(String group_join_id) async {
     try {
       var userBean = await PrefManager.getUser();
       var response = await _httpService.postRequest(
@@ -127,6 +127,34 @@ class MyGroupRepository {
           {'user_id': userBean.data.id, 'group_join_id': group_join_id});
       var jsonString = json.decode(response.data);
       return MyGroupBean.fromJson(jsonString);
+    } on HttpException catch (e) {
+      Utils().showSnackBar(Get.context, e.response);
+    }
+    return null;
+  }
+
+  Future AcceptGroupInvitationRequest(String invite_id) async {
+    try {
+      var userBean = await PrefManager.getUser();
+      var response = await _httpService.postRequest(
+          'group/accept_group_invitation.php',
+          {'user_id': userBean.data.id, 'invite_id': invite_id});
+      var jsonString = json.decode(response.data);
+      return jsonString;
+    } on HttpException catch (e) {
+      Utils().showSnackBar(Get.context, e.response);
+    }
+    return null;
+  }
+
+  Future<MyGroupBean> RejectGroupInvitationRequest(String invite_id) async {
+    try {
+      var userBean = await PrefManager.getUser();
+      var response = await _httpService.postRequest(
+          'group/reject_group_invitation.php',
+          {'user_id': userBean.data.id, 'invite_id': invite_id});
+      var jsonString = json.decode(response.data);
+      return jsonString;
     } on HttpException catch (e) {
       Utils().showSnackBar(Get.context, e.response);
     }

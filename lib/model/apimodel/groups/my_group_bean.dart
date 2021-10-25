@@ -29,6 +29,8 @@ class MyGroupBean {
 
 class MyGroupDataBean {
   String groupId;
+  String invite_id;
+  String group_invite_status;
   String group_join_id;
   String group_join_status;
   String groupName;
@@ -43,6 +45,8 @@ class MyGroupDataBean {
   MyGroupDataBean(
       {this.groupId,
       this.group_join_id,
+      this.invite_id,
+      this.group_invite_status,
       this.group_join_status,
       this.groupName,
       this.groupDesc,
@@ -55,6 +59,8 @@ class MyGroupDataBean {
 
   MyGroupDataBean.fromJson(Map<String, dynamic> json) {
     groupId = json['group_id'];
+    invite_id = json['invite_id'];
+    group_invite_status = json['group_invite_status'];
     group_join_status = json['group_join_status'];
     group_join_id = json['group_join_id'];
     groupName = json['group_name'];
@@ -70,6 +76,8 @@ class MyGroupDataBean {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['group_id'] = this.groupId;
+    data['invite_id'] = this.invite_id;
+    data['group_invite_status'] = this.group_invite_status;
     data['group_join_id'] = this.group_join_id;
     data['group_join_status'] = this.group_join_status;
     data['group_name'] = this.groupName;

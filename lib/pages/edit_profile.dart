@@ -1,4 +1,5 @@
 import 'package:ekuabo/controller/edit_profile_controller.dart';
+import 'package:ekuabo/pages/edit_neighbourhood_details.dart';
 import 'package:ekuabo/utils/color.dart';
 import 'package:ekuabo/utils/ekuabo_asset.dart';
 import 'package:ekuabo/utils/ekuabo_string.dart';
@@ -224,17 +225,23 @@ class EditProfile extends StatelessWidget {
                             UnderlineWidget().getUnderlineWidget()
                           ],
                         ),
-                        // MaterialButton(
-                        //   minWidth: 100,
-                        //   onPressed: () {},
-                        //   shape: RoundedRectangleBorder(
-                        //       borderRadius: BorderRadius.circular(30)),
-                        //   child: EkuaboString.submit.text
-                        //       .color(MyColor.lightestGrey)
-                        //       .make(),
-                        //   color: MyColor.mainColor,
-                        //   height: 35,
-                        // )
+                        MaterialButton(
+                          minWidth: 100,
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        EditNeighbourhoodDetails()));
+                          },
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30)),
+                          child: EkuaboString.editneighbourhood.text
+                              .color(MyColor.lightestGrey)
+                              .make(),
+                          color: MyColor.mainColor,
+                          height: 35,
+                        )
                       ],
                     ),
                     // 16.heightBox,

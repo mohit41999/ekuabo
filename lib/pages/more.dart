@@ -258,13 +258,33 @@ class More extends StatelessWidget {
                           _con.userProfileDataBean.marketplaceInfo.message.text
                               .light
                               .make(),
+                          Row(
+                            children: [
+                              Image.asset(
+                                EkuaboAsset.ic_location,
+                                color: MyColor.mainColor,
+                                width: 13,
+                                height: 16,
+                              ),
+                              10.widthBox,
+                              _con.userProfileDataBean.marketplaceInfo
+                                  .marketAddress.text.medium
+                                  .size(12)
+                                  .make(),
+                            ],
+                          ),
                           MaterialButton(
                             onPressed: () {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) =>
-                                          EditMarketPlaceInfo()));
+                                      builder: (context) => EditMarketPlaceInfo(
+                                            market_id: _con.userProfileDataBean
+                                                .marketplaceInfo.marketId
+                                                .toString(),
+                                          ))).then((value) {
+                                _con.getUserProfile();
+                              });
                             },
                             color: MyColor.mainColor,
                             height: 30,
