@@ -395,7 +395,12 @@ class _HomeViewState extends State<HomeView> {
                                   .elevation(10)
                                   .bottomLeftRounded(value: 12)
                                   .make()
-                                  .pOnly(left: 10);
+                                  .pOnly(left: 10)
+                                  .onTap(() {
+                                Navigator.pushNamed(
+                                    context, EkuaboRoute.blog_detail,
+                                    arguments: _blogcon.mostRecentBlogs[index]);
+                              });
                             }),
                       ),
                 20.heightBox,

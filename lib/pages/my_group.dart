@@ -352,10 +352,14 @@ class MyGroups extends StatelessWidget {
                                       ),
                                       MaterialButton(
                                         onPressed: () {
-                                          _con.callLeaveMyGroupApi(
-                                              context,
-                                              _con.myJoiningGroups[index]
-                                                  .groupId);
+                                          _con
+                                              .callLeaveMyGroupApi(
+                                                  context,
+                                                  _con.myJoiningGroups[index]
+                                                      .groupId)
+                                              .then((value) {
+                                            _con.getMyJoiningGroup();
+                                          });
                                           _con.myJoiningGroups.removeAt(index);
                                         },
                                         shape: RoundedRectangleBorder(
@@ -390,7 +394,22 @@ class MyGroups extends StatelessWidget {
                                   .withRounded(value: 16)
                                   .make()
                                   .wh(double.infinity, 200)
-                                  .pOnly(top: 10, left: 10, right: 10);
+                                  .onTap(() {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => GroupDetails(
+                                            group_id: _con
+                                                .myJoiningGroups[index].groupId,
+                                            created_date: _con
+                                                .myJoiningGroups[index]
+                                                .createdDate,
+                                            image_url: _con
+                                                .myJoiningGroups[index].image,
+                                            grp_name: _con
+                                                .myJoiningGroups[index]
+                                                .groupName)));
+                              }).pOnly(top: 10, left: 10, right: 10);
                             }),
                     Image.asset(
                       EkuaboAsset.bottom_image,

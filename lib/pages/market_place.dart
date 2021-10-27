@@ -53,9 +53,14 @@ class _MarketPlaceState extends State<MarketPlace> {
                 child: MaterialButton(
                   onPressed: () {
                     Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => MyMarketPlace()));
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => MyMarketPlace()))
+                        .then((value) {
+                      setState(() {
+                        _con.getMarketPlace();
+                      });
+                    });
                   },
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20),
@@ -120,7 +125,9 @@ class _MarketPlaceState extends State<MarketPlace> {
                               _homeController.bottomNavigatorKey.currentState
                                   .push(ScaleRoute(page: MarketPlaceListing()))
                                   .then((value) {
-                                _con.getMarketPlace();
+                                setState(() {
+                                  _con.getMarketPlace();
+                                });
                               });
                               _homeController.navigationQueue.addLast(1);
                             }).pOnly(top: 10, left: 10, right: 10);

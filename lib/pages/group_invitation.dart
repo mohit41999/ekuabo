@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:ekuabo/controller/group_invitation_controller.dart';
+import 'package:ekuabo/pages/group_details.dart';
 import 'package:ekuabo/utils/color.dart';
 import 'package:ekuabo/utils/ekuabo_asset.dart';
 import 'package:ekuabo/utils/ekuabo_route.dart';
@@ -152,6 +153,9 @@ class GroupInvitation extends StatelessWidget {
                                                 .invite_id);
                                           },
                                           child: Text('Reject')),
+                                      SizedBox(
+                                        width: 10,
+                                      ),
                                       ElevatedButton(
                                           onPressed: () {
                                             _con.AcceptGroupInvitation(_con
@@ -186,7 +190,22 @@ class GroupInvitation extends StatelessWidget {
                               .withRounded(value: 16)
                               .make()
                               .wh(double.infinity, 200)
-                              .pOnly(top: 10, left: 10, right: 10);
+                              .pOnly(top: 10, left: 10, right: 10)
+                              .onTap(() {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => GroupDetails(
+                                        group_id: _con
+                                            .groupInvitations[index].groupId,
+                                        created_date: _con
+                                            .groupInvitations[index]
+                                            .createdDate,
+                                        image_url:
+                                            _con.groupInvitations[index].image,
+                                        grp_name: _con.groupInvitations[index]
+                                            .groupName)));
+                          });
                         }),
               ],
             ),

@@ -343,6 +343,7 @@ class _PostNewListingState extends State<PostNewListing> {
                                   showFlag: true,
                                   showCurrencyName: true,
                                   showCurrencyCode: true,
+                                  favorite: [],
                                   onSelect: (Currency currency) {
                                     print(
                                         'Select currency: ${currency.symbol}');
@@ -351,7 +352,6 @@ class _PostNewListingState extends State<PostNewListing> {
                                           currency.symbol.toString();
                                     });
                                   },
-                                  favorite: ['USD'],
                                 );
                               },
                               child: Container(

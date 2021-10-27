@@ -38,7 +38,7 @@ class MyGroupController extends GetxController {
     update();
   }
 
-  void callLeaveMyGroupApi(BuildContext context, String index) async {
+  Future callLeaveMyGroupApi(BuildContext context, String index) async {
     var loader = ProgressView(context);
     loader.show();
     var userBean = await PrefManager.getUser();

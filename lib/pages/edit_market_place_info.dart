@@ -30,6 +30,14 @@ class _EditMarketPlaceInfoState extends State<EditMarketPlaceInfo> {
   TextEditingController market_ContactnoCtl = TextEditingController();
   TextEditingController market_WebsiteCtl = TextEditingController();
   final picker = ImagePicker();
+  void clearcontrollers() {
+    market_TitleCtl.clear();
+    market_DescCtl.clear();
+    market_AddressCtl.clear();
+    market_ContactnoCtl.clear();
+    market_WebsiteCtl.clear();
+  }
+
   PickedFile image;
 
   Future editMarketPlaceInfo() async {
@@ -52,6 +60,7 @@ class _EditMarketPlaceInfoState extends State<EditMarketPlaceInfo> {
     var Response = jsonDecode(response.body);
     print(Response);
     loader.dismiss();
+    clearcontrollers();
   }
 
   Future editMarketPlaceInfoImage(String i) async {
@@ -82,6 +91,7 @@ class _EditMarketPlaceInfoState extends State<EditMarketPlaceInfo> {
     var responseString = String.fromCharCodes(responseData);
     print(responseString + 'kkkkkkkkkkkkkkkkkkkkkkkkk');
     loader.dismiss();
+    clearcontrollers();
   }
   // Future postImage(String imagePath) async {
   //   UserBean userBean = await PrefManager.getUser();
