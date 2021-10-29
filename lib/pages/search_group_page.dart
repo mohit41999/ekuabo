@@ -1,8 +1,11 @@
 import 'dart:convert';
 
+import 'package:ekuabo/controller/add_banner_controller.dart';
+import 'package:ekuabo/model/apimodel/banner/display_banner_ads.dart';
 import 'package:ekuabo/model/apimodel/searchgroup/searchgroupmodel.dart';
 import 'package:ekuabo/model/apimodel/user_bean.dart';
 import 'package:ekuabo/network/repository/searchgroupservices.dart';
+import 'package:ekuabo/pages/home_view.dart';
 import 'package:ekuabo/utils/color.dart';
 import 'package:ekuabo/utils/ekuabo_asset.dart';
 import 'package:ekuabo/utils/pref_manager.dart';
@@ -13,6 +16,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:http/http.dart' as http;
+import 'package:get/get.dart';
 
 class SearchGroup extends StatefulWidget {
   const SearchGroup({Key key}) : super(key: key);
@@ -23,6 +27,22 @@ class SearchGroup extends StatefulWidget {
 
 class _SearchGroupState extends State<SearchGroup> {
   var token = '123456789';
+  final _adcon = Get.find<AddBannerController>();
+
+  List<BannerModelData> SearchGroupHorizontalAd = [];
+  List<BannerModelData> SearchGroupVerticalAd = [];
+  void callads() {
+    _adcon.getslotads(context, '3').then((value) {
+      setState(() {
+        SearchGroupHorizontalAd = value.data;
+      });
+    });
+    _adcon.getslotads(context, '4').then((value) {
+      setState(() {
+        SearchGroupVerticalAd = value.data;
+      });
+    });
+  }
 
   Future joinGrouprequest(String group_id) async {
     var loader = ProgressView(context);
@@ -66,6 +86,7 @@ class _SearchGroupState extends State<SearchGroup> {
   @override
   void initState() {
     searchmodel = SearchGroupServices().SearchGroupService('');
+    callads();
     super.initState();
   }
 
@@ -176,26 +197,11 @@ class _SearchGroupState extends State<SearchGroup> {
                               shrinkWrap: true,
                               itemCount: snapshot.data.data.length,
                               itemBuilder: (context, index) {
-                                return Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.only(
-                                            bottomLeft: Radius.circular(10)),
-                                        color: Colors.white,
-                                        boxShadow: [
-                                          BoxShadow(
-                                              color:
-                                                  Colors.grey.withOpacity(0.5),
-                                              blurRadius: 1,
-                                              spreadRadius: 2,
-                                              offset: Offset(1, 1))
-                                        ]),
-                                    height: 200,
-                                    child: Row(
-                                      children: [
-                                        Expanded(
-                                            flex: 2,
+                                return (index % 5 == 0)
+                                    ? Column(
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
                                             child: Container(
                                               decoration: BoxDecoration(
                                                   borderRadius:
@@ -203,164 +209,592 @@ class _SearchGroupState extends State<SearchGroup> {
                                                           bottomLeft:
                                                               Radius.circular(
                                                                   10)),
-                                                  border: Border.all(
-                                                      color: Colors.black),
-                                                  image: DecorationImage(
-                                                      image: NetworkImage(
-                                                          snapshot
-                                                              .data
-                                                              .data[index]
-                                                              .image),
-                                                      fit: BoxFit.contain)),
-                                            )),
-                                        Expanded(
-                                            flex: 3,
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.all(12.0),
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceEvenly,
+                                                  color: Colors.white,
+                                                  boxShadow: [
+                                                    BoxShadow(
+                                                        color: Colors.grey
+                                                            .withOpacity(0.5),
+                                                        blurRadius: 1,
+                                                        spreadRadius: 2,
+                                                        offset: Offset(1, 1))
+                                                  ]),
+                                              height: 200,
+                                              child: Row(
                                                 children: [
-                                                  Text(snapshot.data.data[index]
-                                                      .groupName),
-                                                  Text(snapshot.data.data[index]
-                                                      .groupDesc),
-                                                  Row(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      Icon(
-                                                        Icons.calendar_today,
-                                                        color: MyColor.mainColor
-                                                            .withOpacity(0.6),
-                                                        size: 20,
-                                                      ),
-                                                      SizedBox(
-                                                        width: 10,
-                                                      ),
-                                                      Text(snapshot
-                                                          .data
-                                                          .data[index]
-                                                          .createdDate),
-                                                    ],
-                                                  ),
-                                                  Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
-                                                    children: [
-                                                      IconRow(
-                                                        icon: Icons.people,
-                                                        data: snapshot
-                                                            .data
-                                                            .data[index]
-                                                            .totalMember,
-                                                        text: 'Members',
-                                                      ),
-                                                      IconRow(
-                                                          data: snapshot
-                                                              .data
-                                                              .data[index]
-                                                              .totalFeed,
-                                                          icon: Icons.feed,
-                                                          text: 'Posts')
-                                                    ],
-                                                  ),
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            left: 10.0,
-                                                            right: 30),
-                                                    child: MaterialButton(
-                                                      onPressed: () {
-                                                        (snapshot
+                                                  Expanded(
+                                                      flex: 2,
+                                                      child: Container(
+                                                        decoration: BoxDecoration(
+                                                            borderRadius:
+                                                                BorderRadius.only(
+                                                                    bottomLeft:
+                                                                        Radius.circular(
+                                                                            10)),
+                                                            border: Border.all(
+                                                                color: Colors
+                                                                    .black),
+                                                            image: DecorationImage(
+                                                                image: NetworkImage(
+                                                                    snapshot
+                                                                        .data
+                                                                        .data[
+                                                                            index]
+                                                                        .image),
+                                                                fit: BoxFit
+                                                                    .contain)),
+                                                      )),
+                                                  Expanded(
+                                                      flex: 3,
+                                                      child: Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(12.0),
+                                                        child: Column(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceEvenly,
+                                                          children: [
+                                                            Text(snapshot
+                                                                .data
+                                                                .data[index]
+                                                                .groupName),
+                                                            Text(snapshot
+                                                                .data
+                                                                .data[index]
+                                                                .groupDesc),
+                                                            Row(
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .start,
+                                                              children: [
+                                                                Icon(
+                                                                  Icons
+                                                                      .calendar_today,
+                                                                  color: MyColor
+                                                                      .mainColor
+                                                                      .withOpacity(
+                                                                          0.6),
+                                                                  size: 20,
+                                                                ),
+                                                                SizedBox(
+                                                                  width: 10,
+                                                                ),
+                                                                Text(snapshot
                                                                     .data
                                                                     .data[index]
-                                                                    .groupStatus ==
-                                                                'n')
-                                                            ? joinGrouprequest(
-                                                                    snapshot
+                                                                    .createdDate),
+                                                              ],
+                                                            ),
+                                                            Row(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .spaceBetween,
+                                                              children: [
+                                                                IconRow(
+                                                                  icon: Icons
+                                                                      .people,
+                                                                  data: snapshot
+                                                                      .data
+                                                                      .data[
+                                                                          index]
+                                                                      .totalMember,
+                                                                  text:
+                                                                      'Members',
+                                                                ),
+                                                                IconRow(
+                                                                    data: snapshot
                                                                         .data
                                                                         .data[
                                                                             index]
-                                                                        .groupId)
-                                                                .then((value) {
-                                                                setState(() {
-                                                                  searchmodel =
-                                                                      SearchGroupServices()
-                                                                          .SearchGroupService(
-                                                                              _username.text);
-                                                                });
-                                                              })
-                                                            : leaveGrouprequest(
-                                                                    snapshot
-                                                                        .data
-                                                                        .data[
-                                                                            index]
-                                                                        .groupId)
-                                                                .then((value) {
-                                                                setState(() {
-                                                                  searchmodel =
-                                                                      SearchGroupServices()
-                                                                          .SearchGroupService(
-                                                                              _username.text);
-                                                                });
-                                                              });
-                                                      },
-                                                      shape:
-                                                          RoundedRectangleBorder(
-                                                        side: BorderSide(
-                                                            color: MyColor
-                                                                .mainColor),
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(20),
-                                                      ),
-                                                      child: Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .spaceEvenly,
-                                                        children: [
-                                                          Icon(
-                                                            Icons.logout,
-                                                            color: MyColor
-                                                                .mainColor,
-                                                          ),
-                                                          Text(
-                                                            (snapshot
-                                                                        .data
-                                                                        .data[
-                                                                            index]
-                                                                        .groupStatus ==
-                                                                    'n')
-                                                                ? 'Join Group'
-                                                                : (snapshot
-                                                                            .data
-                                                                            .data[index]
-                                                                            .groupStatus ==
-                                                                        'p')
-                                                                    ? 'Pending'
-                                                                    : 'Leave Group',
-                                                            style: TextStyle(
-                                                                color: MyColor
-                                                                    .mainColor),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  )
+                                                                        .totalFeed,
+                                                                    icon: Icons
+                                                                        .feed,
+                                                                    text:
+                                                                        'Posts')
+                                                              ],
+                                                            ),
+                                                            Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                          .only(
+                                                                      left:
+                                                                          10.0,
+                                                                      right:
+                                                                          30),
+                                                              child:
+                                                                  MaterialButton(
+                                                                onPressed: () {
+                                                                  (snapshot.data.data[index].groupStatus ==
+                                                                          'n')
+                                                                      ? joinGrouprequest(snapshot
+                                                                              .data
+                                                                              .data[
+                                                                                  index]
+                                                                              .groupId)
+                                                                          .then(
+                                                                              (value) {
+                                                                          setState(
+                                                                              () {
+                                                                            searchmodel =
+                                                                                SearchGroupServices().SearchGroupService(_username.text);
+                                                                          });
+                                                                        })
+                                                                      : leaveGrouprequest(snapshot
+                                                                              .data
+                                                                              .data[index]
+                                                                              .groupId)
+                                                                          .then((value) {
+                                                                          setState(
+                                                                              () {
+                                                                            searchmodel =
+                                                                                SearchGroupServices().SearchGroupService(_username.text);
+                                                                          });
+                                                                        });
+                                                                },
+                                                                shape:
+                                                                    RoundedRectangleBorder(
+                                                                  side: BorderSide(
+                                                                      color: MyColor
+                                                                          .mainColor),
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              20),
+                                                                ),
+                                                                child: Row(
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .spaceEvenly,
+                                                                  children: [
+                                                                    Icon(
+                                                                      Icons
+                                                                          .logout,
+                                                                      color: MyColor
+                                                                          .mainColor,
+                                                                    ),
+                                                                    Text(
+                                                                      (snapshot.data.data[index].groupStatus ==
+                                                                              'n')
+                                                                          ? 'Join Group'
+                                                                          : (snapshot.data.data[index].groupStatus == 'p')
+                                                                              ? 'Pending'
+                                                                              : 'Leave Group',
+                                                                      style: TextStyle(
+                                                                          color:
+                                                                              MyColor.mainColor),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                            )
+                                                          ],
+                                                        ),
+                                                      )),
                                                 ],
                                               ),
-                                            )),
-                                      ],
-                                    ),
-                                  ),
-                                );
+                                            ),
+                                          ),
+                                          (SearchGroupHorizontalAd.length == 0)
+                                              ? Container()
+                                              : HorizontalAd(
+                                                  data: SearchGroupHorizontalAd)
+                                        ],
+                                      )
+                                    : (index % 9 == 0)
+                                        ? Column(
+                                            children: [
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Container(
+                                                  decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.only(
+                                                              bottomLeft: Radius
+                                                                  .circular(
+                                                                      10)),
+                                                      color: Colors.white,
+                                                      boxShadow: [
+                                                        BoxShadow(
+                                                            color: Colors.grey
+                                                                .withOpacity(
+                                                                    0.5),
+                                                            blurRadius: 1,
+                                                            spreadRadius: 2,
+                                                            offset:
+                                                                Offset(1, 1))
+                                                      ]),
+                                                  height: 200,
+                                                  child: Row(
+                                                    children: [
+                                                      Expanded(
+                                                          flex: 2,
+                                                          child: Container(
+                                                            decoration: BoxDecoration(
+                                                                borderRadius: BorderRadius.only(
+                                                                    bottomLeft:
+                                                                        Radius.circular(
+                                                                            10)),
+                                                                border: Border.all(
+                                                                    color: Colors
+                                                                        .black),
+                                                                image: DecorationImage(
+                                                                    image: NetworkImage(snapshot
+                                                                        .data
+                                                                        .data[
+                                                                            index]
+                                                                        .image),
+                                                                    fit: BoxFit
+                                                                        .contain)),
+                                                          )),
+                                                      Expanded(
+                                                          flex: 3,
+                                                          child: Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(12.0),
+                                                            child: Column(
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .start,
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .spaceEvenly,
+                                                              children: [
+                                                                Text(snapshot
+                                                                    .data
+                                                                    .data[index]
+                                                                    .groupName),
+                                                                Text(snapshot
+                                                                    .data
+                                                                    .data[index]
+                                                                    .groupDesc),
+                                                                Row(
+                                                                  crossAxisAlignment:
+                                                                      CrossAxisAlignment
+                                                                          .start,
+                                                                  children: [
+                                                                    Icon(
+                                                                      Icons
+                                                                          .calendar_today,
+                                                                      color: MyColor
+                                                                          .mainColor
+                                                                          .withOpacity(
+                                                                              0.6),
+                                                                      size: 20,
+                                                                    ),
+                                                                    SizedBox(
+                                                                      width: 10,
+                                                                    ),
+                                                                    Text(snapshot
+                                                                        .data
+                                                                        .data[
+                                                                            index]
+                                                                        .createdDate),
+                                                                  ],
+                                                                ),
+                                                                Row(
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .spaceBetween,
+                                                                  children: [
+                                                                    IconRow(
+                                                                      icon: Icons
+                                                                          .people,
+                                                                      data: snapshot
+                                                                          .data
+                                                                          .data[
+                                                                              index]
+                                                                          .totalMember,
+                                                                      text:
+                                                                          'Members',
+                                                                    ),
+                                                                    IconRow(
+                                                                        data: snapshot
+                                                                            .data
+                                                                            .data[
+                                                                                index]
+                                                                            .totalFeed,
+                                                                        icon: Icons
+                                                                            .feed,
+                                                                        text:
+                                                                            'Posts')
+                                                                  ],
+                                                                ),
+                                                                Padding(
+                                                                  padding: const EdgeInsets
+                                                                          .only(
+                                                                      left:
+                                                                          10.0,
+                                                                      right:
+                                                                          30),
+                                                                  child:
+                                                                      MaterialButton(
+                                                                    onPressed:
+                                                                        () {
+                                                                      (snapshot.data.data[index].groupStatus ==
+                                                                              'n')
+                                                                          ? joinGrouprequest(snapshot.data.data[index].groupId).then(
+                                                                              (value) {
+                                                                              setState(() {
+                                                                                searchmodel = SearchGroupServices().SearchGroupService(_username.text);
+                                                                              });
+                                                                            })
+                                                                          : leaveGrouprequest(snapshot.data.data[index].groupId)
+                                                                              .then((value) {
+                                                                              setState(() {
+                                                                                searchmodel = SearchGroupServices().SearchGroupService(_username.text);
+                                                                              });
+                                                                            });
+                                                                    },
+                                                                    shape:
+                                                                        RoundedRectangleBorder(
+                                                                      side: BorderSide(
+                                                                          color:
+                                                                              MyColor.mainColor),
+                                                                      borderRadius:
+                                                                          BorderRadius.circular(
+                                                                              20),
+                                                                    ),
+                                                                    child: Row(
+                                                                      mainAxisAlignment:
+                                                                          MainAxisAlignment
+                                                                              .spaceEvenly,
+                                                                      children: [
+                                                                        Icon(
+                                                                          Icons
+                                                                              .logout,
+                                                                          color:
+                                                                              MyColor.mainColor,
+                                                                        ),
+                                                                        Text(
+                                                                          (snapshot.data.data[index].groupStatus == 'n')
+                                                                              ? 'Join Group'
+                                                                              : (snapshot.data.data[index].groupStatus == 'p')
+                                                                                  ? 'Pending'
+                                                                                  : 'Leave Group',
+                                                                          style:
+                                                                              TextStyle(color: MyColor.mainColor),
+                                                                        ),
+                                                                      ],
+                                                                    ),
+                                                                  ),
+                                                                )
+                                                              ],
+                                                            ),
+                                                          )),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                              (SearchGroupVerticalAd.length ==
+                                                      0)
+                                                  ? Container()
+                                                  : VerticalAd(
+                                                      data:
+                                                          SearchGroupVerticalAd)
+                                            ],
+                                          )
+                                        : Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.only(
+                                                          bottomLeft:
+                                                              Radius.circular(
+                                                                  10)),
+                                                  color: Colors.white,
+                                                  boxShadow: [
+                                                    BoxShadow(
+                                                        color: Colors.grey
+                                                            .withOpacity(0.5),
+                                                        blurRadius: 1,
+                                                        spreadRadius: 2,
+                                                        offset: Offset(1, 1))
+                                                  ]),
+                                              height: 200,
+                                              child: Row(
+                                                children: [
+                                                  Expanded(
+                                                      flex: 2,
+                                                      child: Container(
+                                                        decoration: BoxDecoration(
+                                                            borderRadius:
+                                                                BorderRadius.only(
+                                                                    bottomLeft:
+                                                                        Radius.circular(
+                                                                            10)),
+                                                            border: Border.all(
+                                                                color: Colors
+                                                                    .black),
+                                                            image: DecorationImage(
+                                                                image: NetworkImage(
+                                                                    snapshot
+                                                                        .data
+                                                                        .data[
+                                                                            index]
+                                                                        .image),
+                                                                fit: BoxFit
+                                                                    .contain)),
+                                                      )),
+                                                  Expanded(
+                                                      flex: 3,
+                                                      child: Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(12.0),
+                                                        child: Column(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceEvenly,
+                                                          children: [
+                                                            Text(snapshot
+                                                                .data
+                                                                .data[index]
+                                                                .groupName),
+                                                            Text(snapshot
+                                                                .data
+                                                                .data[index]
+                                                                .groupDesc),
+                                                            Row(
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .start,
+                                                              children: [
+                                                                Icon(
+                                                                  Icons
+                                                                      .calendar_today,
+                                                                  color: MyColor
+                                                                      .mainColor
+                                                                      .withOpacity(
+                                                                          0.6),
+                                                                  size: 20,
+                                                                ),
+                                                                SizedBox(
+                                                                  width: 10,
+                                                                ),
+                                                                Text(snapshot
+                                                                    .data
+                                                                    .data[index]
+                                                                    .createdDate),
+                                                              ],
+                                                            ),
+                                                            Row(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .spaceBetween,
+                                                              children: [
+                                                                IconRow(
+                                                                  icon: Icons
+                                                                      .people,
+                                                                  data: snapshot
+                                                                      .data
+                                                                      .data[
+                                                                          index]
+                                                                      .totalMember,
+                                                                  text:
+                                                                      'Members',
+                                                                ),
+                                                                IconRow(
+                                                                    data: snapshot
+                                                                        .data
+                                                                        .data[
+                                                                            index]
+                                                                        .totalFeed,
+                                                                    icon: Icons
+                                                                        .feed,
+                                                                    text:
+                                                                        'Posts')
+                                                              ],
+                                                            ),
+                                                            Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                          .only(
+                                                                      left:
+                                                                          10.0,
+                                                                      right:
+                                                                          30),
+                                                              child:
+                                                                  MaterialButton(
+                                                                onPressed: () {
+                                                                  (snapshot.data.data[index].groupStatus ==
+                                                                          'n')
+                                                                      ? joinGrouprequest(snapshot
+                                                                              .data
+                                                                              .data[
+                                                                                  index]
+                                                                              .groupId)
+                                                                          .then(
+                                                                              (value) {
+                                                                          setState(
+                                                                              () {
+                                                                            searchmodel =
+                                                                                SearchGroupServices().SearchGroupService(_username.text);
+                                                                          });
+                                                                        })
+                                                                      : leaveGrouprequest(snapshot
+                                                                              .data
+                                                                              .data[index]
+                                                                              .groupId)
+                                                                          .then((value) {
+                                                                          setState(
+                                                                              () {
+                                                                            searchmodel =
+                                                                                SearchGroupServices().SearchGroupService(_username.text);
+                                                                          });
+                                                                        });
+                                                                },
+                                                                shape:
+                                                                    RoundedRectangleBorder(
+                                                                  side: BorderSide(
+                                                                      color: MyColor
+                                                                          .mainColor),
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              20),
+                                                                ),
+                                                                child: Row(
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .spaceEvenly,
+                                                                  children: [
+                                                                    Icon(
+                                                                      Icons
+                                                                          .logout,
+                                                                      color: MyColor
+                                                                          .mainColor,
+                                                                    ),
+                                                                    Text(
+                                                                      (snapshot.data.data[index].groupStatus ==
+                                                                              'n')
+                                                                          ? 'Join Group'
+                                                                          : (snapshot.data.data[index].groupStatus == 'p')
+                                                                              ? 'Pending'
+                                                                              : 'Leave Group',
+                                                                      style: TextStyle(
+                                                                          color:
+                                                                              MyColor.mainColor),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                            )
+                                                          ],
+                                                        ),
+                                                      )),
+                                                ],
+                                              ),
+                                            ),
+                                          );
                               })
                           : Container();
                       // }

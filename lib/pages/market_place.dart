@@ -1,5 +1,7 @@
+import 'package:ekuabo/controller/add_banner_controller.dart';
 import 'package:ekuabo/controller/home_controller.dart';
 import 'package:ekuabo/controller/market_place_controller.dart';
+import 'package:ekuabo/model/apimodel/banner/display_banner_ads.dart';
 import 'package:ekuabo/model/apimodel/market_place/category_bean.dart';
 import 'package:ekuabo/network/repository/market_place_repository.dart';
 import 'package:ekuabo/pages/marketplace_listing.dart';
@@ -24,7 +26,25 @@ class _MarketPlaceState extends State<MarketPlace> {
   final _homeController = Get.find<HomeController>();
 
   final _con = Get.find<MarketPlaceController>();
+  final _adcon = Get.find<AddBannerController>();
   Future<CategoryBean> getMarketPlaceCategory;
+  List<BannerModelData> MarketHorizontalAd;
+  List<BannerModelData> MarketVerticalAd;
+  void callads() {
+    _adcon.getslotads(context, '5').then((value) {
+      setState(() {
+        MarketHorizontalAd = value.data;
+      });
+    });
+    _adcon.getslotads(context, '6').then((value) {
+      setState(() {
+        print(value.data[0].title.toString() +
+            'kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk');
+        MarketVerticalAd = value.data;
+      });
+    });
+  }
+
   void initialize() {
     setState(() {
       getMarketPlaceCategory = MarketPlaceRepository().getCategory();

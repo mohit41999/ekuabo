@@ -10,6 +10,7 @@ import 'package:ekuabo/widgets/UnderlineWidget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:get/get.dart';
 import 'package:velocity_x/velocity_x.dart';
 
@@ -25,6 +26,10 @@ class GroupInvitation extends StatelessWidget {
         builder: (_) => Stack(
           fit: StackFit.expand,
           children: [
+            Image.asset(
+              EkuaboAsset.bottom_image,
+              width: double.infinity,
+            ).objectBottomLeft(),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -71,28 +76,23 @@ class GroupInvitation extends StatelessWidget {
                           ),*/
                               10.widthBox,
                               Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  10.heightBox,
-                                  _con.groupInvitations[index].groupName.text
-                                      .size(16)
-                                      .medium
-                                      .make(),
-                                  10.heightBox,
-                                  Flexible(
-                                    child: _con
-                                        .groupInvitations[index].groupDesc.text
-                                        .maxLines(3)
-                                        .ellipsis
-                                        .size(12)
-                                        .medium
-                                        .align(TextAlign.justify)
-                                        .color(
-                                            MyColor.blackColor.withOpacity(0.6))
-                                        .make()
-                                        .pOnly(right: 20),
+                                  Text(
+                                    _con.groupInvitations[index].groupName,
                                   ),
-                                  10.heightBox,
+                                  _con.groupInvitations[index].groupDesc.text
+                                      .maxLines(3)
+                                      .ellipsis
+                                      .size(12)
+                                      .medium
+                                      .align(TextAlign.justify)
+                                      .color(
+                                          MyColor.blackColor.withOpacity(0.6))
+                                      .make()
+                                      .w(200),
                                   Row(
                                     children: [
                                       Image.asset(
@@ -100,7 +100,6 @@ class GroupInvitation extends StatelessWidget {
                                         width: 16,
                                         height: 16,
                                       ),
-                                      10.widthBox,
                                       _con.groupInvitations[index].createdDate
                                           .text
                                           .size(12)
@@ -110,7 +109,6 @@ class GroupInvitation extends StatelessWidget {
                                           .make()
                                     ],
                                   ),
-                                  10.heightBox,
                                   Row(
                                     children: [
                                       Image.asset(
@@ -186,7 +184,7 @@ class GroupInvitation extends StatelessWidget {
                             ],
                           ))
                               .elevation(7)
-                              .color(MyColor.lightGrey)
+                              .color(Colors.white)
                               .withRounded(value: 16)
                               .make()
                               .wh(double.infinity, 200)
@@ -209,10 +207,6 @@ class GroupInvitation extends StatelessWidget {
                         }),
               ],
             ),
-            Image.asset(
-              EkuaboAsset.bottom_image,
-              width: double.infinity,
-            ).objectBottomLeft()
           ],
         ),
         initState: (_) {

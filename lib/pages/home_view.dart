@@ -1,9 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:ekuabo/controller/add_banner_controller.dart';
 import 'package:ekuabo/controller/blog_controller.dart';
 import 'package:ekuabo/controller/home_controller.dart';
 import 'package:ekuabo/controller/home_view_controller.dart';
+import 'package:ekuabo/model/apimodel/banner/display_banner_ads.dart';
 
 import 'package:ekuabo/model/uiModel/MostRecentFeedModel.dart';
+import 'package:ekuabo/pages/userShopMarket.dart';
 import 'package:ekuabo/utils/color.dart';
 import 'package:ekuabo/utils/ekuabo_asset.dart';
 import 'package:ekuabo/utils/ekuabo_route.dart';
@@ -24,10 +27,28 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
+  List<BannerModelData> homehorizontalads = [];
+  List<BannerModelData> homeverticalads = [];
+
+  void callads() {
+    _adcon.getslotads(context, '1').then((value) {
+      setState(() {
+        homehorizontalads = value.data;
+      });
+    });
+    _adcon.getslotads(context, '2').then((value) {
+      setState(() {
+        print(value.data[0].title.toString() +
+            'kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk');
+        homeverticalads = value.data;
+      });
+    });
+  }
+
   @override
   void initState() {
     // TODO: implement initState
-    super.initState();
+
     setState(() {
       _blogcon.getMostRecent().then((value) {
         setState(() {
@@ -35,12 +56,17 @@ class _HomeViewState extends State<HomeView> {
         });
       });
     });
+
+    callads();
+
+    super.initState();
   }
 
   final _homeController = Get.find<HomeController>();
 
   final _con = Get.find<HomeViewController>();
   final _blogcon = Get.find<BlogController>();
+  final _adcon = Get.find<AddBannerController>();
 
   @override
   Widget build(BuildContext context) {
@@ -274,6 +300,10 @@ class _HomeViewState extends State<HomeView> {
                               });
                             }),
                       ),
+                5.heightBox,
+                (homehorizontalads.toString() == [].toString())
+                    ? Container()
+                    : HorizontalAd(data: homehorizontalads),
 // Latest Blog
                 20.heightBox,
                 EkuaboString.latest_blog.text
@@ -288,6 +318,7 @@ class _HomeViewState extends State<HomeView> {
                     .objectCenterLeft()
                     .pOnly(left: 16),
                 16.heightBox,
+
                 // Latest Blog
                 _blogcon.mostRecentBlogs.isEmpty
                     ? EkuaboString.no_results_found.text
@@ -403,7 +434,12 @@ class _HomeViewState extends State<HomeView> {
                               });
                             }),
                       ),
+                5.heightBox,
+                (homeverticalads.toString() == [].toString())
+                    ? Container()
+                    : VerticalAd(data: homeverticalads),
                 20.heightBox,
+
                 EkuaboString.market_place.text
                     .size(16)
                     .bold
@@ -416,6 +452,7 @@ class _HomeViewState extends State<HomeView> {
                     .objectTopLeft()
                     .pOnly(left: 16),
                 16.heightBox,
+
                 _con.homeMarketPlaces.isNotEmpty
                     ? Stack(
                         children: [
@@ -543,7 +580,18 @@ class _HomeViewState extends State<HomeView> {
                                       .elevation(10)
                                       .bottomLeftRounded(value: 12)
                                       .make()
-                                      .pOnly(left: 10);
+                                      .pOnly(left: 10)
+                                      .onTap(() {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                userShopMarketPlace(
+                                                    user_id: _con
+                                                        .homeMarketPlaces[index]
+                                                        .userDetail
+                                                        .userId)));
+                                  });
                                 }),
                           ),
                         ],
@@ -571,6 +619,138 @@ class _HomeViewState extends State<HomeView> {
         _con.getMostRecentNewsFeed();
         _blogcon.getMostRecent();
       },
+    );
+  }
+}
+
+class HorizontalAd extends StatelessWidget {
+  const HorizontalAd({
+    Key key,
+    @required this.data,
+  }) : super(key: key);
+
+  final List<BannerModelData> data;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 100,
+      width: double.infinity,
+      child: ListView.builder(
+          padding: EdgeInsets.zero,
+          scrollDirection: Axis.horizontal,
+          itemCount: data.length,
+          itemBuilder: (context, index) {
+            return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                height: 100,
+                width: 350,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    gradient: LinearGradient(
+                        colors: [MyColor.lightBlueColor, MyColor.mainColor])),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          data[index].title,
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        Container(
+                          width: 200,
+                          child: Text(
+                            data[index].description,
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 8.0),
+                      child: CachedNetworkImage(
+                          height: 100,
+                          width: 100,
+                          imageUrl: data[index].image,
+                          errorWidget: (_, __, ___) =>
+                              Image.asset('asset/images/error_img.jpg'),
+                          fit: BoxFit.contain),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          }),
+    );
+  }
+}
+
+class VerticalAd extends StatelessWidget {
+  const VerticalAd({
+    Key key,
+    @required this.data,
+  }) : super(key: key);
+
+  final List<BannerModelData> data;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 250,
+      width: double.infinity / 2,
+      child: ListView.builder(
+          padding: EdgeInsets.zero,
+          scrollDirection: Axis.vertical,
+          itemCount: data.length,
+          itemBuilder: (context, index) {
+            return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                height: 250,
+                width: 200,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    gradient: LinearGradient(
+                        colors: [MyColor.lightBlueColor, MyColor.mainColor])),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          data[index].title,
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        Container(
+                          width: 200,
+                          child: Text(
+                            data[index].description,
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 8.0),
+                      child: CachedNetworkImage(
+                          height: 250,
+                          width: 100,
+                          imageUrl: data[index].image,
+                          errorWidget: (_, __, ___) =>
+                              Image.asset('asset/images/error_img.jpg'),
+                          fit: BoxFit.contain),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          }),
     );
   }
 }

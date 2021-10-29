@@ -37,9 +37,8 @@ class GroupInvitationController extends GetxController {
 
   void RejectGroupInvitation(String invite_id) async {
     var result = await _groupRepository.RejectGroupInvitationRequest(invite_id);
-    if (result != null) {
-      getGroupInvitationList();
-    }
+    getGroupInvitationList();
+
     update();
   }
 }

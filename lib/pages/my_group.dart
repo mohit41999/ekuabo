@@ -358,9 +358,10 @@ class MyGroups extends StatelessWidget {
                                                   _con.myJoiningGroups[index]
                                                       .groupId)
                                               .then((value) {
+                                            _con.myJoiningGroups
+                                                .removeAt(index);
                                             _con.getMyJoiningGroup();
                                           });
-                                          _con.myJoiningGroups.removeAt(index);
                                         },
                                         shape: RoundedRectangleBorder(
                                             borderRadius:

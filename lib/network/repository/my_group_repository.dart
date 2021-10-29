@@ -147,7 +147,7 @@ class MyGroupRepository {
     return null;
   }
 
-  Future<MyGroupBean> RejectGroupInvitationRequest(String invite_id) async {
+  Future RejectGroupInvitationRequest(String invite_id) async {
     try {
       var userBean = await PrefManager.getUser();
       var response = await _httpService.postRequest(
