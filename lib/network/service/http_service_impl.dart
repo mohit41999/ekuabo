@@ -78,7 +78,7 @@ class HttpServiceImpl implements HttpService {
       param['token'] = TOKEN;
       response = await _dio.post(endpoint, data: FormData.fromMap(param));
     } catch (error, stacktrace) {
-      print("Exception occured: $error stackTrace: $stacktrace");
+      print("Exception occur: $error stackTrace: $stacktrace");
 
       Map<String, dynamic> map = _dioError.response.data;
       if (_dioError.response.statusCode == 500) {
