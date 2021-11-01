@@ -127,7 +127,7 @@ class _MarketPlaceState extends State<MarketPlace> {
                 ).pOnly(left: 16, right: 16),
                 _con.marketPlaces.isNotEmpty
                     ? Expanded(
-                        child: GridView.builder(
+                        child: ListView.builder(
                           itemBuilder: (ctx, index) {
                             return VxCard(marketlistTile(
                               con: _con,
@@ -156,12 +156,12 @@ class _MarketPlaceState extends State<MarketPlace> {
                           physics: const BouncingScrollPhysics(),
                           scrollDirection: Axis.vertical,
                           itemCount: _con.marketPlaces.length,
-                          gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 2,
-                                  childAspectRatio: 2 / 3.2,
-                                  crossAxisSpacing: 0,
-                                  mainAxisSpacing: 5),
+                          // gridDelegate:
+                          //     SliverGridDelegateWithFixedCrossAxisCount(
+                          //         crossAxisCount: 2,
+                          //         childAspectRatio: 2 / 3.2,
+                          //         crossAxisSpacing: 0,
+                          //         mainAxisSpacing: 5),
                         ),
                       )
                     : EkuaboString.no_results_found.text
