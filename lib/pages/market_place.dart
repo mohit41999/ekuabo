@@ -100,7 +100,7 @@ class _MarketPlaceState extends State<MarketPlace> {
                   color: MyColor.inactiveColor,
                   child: Text(
                     'My Market Place Listing',
-                    style: TextStyle(color: Colors.white),
+                    style: TextStyle(color: Colors.white, fontSize: 10),
                   ),
                 ))),
         drawer: NavigationDrawer(getMarketPlaceCategory),
