@@ -99,17 +99,6 @@ class More extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          _showPopupMenu(context);
-        },
-        tooltip: 'More',
-        child: Icon(
-          Icons.more_horiz,
-          color: MyColor.mainColor,
-        ),
-        backgroundColor: Colors.white,
-      ),
       backgroundColor: Colors.white,
       appBar: EcuaboAppBar().getAppBar(context),
       body: GetBuilder<MoreController>(
