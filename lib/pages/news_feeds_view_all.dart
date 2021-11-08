@@ -14,6 +14,7 @@ import 'package:ekuabo/utils/ekuabo_route.dart';
 import 'package:ekuabo/utils/ekuabo_string.dart';
 import 'package:ekuabo/utils/navigationDrawer.dart';
 import 'package:ekuabo/utils/pref_manager.dart';
+import 'package:ekuabo/widgets/EcuaboAppBar.dart';
 import 'package:ekuabo/widgets/UnderlineWidget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -110,12 +111,21 @@ class _NewsFeedsViewAllState extends State<NewsFeedsViewAll> {
     return GetBuilder<NewsFeedsViewAllController>(
       builder: (_) => Scaffold(
         backgroundColor: Colors.white,
-        appBar: AppBar(
-          foregroundColor: MyColor.mainColor,
-          backgroundColor: Colors.white,
-          elevation: 0,
-          actions: [
-            Padding(
+        appBar: EcuaboAppBar().getAppBar(context,
+            leading: Builder(
+              builder: (context) => IconButton(
+                icon: Icon(
+                  Icons.menu,
+                  color: MyColor.mainColor,
+                ),
+                onPressed: () {
+                  setState(() {
+                    Scaffold.of(context).openDrawer();
+                  });
+                },
+              ),
+            ),
+            action: Padding(
               padding: const EdgeInsets.all(8.0),
               child: VxCircle(
                 backgroundColor: MyColor.mainColor,
@@ -133,14 +143,20 @@ class _NewsFeedsViewAllState extends State<NewsFeedsViewAll> {
                   BoxShadow(color: MyColor.inactiveColor, blurRadius: 10)
                 ],
               ).wh(30, 30),
-            )
-          ],
-          title: Image.asset(
-            EkuaboAsset.ic_app_logo,
-            width: 118,
-            height: 49,
-          ).centered(),
-        ),
+            )),
+        // AppBar(
+        //   foregroundColor: MyColor.mainColor,
+        //   backgroundColor: Colors.white,
+        //   elevation: 0,
+        //   actions: [
+
+        //   ],
+        //   title: Image.asset(
+        //     EkuaboAsset.ic_app_logo,
+        //     width: 118,
+        //     height: 49,
+        //   ).centered(),
+        // ),
         drawer: NavigationDrawer(getMarketPlaceCategory),
         body: SafeArea(
           child: SingleChildScrollView(

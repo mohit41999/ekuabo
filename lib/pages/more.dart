@@ -14,22 +14,113 @@ import 'package:get/get.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 class More extends StatelessWidget {
-  final _homeController = Get.find<HomeController>();
-  final _con = Get.find<MoreController>();
+  final _con = Get.find<HomeController>();
+  final listOfMoreMenu = [
+    "Private Message",
+    "My Profile",
+    "My Posted Banner Ad",
+    "My Groups",
+    "Received Group\n Invitation",
+    "Received Group\n Join Request",
+    "Transaction History",
+    "Settings"
+  ];
+
+  final _morecon = Get.find<MoreController>();
+
+  void _showPopupMenu(BuildContext context) async {
+    List<PopupMenuEntry<Object>> list = [];
+    for (var element in listOfMoreMenu) {
+      list.add(PopupMenuItem(
+          value: element,
+          enabled: true,
+          child: VxBox(
+                  child: element.text
+                      .size(14)
+                      .medium
+                      .color(MyColor.lightBlueColor)
+                      .make())
+              .width(150)
+              .make()
+              .onTap(
+            () {
+              _selectMoreOption(listOfMoreMenu.indexOf(element));
+              Get.back();
+            },
+          )));
+      list.add(const PopupMenuDivider(
+        height: 1,
+      ));
+    }
+    var sizeOfScreen = MediaQuery.of(context).size;
+    await showMenu(
+        context: context,
+        position: RelativeRect.fromLTRB(sizeOfScreen.width - 100,
+            sizeOfScreen.height - 100, sizeOfScreen.width - 100, 100),
+        items: list,
+        useRootNavigator: true);
+  }
+
+  void _selectMoreOption(int index) {
+    _con.navigationQueue.addLast(4);
+    switch (index) {
+      case 0:
+        _con.bottomNavigatorKey.currentState
+            .pushNamed(EkuaboRoute.privateMessageBoard);
+        break;
+      case 1:
+        _con.bottomNavigatorKey.currentState.pushNamed(EkuaboRoute.more);
+        break;
+      case 2:
+        _con.bottomNavigatorKey.currentState
+            .pushNamed(EkuaboRoute.myPostBannerAd);
+        break;
+      case 3:
+        _con.bottomNavigatorKey.currentState.pushNamed(EkuaboRoute.myGroup);
+        break;
+      case 4:
+        _con.bottomNavigatorKey.currentState
+            .pushNamed(EkuaboRoute.groupInvitation);
+        break;
+      case 5:
+        _con.bottomNavigatorKey.currentState
+            .pushNamed(EkuaboRoute.groupJoinRequest);
+        break;
+      case 6:
+        _con.bottomNavigatorKey.currentState
+            .pushNamed(EkuaboRoute.transactionHistory);
+        break;
+      case 7:
+        _con.bottomNavigatorKey.currentState.pushNamed(EkuaboRoute.setting);
+        break;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          _showPopupMenu(context);
+        },
+        tooltip: 'More',
+        child: Icon(
+          Icons.more_horiz,
+          color: MyColor.mainColor,
+        ),
+        backgroundColor: Colors.white,
+      ),
       backgroundColor: Colors.white,
-      appBar: EcuaboAppBar().getAppBar(),
+      appBar: EcuaboAppBar().getAppBar(context),
       body: GetBuilder<MoreController>(
-        builder: (_) => _con.userProfileDataBean != null
+        builder: (_) => _morecon.userProfileDataBean != null
             ? SingleChildScrollView(
                 child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   10.heightBox,
                   IconButton(
-                      onPressed: () => _homeController.bottomNavPop(),
+                      onPressed: () => _con.bottomNavPop(),
                       icon: Icon(
                         Icons.arrow_back,
                         color: MyColor.mainColor,
@@ -43,14 +134,14 @@ class More extends StatelessWidget {
                         child: CircleAvatar(
                           backgroundColor: Colors.transparent,
                           child: CachedNetworkImage(
-                            imageUrl:
-                                _con.userProfileDataBean.profile.profilePicture,
+                            imageUrl: _morecon
+                                .userProfileDataBean.profile.profilePicture,
                             placeholder: (_, __) => CircularProgressIndicator(),
                           ),
                         ),
                       ),
                       16.heightBox,
-                      _con.userProfileDataBean.profile.name.text
+                      _morecon.userProfileDataBean.profile.name.text
                           .size(16)
                           .medium
                           .heightTight
@@ -70,7 +161,7 @@ class More extends StatelessWidget {
                           ),
                           10.widthBox,
                           Expanded(
-                            child: _con
+                            child: _morecon
                                 .userProfileDataBean.profile.createdDate.text
                                 .color(MyColor.lightBlueColor)
                                 .size(10)
@@ -94,7 +185,8 @@ class More extends StatelessWidget {
                             height: 16,
                           ),
                           10.widthBox,
-                          _con.userProfileDataBean.profile.address.text.medium
+                          _morecon
+                              .userProfileDataBean.profile.address.text.medium
                               .size(12)
                               .make(),
                         ],
@@ -109,7 +201,8 @@ class More extends StatelessWidget {
                             height: 16,
                           ),
                           10.widthBox,
-                          _con.userProfileDataBean.profile.mobileNo.text.medium
+                          _morecon
+                              .userProfileDataBean.profile.mobileNo.text.medium
                               .size(12)
                               .make(),
                         ],
@@ -124,7 +217,7 @@ class More extends StatelessWidget {
                             height: 16,
                           ),
                           10.widthBox,
-                          "${_con.userProfileDataBean.profile.homeContactNo}(Home)"
+                          "${_morecon.userProfileDataBean.profile.homeContactNo}(Home)"
                               .text
                               .medium
                               .size(12)
@@ -141,7 +234,7 @@ class More extends StatelessWidget {
                             height: 16,
                           ),
                           10.widthBox,
-                          "${_con.userProfileDataBean.profile.mobileContactNo}(Mobile)"
+                          "${_morecon.userProfileDataBean.profile.mobileContactNo}(Mobile)"
                               .text
                               .medium
                               .size(12)
@@ -158,8 +251,8 @@ class More extends StatelessWidget {
                             height: 16,
                           ),
                           10.widthBox,
-                          _con.userProfileDataBean.profile.publicEmailId.text
-                              .medium
+                          _morecon.userProfileDataBean.profile.publicEmailId
+                              .text.medium
                               .size(12)
                               .make(),
                         ],
@@ -173,17 +266,17 @@ class More extends StatelessWidget {
                             height: 16,
                           ),
                           10.widthBox,
-                          _con.userProfileDataBean.profile.website.text.medium
+                          _morecon
+                              .userProfileDataBean.profile.website.text.medium
                               .size(12)
                               .make(),
                         ],
                       ).pOnly(left: 20),
                       MaterialButton(
                         onPressed: () {
-                          _homeController.navigationQueue.addLast(4);
-                          _homeController.bottomNavigatorKey.currentState
+                          _con.bottomNavigatorKey.currentState
                               .pushNamed(EkuaboRoute.editProfile)
-                              .then((value) => _con.getUserProfile());
+                              .then((value) => _morecon.getUserProfile());
                         },
                         color: MyColor.mainColor,
                         height: 30,
@@ -225,7 +318,7 @@ class More extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       CachedNetworkImage(
-                        imageUrl: _con.userProfileDataBean.marketplaceInfo
+                        imageUrl: _morecon.userProfileDataBean.marketplaceInfo
                                 .marketImage ??
                             '',
                         placeholder: (_, __) => SizedBox(
@@ -248,15 +341,15 @@ class More extends StatelessWidget {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          _con.userProfileDataBean.marketplaceInfo.marketTitle
-                              .text
+                          _morecon.userProfileDataBean.marketplaceInfo
+                              .marketTitle.text
                               .size(16)
                               .medium
                               .color(MyColor.lightBlueColor)
                               .make(),
                           5.heightBox,
-                          _con.userProfileDataBean.marketplaceInfo.message.text
-                              .light
+                          _morecon.userProfileDataBean.marketplaceInfo.message
+                              .text.light
                               .make(),
                           Row(
                             children: [
@@ -267,10 +360,13 @@ class More extends StatelessWidget {
                                 height: 16,
                               ),
                               10.widthBox,
-                              _con.userProfileDataBean.marketplaceInfo
-                                  .marketAddress.text.medium
-                                  .size(12)
-                                  .make(),
+                              Container(
+                                width: 150,
+                                child: _morecon.userProfileDataBean
+                                    .marketplaceInfo.marketAddress.text.medium
+                                    .size(12)
+                                    .make(),
+                              ),
                             ],
                           ),
                           MaterialButton(
@@ -279,11 +375,13 @@ class More extends StatelessWidget {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => EditMarketPlaceInfo(
-                                            market_id: _con.userProfileDataBean
-                                                .marketplaceInfo.marketId
+                                            market_id: _morecon
+                                                .userProfileDataBean
+                                                .marketplaceInfo
+                                                .marketId
                                                 .toString(),
                                           ))).then((value) {
-                                _con.getUserProfile();
+                                _morecon.getUserProfile();
                               });
                             },
                             color: MyColor.mainColor,
@@ -334,7 +432,8 @@ class More extends StatelessWidget {
                             height: 16,
                           ),
                           10.widthBox,
-                          _con.userProfileDataBean.about.homeTown.text.medium
+                          _morecon
+                              .userProfileDataBean.about.homeTown.text.medium
                               .size(12)
                               .make(),
                         ],
@@ -349,7 +448,8 @@ class More extends StatelessWidget {
                             height: 16,
                           ),
                           10.widthBox,
-                          _con.userProfileDataBean.about.occupation.text.medium
+                          _morecon
+                              .userProfileDataBean.about.occupation.text.medium
                               .size(12)
                               .make(),
                         ],
@@ -364,7 +464,8 @@ class More extends StatelessWidget {
                             height: 16,
                           ),
                           10.widthBox,
-                          _con.userProfileDataBean.about.funFacts.text.medium
+                          _morecon
+                              .userProfileDataBean.about.funFacts.text.medium
                               .size(12)
                               .make(),
                         ],
@@ -379,7 +480,8 @@ class More extends StatelessWidget {
                             height: 16,
                           ),
                           10.widthBox,
-                          _con.userProfileDataBean.about.interests.text.medium
+                          _morecon
+                              .userProfileDataBean.about.interests.text.medium
                               .size(12)
                               .make(),
                         ],
@@ -402,7 +504,7 @@ class More extends StatelessWidget {
               ),
         initState: (_) {
           Get.parameters = {EkuaboRoute.more: ""};
-          _con.getUserProfile();
+          _morecon.getUserProfile();
         },
       ),
     );

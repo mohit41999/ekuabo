@@ -22,7 +22,7 @@ class ChatConversation extends StatelessWidget {
     return GetBuilder<ChatConversationController>(
       builder: (_) => Scaffold(
         backgroundColor: Colors.white,
-        appBar: EcuaboAppBar().getAppBar(),
+        appBar: EcuaboAppBar().getAppBar(context),
         body: SingleChildScrollView(
           physics: BouncingScrollPhysics(),
           child: Column(

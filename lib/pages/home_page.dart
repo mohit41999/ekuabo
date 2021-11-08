@@ -25,6 +25,7 @@ import 'package:ekuabo/utils/color.dart';
 import 'package:ekuabo/utils/ekuabo_asset.dart';
 import 'package:ekuabo/utils/ekuabo_route.dart';
 import 'package:ekuabo/utils/ekuabo_string.dart';
+import 'package:ekuabo/widgets/EcuaboAppBar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:velocity_x/velocity_x.dart';
@@ -84,9 +85,9 @@ class HomePage extends StatelessWidget {
                   backgroundColor: Colors.white,
                   currentIndex: _con.selectedIndex,
                   onTap: (index) {
-                    if (index == 4) {
-                      _showPopupMenu(context);
-                    }
+                    // if (index == 4) {
+                    //   _showPopupMenu(context);
+                    // }
 
                     if (index != _con.selectedIndex) {
                       /*_con.navigationQueue
@@ -158,15 +159,19 @@ class HomePage extends StatelessWidget {
                           height: 24,
                         ).p(10),
                         label: EkuaboString.blog),
-                    BottomNavigationBarItem(
-                        icon: Image.asset(
-                          _con.selectedIndex == 4
-                              ? EkuaboAsset.ic_active_more
-                              : EkuaboAsset.ic_more,
-                          width: 24,
-                          height: 24,
-                        ),
-                        label: EkuaboString.more),
+                    // BottomNavigationBarItem(
+                    //     icon: Icon(
+                    //       Icons.person_outline_rounded,
+                    //       color: _con.selectedIndex == 4
+                    //           ? MyColor.mainColor
+                    //           : MyColor.inactiveColor,
+                    //     ),
+                    //     // Image.asset(
+                    //
+                    //     //   width: 24,
+                    //     //   height: 24,
+                    //     // ),
+                    //     label: 'Profile'),
                   ],
                 ),
                 body: Navigator(
@@ -237,74 +242,6 @@ class HomePage extends StatelessWidget {
 
       default:
         return const Text("Loading...");
-    }
-  }
-
-  void _showPopupMenu(BuildContext context) async {
-    List<PopupMenuEntry<Object>> list = [];
-    for (var element in listOfMoreMenu) {
-      list.add(PopupMenuItem(
-          value: element,
-          enabled: true,
-          child: VxBox(
-                  child: element.text
-                      .size(14)
-                      .medium
-                      .color(MyColor.lightBlueColor)
-                      .make())
-              .width(150)
-              .make()
-              .onTap(
-            () {
-              _selectMoreOption(listOfMoreMenu.indexOf(element));
-              Get.back();
-            },
-          )));
-      list.add(const PopupMenuDivider(
-        height: 1,
-      ));
-    }
-    var sizeOfScreen = MediaQuery.of(context).size;
-    await showMenu(
-        context: context,
-        position: RelativeRect.fromLTRB(sizeOfScreen.width - 100,
-            sizeOfScreen.height - 100, sizeOfScreen.width - 100, 100),
-        items: list,
-        useRootNavigator: true);
-  }
-
-  void _selectMoreOption(int index) {
-    _con.navigationQueue.addLast(4);
-    switch (index) {
-      case 0:
-        _con.bottomNavigatorKey.currentState
-            .pushNamed(EkuaboRoute.privateMessageBoard);
-        break;
-      case 1:
-        _con.bottomNavigatorKey.currentState.pushNamed(EkuaboRoute.more);
-        break;
-      case 2:
-        _con.bottomNavigatorKey.currentState
-            .pushNamed(EkuaboRoute.myPostBannerAd);
-        break;
-      case 3:
-        _con.bottomNavigatorKey.currentState.pushNamed(EkuaboRoute.myGroup);
-        break;
-      case 4:
-        _con.bottomNavigatorKey.currentState
-            .pushNamed(EkuaboRoute.groupInvitation);
-        break;
-      case 5:
-        _con.bottomNavigatorKey.currentState
-            .pushNamed(EkuaboRoute.groupJoinRequest);
-        break;
-      case 6:
-        _con.bottomNavigatorKey.currentState
-            .pushNamed(EkuaboRoute.transactionHistory);
-        break;
-      case 7:
-        _con.bottomNavigatorKey.currentState.pushNamed(EkuaboRoute.setting);
-        break;
     }
   }
 }

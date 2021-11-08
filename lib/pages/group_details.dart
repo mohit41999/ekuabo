@@ -79,7 +79,7 @@ class _GroupDetailsState extends State<GroupDetails> {
         ),
         backgroundColor: MyColor.mainColor,
       ),
-      appBar: EcuaboAppBar().getAppBar(),
+      appBar: EcuaboAppBar().getAppBar(context),
       body: (loading)
           ? Center(child: CircularProgressIndicator())
           : (_groupModel == null)

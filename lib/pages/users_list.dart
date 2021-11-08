@@ -47,7 +47,7 @@ class _UsersListState extends State<UsersList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: EcuaboAppBar().getAppBar(),
+      appBar: EcuaboAppBar().getAppBar(context),
       body: ListView.builder(
           itemCount: UsersList.length,
           itemBuilder: (context, index) {

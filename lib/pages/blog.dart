@@ -28,7 +28,7 @@ class _BlogState extends State<Blog> {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Colors.white,
-        appBar: EcuaboAppBar().getAppBar(),
+        appBar: EcuaboAppBar().getAppBar(context),
         body: GetBuilder<BlogController>(
           builder: (_) => _con.mostRecentBlogs == null
               ? Stack(

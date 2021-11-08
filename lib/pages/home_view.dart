@@ -11,6 +11,7 @@ import 'package:ekuabo/utils/color.dart';
 import 'package:ekuabo/utils/ekuabo_asset.dart';
 import 'package:ekuabo/utils/ekuabo_route.dart';
 import 'package:ekuabo/utils/ekuabo_string.dart';
+import 'package:ekuabo/widgets/EcuaboAppBar.dart';
 import 'package:ekuabo/widgets/UnderlineWidget.dart';
 import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/cupertino.dart';
@@ -18,6 +19,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:get/get.dart';
 import 'package:velocity_x/velocity_x.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 
 class HomeView extends StatefulWidget {
   HomeView({Key key}) : super(key: key);
@@ -38,8 +40,6 @@ class _HomeViewState extends State<HomeView> {
     });
     _adcon.getslotads(context, '2').then((value) {
       setState(() {
-        print(value.data[0].title.toString() +
-            'kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk');
         homeverticalads = value.data;
       });
     });
@@ -79,6 +79,7 @@ class _HomeViewState extends State<HomeView> {
 
     return GetBuilder<HomeViewController>(
       builder: (_) => Scaffold(
+        appBar: EcuaboAppBar().getAppBar(context),
         body: RefreshIndicator(
           onRefresh: () {
             setState(() {
@@ -633,59 +634,62 @@ class HorizontalAd extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 100,
-      width: double.infinity,
-      child: ListView.builder(
-          padding: EdgeInsets.zero,
+    return CarouselSlider.builder(
+        options: CarouselOptions(
+          autoPlay: true,
+          autoPlayInterval: Duration(seconds: 5),
+          autoPlayAnimationDuration: Duration(milliseconds: 800),
+          autoPlayCurve: Curves.fastOutSlowIn,
+          height: 100.0,
           scrollDirection: Axis.horizontal,
-          itemCount: data.length,
-          itemBuilder: (context, index) {
-            return Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                height: 100,
-                width: 350,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    gradient: LinearGradient(
-                        colors: [MyColor.lightBlueColor, MyColor.mainColor])),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          data[index].title,
+          viewportFraction: 1,
+        ),
+        itemCount: data.length,
+        itemBuilder: (BuildContext context, int index, int pageViewIndex) {
+          return Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              height: 100,
+              width: 350,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  gradient: LinearGradient(
+                      colors: [MyColor.lightBlueColor, MyColor.mainColor])),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        data[index].title,
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      Container(
+                        width: 200,
+                        child: Text(
+                          data[index].description,
                           style: TextStyle(color: Colors.white),
                         ),
-                        Container(
-                          width: 200,
-                          child: Text(
-                            data[index].description,
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(right: 8.0),
-                      child: CachedNetworkImage(
-                          height: 100,
-                          width: 100,
-                          imageUrl: data[index].image,
-                          errorWidget: (_, __, ___) =>
-                              Image.asset('asset/images/error_img.jpg'),
-                          fit: BoxFit.contain),
-                    ),
-                  ],
-                ),
+                      ),
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 8.0),
+                    child: CachedNetworkImage(
+                        height: 100,
+                        width: 100,
+                        imageUrl: data[index].image,
+                        errorWidget: (_, __, ___) =>
+                            Image.asset('asset/images/error_img.jpg'),
+                        fit: BoxFit.cover),
+                  ),
+                ],
               ),
-            );
-          }),
-    );
+            ),
+          );
+        });
   }
 }
 
@@ -699,58 +703,117 @@ class VerticalAd extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 250,
-      width: double.infinity / 2,
-      child: ListView.builder(
-          padding: EdgeInsets.zero,
+    return CarouselSlider.builder(
+        options: CarouselOptions(
+          autoPlay: true,
+          autoPlayInterval: Duration(seconds: 5),
+          autoPlayAnimationDuration: Duration(milliseconds: 800),
+          autoPlayCurve: Curves.fastOutSlowIn,
+          height: 250.0,
           scrollDirection: Axis.vertical,
-          itemCount: data.length,
-          itemBuilder: (context, index) {
-            return Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                height: 250,
-                width: 200,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    gradient: LinearGradient(
-                        colors: [MyColor.lightBlueColor, MyColor.mainColor])),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          data[index].title,
+          viewportFraction: 1,
+        ),
+        itemCount: data.length,
+        itemBuilder: (BuildContext context, int index, int pageViewIndex) {
+          return Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              height: 250,
+              width: 200,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  gradient: LinearGradient(colors: [
+                    MyColor.lightBlueColor,
+                    MyColor.mainColor,
+                    Colors.blue
+                  ], begin: Alignment.topLeft, end: Alignment.bottomRight)),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        data[index].title,
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      Container(
+                        width: 200,
+                        child: Text(
+                          data[index].description,
                           style: TextStyle(color: Colors.white),
                         ),
-                        Container(
-                          width: 200,
-                          child: Text(
-                            data[index].description,
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(right: 8.0),
-                      child: CachedNetworkImage(
-                          height: 250,
-                          width: 100,
-                          imageUrl: data[index].image,
-                          errorWidget: (_, __, ___) =>
-                              Image.asset('asset/images/error_img.jpg'),
-                          fit: BoxFit.contain),
-                    ),
-                  ],
-                ),
+                      ),
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 8.0),
+                    child: CachedNetworkImage(
+                        height: 150,
+                        width: 100,
+                        imageUrl: data[index].image,
+                        errorWidget: (_, __, ___) =>
+                            Image.asset('asset/images/error_img.jpg'),
+                        fit: BoxFit.cover),
+                  ),
+                ],
               ),
-            );
-          }),
-    );
+            ),
+          );
+        });
+    //   Container(
+    //   height: 250,
+    //   width: double.infinity / 2,
+    //   child: ListView.builder(
+    //       padding: EdgeInsets.zero,
+    //       scrollDirection: Axis.vertical,
+    //       itemCount: data.length,
+    //       itemBuilder: (context, index) {
+    //         return Padding(
+    //           padding: const EdgeInsets.all(8.0),
+    //           child: Container(
+    //             height: 250,
+    //             width: 200,
+    //             decoration: BoxDecoration(
+    //                 borderRadius: BorderRadius.circular(10),
+    //                 gradient: LinearGradient(
+    //                     colors: [MyColor.lightBlueColor, MyColor.mainColor])),
+    //             child: Row(
+    //               mainAxisAlignment: MainAxisAlignment.spaceAround,
+    //               children: [
+    //                 Column(
+    //                   crossAxisAlignment: CrossAxisAlignment.start,
+    //                   mainAxisAlignment: MainAxisAlignment.center,
+    //                   children: [
+    //                     Text(
+    //                       data[index].title,
+    //                       style: TextStyle(color: Colors.white),
+    //                     ),
+    //                     Container(
+    //                       width: 200,
+    //                       child: Text(
+    //                         data[index].description,
+    //                         style: TextStyle(color: Colors.white),
+    //                       ),
+    //                     ),
+    //                   ],
+    //                 ),
+    //                 Padding(
+    //                   padding: const EdgeInsets.only(right: 8.0),
+    //                   child: CachedNetworkImage(
+    //                       height: 250,
+    //                       width: 100,
+    //                       imageUrl: data[index].image,
+    //                       errorWidget: (_, __, ___) =>
+    //                           Image.asset('asset/images/error_img.jpg'),
+    //                       fit: BoxFit.contain),
+    //                 ),
+    //               ],
+    //             ),
+    //           ),
+    //         );
+    //       }),
+    // );
   }
 }

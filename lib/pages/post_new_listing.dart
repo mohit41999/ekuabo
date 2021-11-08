@@ -126,7 +126,7 @@ class _PostNewListingState extends State<PostNewListing> {
     return GetBuilder<AddMarketPlaceController>(
       builder: (_) => Scaffold(
         backgroundColor: Colors.white,
-        appBar: EcuaboAppBar().getAppBar(),
+        appBar: EcuaboAppBar().getAppBar(context),
         body: SingleChildScrollView(
             child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

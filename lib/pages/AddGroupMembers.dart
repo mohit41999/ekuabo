@@ -61,7 +61,7 @@ class _AddGroupMembersState extends State<AddGroupMembers> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: EcuaboAppBar().getAppBar(),
+      appBar: EcuaboAppBar().getAppBar(context),
       body: ListView.builder(
           itemCount: Members.length,
           itemBuilder: (context, index) {

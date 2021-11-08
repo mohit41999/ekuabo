@@ -88,7 +88,7 @@ class _EditNeighbourhoodDetailsState extends State<EditNeighbourhoodDetails> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: EcuaboAppBar().getAppBar(),
+      appBar: EcuaboAppBar().getAppBar(context),
       body: VxCard(
         Column(
           children: [

@@ -21,7 +21,7 @@ class GroupInvitation extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: EcuaboAppBar().getAppBar(),
+      appBar: EcuaboAppBar().getAppBar(context),
       body: GetBuilder<GroupInvitationController>(
         builder: (_) => Stack(
           fit: StackFit.expand,

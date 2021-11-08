@@ -4,12 +4,14 @@ import 'package:ekuabo/controller/market_place_controller.dart';
 import 'package:ekuabo/model/apimodel/banner/display_banner_ads.dart';
 import 'package:ekuabo/model/apimodel/market_place/category_bean.dart';
 import 'package:ekuabo/network/repository/market_place_repository.dart';
+import 'package:ekuabo/pages/home_view.dart';
 import 'package:ekuabo/pages/marketplace_listing.dart';
 import 'package:ekuabo/pages/my_market_List.dart';
 import 'package:ekuabo/utils/color.dart';
 import 'package:ekuabo/utils/ekuabo_asset.dart';
 import 'package:ekuabo/utils/ekuabo_string.dart';
 import 'package:ekuabo/utils/navigationDrawer.dart';
+import 'package:ekuabo/widgets/EcuaboAppBar.dart';
 import 'package:ekuabo/widgets/UnderlineWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -28,8 +30,8 @@ class _MarketPlaceState extends State<MarketPlace> {
   final _con = Get.find<MarketPlaceController>();
   final _adcon = Get.find<AddBannerController>();
   Future<CategoryBean> getMarketPlaceCategory;
-  List<BannerModelData> MarketHorizontalAd;
-  List<BannerModelData> MarketVerticalAd;
+  List<BannerModelData> MarketHorizontalAd = [];
+  List<BannerModelData> MarketVerticalAd = [];
   void callads() {
     _adcon.getslotads(context, '5').then((value) {
       setState(() {
@@ -55,6 +57,7 @@ class _MarketPlaceState extends State<MarketPlace> {
   void initState() {
     // TODO: implement initState
     initialize();
+    callads();
     super.initState();
   }
 
@@ -63,12 +66,21 @@ class _MarketPlaceState extends State<MarketPlace> {
     return GetBuilder<MarketPlaceController>(
       builder: (_) => Scaffold(
         backgroundColor: Colors.white,
-        appBar: AppBar(
-          foregroundColor: MyColor.mainColor,
-          backgroundColor: Colors.white,
-          elevation: 0,
-          actions: [
-            Padding(
+        appBar: EcuaboAppBar().getAppBar(context,
+            leading: Builder(
+              builder: (context) => IconButton(
+                icon: Icon(
+                  Icons.menu,
+                  color: MyColor.mainColor,
+                ),
+                onPressed: () {
+                  setState(() {
+                    Scaffold.of(context).openDrawer();
+                  });
+                },
+              ),
+            ),
+            action: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: MaterialButton(
                   onPressed: () {
@@ -90,15 +102,22 @@ class _MarketPlaceState extends State<MarketPlace> {
                     'My Market Place Listing',
                     style: TextStyle(color: Colors.white),
                   ),
-                ))
-          ],
-          title: Image.asset(
-            EkuaboAsset.ic_app_logo,
-            width: 118,
-            height: 49,
-          ).centered(),
-        ),
+                ))),
         drawer: NavigationDrawer(getMarketPlaceCategory),
+        // appBar: AppBar(
+        //   foregroundColor: MyColor.mainColor,
+        //   backgroundColor: Colors.white,
+        //   elevation: 0,
+        //   actions: [
+        //
+        //   ],
+        //   title: Image.asset(
+        //     EkuaboAsset.ic_app_logo,
+        //     width: 118,
+        //     height: 49,
+        //   ).centered(),
+        // ),
+
         body: Stack(
           fit: StackFit.expand,
           children: [
@@ -129,28 +148,103 @@ class _MarketPlaceState extends State<MarketPlace> {
                     ? Expanded(
                         child: ListView.builder(
                           itemBuilder: (ctx, index) {
-                            return VxCard(marketlistTile(
-                              con: _con,
-                              index: index,
-                            ))
-                                .elevation(5)
-                                .withRounded(value: 7)
-                                .white
-                                .make()
-                                .onTap(() {
-                              m_id = _con.marketPlaces[index].marketplaceId
-                                  .toString();
-                              print(m_id +
-                                  'ppppppppppppppppppppppppppppppppppppppppppp');
-                              _homeController.bottomNavigatorKey.currentState
-                                  .push(ScaleRoute(page: MarketPlaceListing()))
-                                  .then((value) {
-                                setState(() {
-                                  _con.getMarketPlace();
-                                });
-                              });
-                              _homeController.navigationQueue.addLast(1);
-                            }).pOnly(top: 10, left: 10, right: 10);
+                            return (index % 5 == 0 &&
+                                    MarketHorizontalAd.toString() !=
+                                        [].toString())
+                                ? Column(
+                                    children: [
+                                      VxCard(marketlistTile(
+                                        con: _con,
+                                        index: index,
+                                      ))
+                                          .elevation(5)
+                                          .withRounded(value: 7)
+                                          .white
+                                          .make()
+                                          .onTap(() {
+                                        m_id = _con
+                                            .marketPlaces[index].marketplaceId
+                                            .toString();
+                                        print(m_id +
+                                            'ppppppppppppppppppppppppppppppppppppppppppp');
+                                        _homeController
+                                            .bottomNavigatorKey.currentState
+                                            .push(ScaleRoute(
+                                                page: MarketPlaceListing()))
+                                            .then((value) {
+                                          setState(() {
+                                            _con.getMarketPlace();
+                                          });
+                                        });
+                                        _homeController.navigationQueue
+                                            .addLast(1);
+                                      }).pOnly(top: 10, left: 10, right: 10),
+                                      HorizontalAd(
+                                        data: MarketHorizontalAd,
+                                      ),
+                                    ],
+                                  )
+                                : (index % 7 == 0 &&
+                                        MarketVerticalAd.toString() !=
+                                            [].toString())
+                                    ? Column(
+                                        children: [
+                                          VxCard(marketlistTile(
+                                            con: _con,
+                                            index: index,
+                                          ))
+                                              .elevation(5)
+                                              .withRounded(value: 7)
+                                              .white
+                                              .make()
+                                              .onTap(() {
+                                            m_id = _con.marketPlaces[index]
+                                                .marketplaceId
+                                                .toString();
+                                            print(m_id +
+                                                'ppppppppppppppppppppppppppppppppppppppppppp');
+                                            _homeController
+                                                .bottomNavigatorKey.currentState
+                                                .push(ScaleRoute(
+                                                    page: MarketPlaceListing()))
+                                                .then((value) {
+                                              setState(() {
+                                                _con.getMarketPlace();
+                                              });
+                                            });
+                                            _homeController.navigationQueue
+                                                .addLast(1);
+                                          }).pOnly(
+                                                  top: 10, left: 10, right: 10),
+                                          VerticalAd(data: MarketVerticalAd),
+                                        ],
+                                      )
+                                    : VxCard(marketlistTile(
+                                        con: _con,
+                                        index: index,
+                                      ))
+                                        .elevation(5)
+                                        .withRounded(value: 7)
+                                        .white
+                                        .make()
+                                        .onTap(() {
+                                        m_id = _con
+                                            .marketPlaces[index].marketplaceId
+                                            .toString();
+                                        print(m_id +
+                                            'ppppppppppppppppppppppppppppppppppppppppppp');
+                                        _homeController
+                                            .bottomNavigatorKey.currentState
+                                            .push(ScaleRoute(
+                                                page: MarketPlaceListing()))
+                                            .then((value) {
+                                          setState(() {
+                                            _con.getMarketPlace();
+                                          });
+                                        });
+                                        _homeController.navigationQueue
+                                            .addLast(1);
+                                      }).pOnly(top: 10, left: 10, right: 10);
                           },
                           shrinkWrap: true,
                           physics: const BouncingScrollPhysics(),
@@ -212,7 +306,7 @@ class marketlistTile extends StatelessWidget {
                       child: Image.network(
                     _con.marketPlaces[index].image[0].image.toString(),
                     fit: BoxFit.cover,
-                  )).w(200).h(130).backgroundColor(Colors.red)),
+                  )).w(200).h(130).backgroundColor(Colors.transparent)),
               Expanded(
                 child: const Icon(
                   Icons.more_vert,

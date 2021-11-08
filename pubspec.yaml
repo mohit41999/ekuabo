@@ -52,6 +52,7 @@ dependencies:
   country_picker: ^2.0.7
   webview_flutter: ^2.0.10
   currency_picker: ^2.0.3
+  carousel_slider: ^4.0.0
 #  appcenter: ^0.2.1
 #  appcenter_analytics: ^0.2.1
 #  appcenter_crashes: ^0.2.1

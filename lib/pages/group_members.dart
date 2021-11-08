@@ -70,7 +70,7 @@ class _GroupMembersState extends State<GroupMembers> {
         },
         // tooltip: ,
       ),
-      appBar: EcuaboAppBar().getAppBar(),
+      appBar: EcuaboAppBar().getAppBar(context),
       body: (loading)
           ? Center(
               child: CircularProgressIndicator(),

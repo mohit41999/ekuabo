@@ -19,11 +19,11 @@ class MyPostedBannerAd extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Get.parameters={EkuaboRoute.myPostBannerAd:""};
+    Get.parameters = {EkuaboRoute.myPostBannerAd: ""};
     _con.getBannerList();
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: EcuaboAppBar().getAppBar(),
+      appBar: EcuaboAppBar().getAppBar(context),
       body: GetBuilder<MyPostedBannerAdController>(
         builder: (_) => Stack(
           fit: StackFit.expand,
@@ -79,7 +79,7 @@ class MyPostedBannerAd extends StatelessWidget {
                               maxHeight: 350, maxWidth: double.infinity),
                           child: ListView.builder(
                             itemBuilder: (ctx, index) {
-                              var banner=_con.bannerList[index];
+                              var banner = _con.bannerList[index];
                               return VxCard(Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisSize: MainAxisSize.max,
@@ -93,12 +93,17 @@ class MyPostedBannerAd extends StatelessWidget {
                                               child: Hero(
                                         tag: "Blog",
                                         child: CachedNetworkImage(
-                                          imageUrl: banner.image??'',
+                                          imageUrl: banner.image ?? '',
                                           placeholder: (context, url) =>
                                               const CircularProgressIndicator(),
-                                          errorWidget: (_,__,___)=>Image.asset(EkuaboAsset.no_image,width: 150,height: 200, fit: BoxFit.fill,),
+                                          errorWidget: (_, __, ___) =>
+                                              Image.asset(
+                                            EkuaboAsset.no_image,
+                                            width: 150,
+                                            height: 200,
+                                            fit: BoxFit.fill,
+                                          ),
                                         ),
-
                                       ))
                                           .width(134)
                                           .height(134)
@@ -115,16 +120,17 @@ class MyPostedBannerAd extends StatelessWidget {
                                   16.heightBox,
                                   VxBox(
                                           child: Center(
-                                    child: banner.isApproved=='n'?EkuaboString.approved
-                                        .text
-                                        .color(Colors.grey)
-                                        .medium
-                                        .size(14)
-                                        .make():EkuaboString.pending.text
-                                      .color(Colors.grey)
-                                      .medium
-                                      .size(14)
-                                      .make(),
+                                    child: banner.isApproved == 'n'
+                                        ? EkuaboString.approved.text
+                                            .color(Colors.grey)
+                                            .medium
+                                            .size(14)
+                                            .make()
+                                        : EkuaboString.pending.text
+                                            .color(Colors.grey)
+                                            .medium
+                                            .size(14)
+                                            .make(),
                                   ))
                                       .withRounded(value: 10)
                                       .height(30)
@@ -140,12 +146,11 @@ class MyPostedBannerAd extends StatelessWidget {
                                       .make()
                                       .pOnly(left: 16),
                                   VxBox(
-                                          child: banner.slotName
-                                              .text
-                                              .medium
+                                          child: banner.slotName.text.medium
                                               .size(14)
                                               .color(MyColor.mainColor)
-                                              .makeCentered().p(5))
+                                              .makeCentered()
+                                              .p(5))
                                       .withRounded(value: 10)
                                       .border(
                                           color: MyColor.mainColor, width: 0.4)
@@ -169,9 +174,8 @@ class MyPostedBannerAd extends StatelessWidget {
                                   .white
                                   .make()
                                   .w(200)
-                                  .onTap(() {
-
-                              }).pOnly(top: 10, left: 10, right: 10);
+                                  .onTap(() {})
+                                  .pOnly(top: 10, left: 10, right: 10);
                             },
                             shrinkWrap: true,
                             physics: const BouncingScrollPhysics(),
@@ -182,11 +186,9 @@ class MyPostedBannerAd extends StatelessWidget {
                 ],
               ),
             ),
-
           ],
         ),
-        initState: (_){
-         },
+        initState: (_) {},
       ),
     );
   }

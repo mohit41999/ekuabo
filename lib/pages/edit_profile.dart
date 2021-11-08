@@ -12,11 +12,13 @@ import 'package:velocity_x/velocity_x.dart';
 
 class EditProfile extends StatelessWidget {
   final _con = Get.find<EditProfileController>();
+
   @override
   Widget build(BuildContext context) {
+    _con.fillvalues();
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: EcuaboAppBar().getAppBar(),
+      appBar: EcuaboAppBar().getAppBar(context),
       body: SingleChildScrollView(
         physics: BouncingScrollPhysics(),
         child: Column(

@@ -26,7 +26,7 @@ class _CreateMyAdState extends State<CreateMyAd> {
     return GetBuilder<AddBannerController>(
       builder: (_) => Scaffold(
         backgroundColor: Colors.white,
-        appBar: EcuaboAppBar().getAppBar(),
+        appBar: EcuaboAppBar().getAppBar(context),
         body: _con.bannerSlots.isNotEmpty
             ? SingleChildScrollView(
                 physics: BouncingScrollPhysics(),

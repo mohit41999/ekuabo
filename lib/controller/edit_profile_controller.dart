@@ -14,6 +14,7 @@ class EditProfileController extends GetxController {
   EditProfileRepository _repository;
   final picker = ImagePicker();
   PickedFile mediaFile;
+
   var nameCtl = TextEditingController();
   var emailCtl = TextEditingController();
   var contactNoCtl = TextEditingController();
@@ -22,6 +23,17 @@ class EditProfileController extends GetxController {
   var occupationCtl = TextEditingController();
   var interestCtl = TextEditingController();
   var funFactCtl = TextEditingController();
+  Future<void> fillvalues() async {
+    var userBean = await PrefManager.getUser();
+    nameCtl.text = userBean.data.userName;
+    emailCtl.text = userBean.data.email;
+    contactNoCtl.text = userBean.data.contactNo;
+    homeContactCtl.text = userBean.data.homeContactNo;
+    homeTownCtl.text = userBean.data.homeTown;
+    occupationCtl.text = userBean.data.occupation;
+    interestCtl.text = userBean.data.interests;
+    funFactCtl.text = userBean.data.funFacts;
+  }
 
   void clearControllers() {
     nameCtl.clear();
