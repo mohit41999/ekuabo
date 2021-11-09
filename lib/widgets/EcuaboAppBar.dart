@@ -61,7 +61,6 @@ class EcuaboAppBar {
         break;
       case 1:
         Navigator.pushNamed(context, EkuaboRoute.more);
-        _con.bottomNavigatorKey.currentState.pushNamed(EkuaboRoute.more);
         break;
       case 2:
         Navigator.pushNamed(context, EkuaboRoute.myPostBannerAd);
@@ -102,7 +101,7 @@ class EcuaboAppBar {
               _showPopupMenu(context);
             },
             icon: Icon(
-              Icons.more_horiz,
+              Icons.person,
               color: MyColor.mainColor,
             ))
       ],
