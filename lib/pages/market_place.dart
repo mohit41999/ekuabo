@@ -66,43 +66,22 @@ class _MarketPlaceState extends State<MarketPlace> {
     return GetBuilder<MarketPlaceController>(
       builder: (_) => Scaffold(
         backgroundColor: Colors.white,
-        appBar: EcuaboAppBar().getAppBar(context,
-            leading: Builder(
-              builder: (context) => IconButton(
-                icon: Icon(
-                  Icons.menu,
-                  color: MyColor.mainColor,
-                ),
-                onPressed: () {
-                  setState(() {
-                    Scaffold.of(context).openDrawer();
-                  });
-                },
+        appBar: EcuaboAppBar().getAppBar(
+          context,
+          leading: Builder(
+            builder: (context) => IconButton(
+              icon: Icon(
+                Icons.menu,
+                color: MyColor.mainColor,
               ),
+              onPressed: () {
+                setState(() {
+                  Scaffold.of(context).openDrawer();
+                });
+              },
             ),
-            action: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: MaterialButton(
-                  onPressed: () {
-                    Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => MyMarketPlace()))
-                        .then((value) {
-                      setState(() {
-                        _con.getMarketPlace();
-                      });
-                    });
-                  },
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  color: MyColor.inactiveColor,
-                  child: Text(
-                    'My Market Place Listing',
-                    style: TextStyle(color: Colors.white, fontSize: 10),
-                  ),
-                ))),
+          ),
+        ),
         drawer: NavigationDrawer(getMarketPlaceCategory),
         // appBar: AppBar(
         //   foregroundColor: MyColor.mainColor,
@@ -142,6 +121,29 @@ class _MarketPlaceState extends State<MarketPlace> {
                         UnderlineWidget().getUnderlineWidget()
                       ],
                     ),
+                    Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: MaterialButton(
+                          onPressed: () {
+                            Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => MyMarketPlace()))
+                                .then((value) {
+                              setState(() {
+                                _con.getMarketPlace();
+                              });
+                            });
+                          },
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          color: MyColor.inactiveColor,
+                          child: Text(
+                            'My Market Place Listing',
+                            style: TextStyle(color: Colors.white, fontSize: 12),
+                          ),
+                        ))
                   ],
                 ).pOnly(left: 16, right: 16),
                 _con.marketPlaces.isNotEmpty

@@ -111,39 +111,22 @@ class _NewsFeedsViewAllState extends State<NewsFeedsViewAll> {
     return GetBuilder<NewsFeedsViewAllController>(
       builder: (_) => Scaffold(
         backgroundColor: Colors.white,
-        appBar: EcuaboAppBar().getAppBar(context,
-            leading: Builder(
-              builder: (context) => IconButton(
-                icon: Icon(
-                  Icons.menu,
-                  color: MyColor.mainColor,
-                ),
-                onPressed: () {
-                  setState(() {
-                    Scaffold.of(context).openDrawer();
-                  });
-                },
+        appBar: EcuaboAppBar().getAppBar(
+          context,
+          leading: Builder(
+            builder: (context) => IconButton(
+              icon: Icon(
+                Icons.menu,
+                color: MyColor.mainColor,
               ),
+              onPressed: () {
+                setState(() {
+                  Scaffold.of(context).openDrawer();
+                });
+              },
             ),
-            action: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: VxCircle(
-                backgroundColor: MyColor.mainColor,
-                child: const Icon(
-                  Icons.add,
-                  size: 20,
-                  color: Colors.white,
-                ).onFeedBackTap(() async {
-                  Navigator.pushNamed(context, EkuaboRoute.newsFeed)
-                      .then((value) {
-                    _con.getNewsFeeds();
-                  });
-                }),
-                shadows: const [
-                  BoxShadow(color: MyColor.inactiveColor, blurRadius: 10)
-                ],
-              ).wh(30, 30),
-            )),
+          ),
+        ),
         // AppBar(
         //   foregroundColor: MyColor.mainColor,
         //   backgroundColor: Colors.white,
@@ -177,34 +160,67 @@ class _NewsFeedsViewAllState extends State<NewsFeedsViewAll> {
                                 .size(10)
                                 .make(),
                           )
-                        : GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => SearchGroup()));
-                            },
-                            child: VxCard(Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  Icons.search,
-                                  color: MyColor.mainColor.withOpacity(0.8),
-                                  size: 24,
+                        : Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                SearchGroup()));
+                                  },
+                                  child: VxCard(Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Icon(
+                                        Icons.search,
+                                        color:
+                                            MyColor.mainColor.withOpacity(0.8),
+                                        size: 24,
+                                      ),
+                                      16.widthBox,
+                                      EkuaboString.searchGroup.text
+                                          .color(MyColor.mainColor
+                                              .withOpacity(0.8))
+                                          .light
+                                          .size(16)
+                                          .make()
+                                    ],
+                                  ).p(5))
+                                      .elevation(5)
+                                      .withRounded(value: 7)
+                                      .shadowColor(MyColor.mainColor)
+                                      .make(),
                                 ),
-                                16.widthBox,
-                                EkuaboString.searchGroup.text
-                                    .color(MyColor.mainColor.withOpacity(0.8))
-                                    .light
-                                    .size(16)
-                                    .make()
-                              ],
-                            ).p(5))
-                                .elevation(5)
-                                .withRounded(value: 7)
-                                .shadowColor(MyColor.mainColor)
-                                .make(),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: VxCircle(
+                                  backgroundColor: MyColor.mainColor,
+                                  child: const Icon(
+                                    Icons.add,
+                                    size: 20,
+                                    color: Colors.white,
+                                  ).onFeedBackTap(() async {
+                                    Navigator.pushNamed(
+                                            context, EkuaboRoute.newsFeed)
+                                        .then((value) {
+                                      _con.getNewsFeeds();
+                                    });
+                                  }),
+                                  shadows: const [
+                                    BoxShadow(
+                                        color: MyColor.inactiveColor,
+                                        blurRadius: 10)
+                                  ],
+                                ).wh(30, 30),
+                              )
+                            ],
                           ),
                 16.heightBox,
                 _con.userBean == null

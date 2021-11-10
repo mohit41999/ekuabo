@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:ekuabo/controller/home_controller.dart';
 import 'package:ekuabo/controller/market_place_controller.dart';
 import 'package:ekuabo/model/apimodel/market_place/category_bean.dart';
@@ -12,11 +14,13 @@ import 'package:ekuabo/utils/ekuabo_route.dart';
 import 'package:ekuabo/utils/ekuabo_string.dart';
 import 'package:ekuabo/utils/navigationDrawer.dart';
 import 'package:ekuabo/utils/pref_manager.dart';
+import 'package:ekuabo/utils/utils.dart';
 import 'package:ekuabo/widgets/EcuaboAppBar.dart';
 import 'package:ekuabo/widgets/UnderlineWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:velocity_x/velocity_x.dart';
+import 'package:http/http.dart' as http;
 
 class MyMarketPlace extends StatefulWidget {
   @override
@@ -24,6 +28,8 @@ class MyMarketPlace extends StatefulWidget {
 }
 
 class _MyMarketPlaceState extends State<MyMarketPlace> {
+  String Token = '123456789';
+  String market_id = '';
   final _homeController = Get.find<HomeController>();
 
   final _con = Get.find<MarketPlaceController>();
@@ -34,11 +40,27 @@ class _MyMarketPlaceState extends State<MyMarketPlace> {
     });
   }
 
+  Future getmarketid() async {
+    UserBean userBean = await PrefManager.getUser();
+    var response = await http.post(
+        Uri.parse(
+            'https://eku-abo.com/api/marketplace/get_marketplace_info.php'),
+        body: {'token': Token, 'user_id': userBean.data.id});
+    var Response = jsonDecode(response.body);
+    return Response;
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     initialize();
     _con.getMyMarketPlace();
+    getmarketid().then((value) {
+      setState(() {
+        market_id = value['data'][0]['market_id'].toString();
+        print(market_id);
+      });
+    });
     super.initState();
   }
 
@@ -47,16 +69,15 @@ class _MyMarketPlaceState extends State<MyMarketPlace> {
     return GetBuilder<MarketPlaceController>(
       builder: (_) => Scaffold(
         backgroundColor: Colors.white,
-        appBar: AppBar(
-          foregroundColor: MyColor.mainColor,
-          backgroundColor: Colors.white,
-          elevation: 0,
-          title: Image.asset(
-            EkuaboAsset.ic_app_logo,
-            width: 118,
-            height: 49,
-          ).centered(),
-        ),
+        appBar: EcuaboAppBar().getAppBar(context,
+            leading: IconButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                icon: Icon(
+                  Icons.arrow_back,
+                  color: MyColor.mainColor,
+                ))),
         body: Stack(
           fit: StackFit.expand,
           children: [
@@ -81,26 +102,41 @@ class _MyMarketPlaceState extends State<MyMarketPlace> {
                         UnderlineWidget().getUnderlineWidget()
                       ],
                     ),
-                    VxCircle(
-                      backgroundColor: MyColor.mainColor,
-                      child: const Icon(
-                        Icons.add,
-                        color: Colors.white,
-                      ).onFeedBackTap(() async {
-                        UserBean userbean;
-                        userbean = await PrefManager.getUser();
-                        print(userbean.data.id);
-                        _homeController.bottomNavigatorKey.currentState
-                            .pushNamed(EkuaboRoute.postNewListing)
-                            .then((value) {
-                          _con.getMyMarketPlace();
-                        });
-                        _homeController.navigationQueue.addLast(1);
-                      }),
-                      shadows: const [
-                        BoxShadow(color: MyColor.inactiveColor, blurRadius: 10)
-                      ],
-                    ).wh(40, 40)
+                    (market_id.toString() == '0')
+                        ? VxCircle(
+                            backgroundColor: Colors.grey,
+                            child: const Icon(
+                              Icons.add,
+                              color: Colors.white,
+                            ).onFeedBackTap(() async {
+                              Utils().showSnackBar(context,
+                                  'Edit MarketplaceInfo First in My Profile');
+                            }),
+                            shadows: const [
+                              BoxShadow(color: Colors.grey, blurRadius: 10)
+                            ],
+                          ).wh(40, 40)
+                        : VxCircle(
+                            backgroundColor: MyColor.mainColor,
+                            child: const Icon(
+                              Icons.add,
+                              color: Colors.white,
+                            ).onFeedBackTap(() async {
+                              UserBean userbean;
+                              userbean = await PrefManager.getUser();
+                              print(userbean.data.id);
+
+                              Navigator.pushNamed(
+                                      context, EkuaboRoute.postNewListing)
+                                  .then((value) {
+                                _con.getMyMarketPlace();
+                              });
+                            }),
+                            shadows: const [
+                              BoxShadow(
+                                  color: MyColor.inactiveColor, blurRadius: 10)
+                            ],
+                          ).wh(40, 40)
                   ],
                 ).pOnly(left: 16, right: 16),
                 _con.mymarketPlaces.isNotEmpty
