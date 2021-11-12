@@ -19,7 +19,7 @@ class AddMarketPlaceController extends GetxController {
   CategoryBeanData selectedCategory;
   List<SubCategoryBeanData> subCategories = [];
   SubCategoryBeanData selectedSubCategory;
-  String currency_code = '';
+  String currency_code = '\$';
 
   MarketPlaceRepository _marketPlaceRepository;
 

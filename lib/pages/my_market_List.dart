@@ -29,7 +29,8 @@ class MyMarketPlace extends StatefulWidget {
 
 class _MyMarketPlaceState extends State<MyMarketPlace> {
   String Token = '123456789';
-  String market_id = '';
+  String market_id;
+  bool market_id_load = true;
   final _homeController = Get.find<HomeController>();
 
   final _con = Get.find<MarketPlaceController>();
@@ -54,13 +55,15 @@ class _MyMarketPlaceState extends State<MyMarketPlace> {
   void initState() {
     // TODO: implement initState
     initialize();
-    _con.getMyMarketPlace();
     getmarketid().then((value) {
       setState(() {
         market_id = value['data'][0]['market_id'].toString();
         print(market_id);
+        market_id_load = false;
       });
     });
+    _con.getMyMarketPlace();
+
     super.initState();
   }
 
@@ -102,7 +105,7 @@ class _MyMarketPlaceState extends State<MyMarketPlace> {
                         UnderlineWidget().getUnderlineWidget()
                       ],
                     ),
-                    (market_id.toString() == '0')
+                    (market_id_load)
                         ? VxCircle(
                             backgroundColor: Colors.grey,
                             child: const Icon(
@@ -116,27 +119,42 @@ class _MyMarketPlaceState extends State<MyMarketPlace> {
                               BoxShadow(color: Colors.grey, blurRadius: 10)
                             ],
                           ).wh(40, 40)
-                        : VxCircle(
-                            backgroundColor: MyColor.mainColor,
-                            child: const Icon(
-                              Icons.add,
-                              color: Colors.white,
-                            ).onFeedBackTap(() async {
-                              UserBean userbean;
-                              userbean = await PrefManager.getUser();
-                              print(userbean.data.id);
+                        : (market_id.toString() != '0')
+                            ? VxCircle(
+                                backgroundColor: MyColor.mainColor,
+                                child: const Icon(
+                                  Icons.add,
+                                  color: Colors.white,
+                                ).onFeedBackTap(() async {
+                                  UserBean userbean;
+                                  userbean = await PrefManager.getUser();
+                                  print(userbean.data.id);
 
-                              Navigator.pushNamed(
-                                      context, EkuaboRoute.postNewListing)
-                                  .then((value) {
-                                _con.getMyMarketPlace();
-                              });
-                            }),
-                            shadows: const [
-                              BoxShadow(
-                                  color: MyColor.inactiveColor, blurRadius: 10)
-                            ],
-                          ).wh(40, 40)
+                                  Navigator.pushNamed(
+                                          context, EkuaboRoute.postNewListing)
+                                      .then((value) {
+                                    _con.getMyMarketPlace();
+                                  });
+                                }),
+                                shadows: const [
+                                  BoxShadow(
+                                      color: MyColor.inactiveColor,
+                                      blurRadius: 10)
+                                ],
+                              ).wh(40, 40)
+                            : VxCircle(
+                                backgroundColor: Colors.grey,
+                                child: const Icon(
+                                  Icons.add,
+                                  color: Colors.white,
+                                ).onFeedBackTap(() async {
+                                  Utils().showSnackBar(context,
+                                      'Edit MarketplaceInfo First in My Profile');
+                                }),
+                                shadows: const [
+                                  BoxShadow(color: Colors.grey, blurRadius: 10)
+                                ],
+                              ).wh(40, 40)
                   ],
                 ).pOnly(left: 16, right: 16),
                 _con.mymarketPlaces.isNotEmpty

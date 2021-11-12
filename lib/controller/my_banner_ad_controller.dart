@@ -9,26 +9,22 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
-class MyPostedBannerAdController extends GetxController
-{
+class MyPostedBannerAdController extends GetxController {
   BannerRepository _bannerRepository;
-  List<BannerBeanData> bannerList=[];
+  List<BannerBeanData> bannerList = [];
 
-  MyPostedBannerAdController(){
-  _bannerRepository=Get.find<BannerRepository>();
-}
-void getBannerList()async
-{
-  var result =await _bannerRepository.getBannerList();
+  MyPostedBannerAdController() {
+    _bannerRepository = Get.find<BannerRepository>();
+  }
+  void getBannerList() async {
+    var result = await _bannerRepository.getBannerList();
 
-  if(result!=null)
-    {
-      BannerBean bannerBean=result;
-      if(bannerBean.status)
-        {
-          bannerList=bannerBean.data;
-        }
+    if (result != null) {
+      BannerBean bannerBean = result;
+      if (bannerBean.status) {
+        bannerList = bannerBean.data.reversed.toList();
+      }
     }
-  update();
-}
+    update();
+  }
 }

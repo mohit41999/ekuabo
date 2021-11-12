@@ -400,6 +400,8 @@ class MyGroups extends StatelessWidget {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => GroupDetails(
+                                            members: _con.myJoiningGroups[index]
+                                                .totalMember,
                                             group_id: _con
                                                 .myJoiningGroups[index].groupId,
                                             created_date: _con

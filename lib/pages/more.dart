@@ -109,7 +109,7 @@ class More extends StatelessWidget {
                 children: [
                   10.heightBox,
                   IconButton(
-                      onPressed: () => _con.bottomNavPop(),
+                      onPressed: () => _con.bottomNavPop(context),
                       icon: Icon(
                         Icons.arrow_back,
                         color: MyColor.mainColor,

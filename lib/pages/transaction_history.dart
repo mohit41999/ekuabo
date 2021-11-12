@@ -20,6 +20,10 @@ class TransactionHistory extends StatelessWidget {
         builder: (_) => Stack(
           fit: StackFit.expand,
           children: [
+            Image.asset(
+              EkuaboAsset.bottom_image,
+              width: double.infinity,
+            ).objectBottomLeft(),
             SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -153,10 +157,6 @@ class TransactionHistory extends StatelessWidget {
                 ],
               ),
             ),
-            Image.asset(
-              EkuaboAsset.bottom_image,
-              width: double.infinity,
-            ).objectBottomLeft()
           ],
         ),
         initState: (_) {

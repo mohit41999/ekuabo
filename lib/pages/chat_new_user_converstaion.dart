@@ -25,6 +25,7 @@ class _ChatNewUserConversationState extends State<ChatNewUserConversation> {
   final _homeController = Get.find<HomeController>();
 
   final _con = Get.find<ChatConversationController>();
+  bool chatloading = true;
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +41,7 @@ class _ChatNewUserConversationState extends State<ChatNewUserConversation> {
               Row(
                 children: [
                   IconButton(
-                      onPressed: () => _homeController.bottomNavPop(),
+                      onPressed: () => _homeController.bottomNavPop(context),
                       icon: Icon(
                         Icons.arrow_back,
                         color: MyColor.mainColor,
@@ -67,119 +68,123 @@ class _ChatNewUserConversationState extends State<ChatNewUserConversation> {
                     reverse: true,
                     child: ListView.builder(
                       itemBuilder: (ctx, index) {
-                        return _con.chatList[index].toUserId != widget.chatId
-                            ? Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Row(
+                        return (chatloading)
+                            ? Container()
+                            : _con.chatList[index].toUserId != widget.chatId
+                                ? Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
-                                      VxBox(
-                                              child: Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                      Row(
                                         children: [
-                                          SizedBox(
-                                            width: 30,
-                                            height: 30,
-                                            child: CircleAvatar(
-                                              backgroundColor:
-                                                  Colors.transparent,
-                                              child: CachedNetworkImage(
-                                                imageUrl: _con.chatList[index]
-                                                        .profileImg ??
-                                                    '',
-                                                placeholder: (_, __) =>
-                                                    CircularProgressIndicator(),
-                                                fit: BoxFit.fill,
+                                          VxBox(
+                                                  child: Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              SizedBox(
                                                 width: 30,
                                                 height: 30,
+                                                child: CircleAvatar(
+                                                  backgroundColor:
+                                                      Colors.transparent,
+                                                  child: CachedNetworkImage(
+                                                    imageUrl: _con
+                                                            .chatList[index]
+                                                            .profileImg ??
+                                                        '',
+                                                    placeholder: (_, __) =>
+                                                        CircularProgressIndicator(),
+                                                    fit: BoxFit.fill,
+                                                    width: 30,
+                                                    height: 30,
+                                                  ),
+                                                ),
                                               ),
-                                            ),
-                                          ),
+                                              10.widthBox,
+                                              _con.chatList[index].message.text
+                                                  .maxLines(1)
+                                                  .ellipsis
+                                                  .size(14)
+                                                  .medium
+                                                  .makeCentered()
+                                                  .pOnly(right: 10),
+                                            ],
+                                          ))
+                                              .border(
+                                                  color: MyColor.mainColor,
+                                                  width: 0.6)
+                                              .withRounded(value: 7)
+                                              .height(30)
+                                              .make()
+                                              .pOnly(left: 10),
                                           10.widthBox,
-                                          _con.chatList[index].message.text
-                                              .maxLines(1)
-                                              .ellipsis
-                                              .size(14)
+                                          _con.chatList[index].time.text
+                                              .size(10)
                                               .medium
-                                              .makeCentered()
-                                              .pOnly(right: 10),
+                                              .color(MyColor.blackColor
+                                                  .withOpacity(0.5))
+                                              .make()
+                                              .pOnly(top: 16)
                                         ],
-                                      ))
-                                          .border(
-                                              color: MyColor.mainColor,
-                                              width: 0.6)
-                                          .withRounded(value: 7)
-                                          .height(30)
-                                          .make()
-                                          .pOnly(left: 10),
-                                      10.widthBox,
+                                      )
+                                    ],
+                                  ).pOnly(top: 10, left: 10, right: 10)
+                                : Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
                                       _con.chatList[index].time.text
                                           .size(10)
                                           .medium
                                           .color(MyColor.blackColor
                                               .withOpacity(0.5))
                                           .make()
-                                          .pOnly(top: 16)
-                                    ],
-                                  )
-                                ],
-                              ).pOnly(top: 10, left: 10, right: 10)
-                            : Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  _con.chatList[index].time.text
-                                      .size(10)
-                                      .medium
-                                      .color(
-                                          MyColor.blackColor.withOpacity(0.5))
-                                      .make()
-                                      .pOnly(top: 10, right: 16),
-                                  Row(
-                                    children: [
-                                      VxBox(
-                                              child: Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                          .pOnly(top: 10, right: 16),
+                                      Row(
                                         children: [
-                                          _con.chatList[index].message.text
-                                              .maxLines(1)
-                                              .ellipsis
-                                              .size(14)
-                                              .medium
-                                              .makeCentered()
-                                              .pOnly(left: 10),
-                                          SizedBox(
-                                            width: 30,
-                                            height: 30,
-                                            child: CircleAvatar(
-                                              backgroundColor:
-                                                  Colors.transparent,
-                                              child: CachedNetworkImage(
-                                                imageUrl: _con.chatList[index]
-                                                        .profileImg ??
-                                                    '',
-                                                placeholder: (_, __) =>
-                                                    CircularProgressIndicator(),
-                                                fit: BoxFit.cover,
+                                          VxBox(
+                                                  child: Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              _con.chatList[index].message.text
+                                                  .maxLines(1)
+                                                  .ellipsis
+                                                  .size(14)
+                                                  .medium
+                                                  .makeCentered()
+                                                  .pOnly(left: 10),
+                                              SizedBox(
                                                 width: 30,
                                                 height: 30,
-                                              ),
-                                            ),
-                                          ).pOnly(left: 20),
+                                                child: CircleAvatar(
+                                                  backgroundColor:
+                                                      Colors.transparent,
+                                                  child: CachedNetworkImage(
+                                                    imageUrl: _con
+                                                            .chatList[index]
+                                                            .profileImg ??
+                                                        '',
+                                                    placeholder: (_, __) =>
+                                                        CircularProgressIndicator(),
+                                                    fit: BoxFit.cover,
+                                                    width: 30,
+                                                    height: 30,
+                                                  ),
+                                                ),
+                                              ).pOnly(left: 20),
+                                            ],
+                                          ))
+                                              .border(
+                                                  color: MyColor.mainColor,
+                                                  width: 0.6)
+                                              .withRounded(value: 7)
+                                              .height(30)
+                                              .make()
+                                              .pOnly(left: 10),
                                         ],
-                                      ))
-                                          .border(
-                                              color: MyColor.mainColor,
-                                              width: 0.6)
-                                          .withRounded(value: 7)
-                                          .height(30)
-                                          .make()
-                                          .pOnly(left: 10),
+                                      )
                                     ],
-                                  )
-                                ],
-                              ).pOnly(top: 10, left: 10, right: 10);
+                                  ).pOnly(top: 10, left: 10, right: 10);
                       },
                       shrinkWrap: true,
                       physics: NeverScrollableScrollPhysics(),
@@ -257,7 +262,11 @@ class _ChatNewUserConversationState extends State<ChatNewUserConversation> {
           ),
         ),
       ),
-      initState: (_) => _con.getUserChatList(widget.chatId),
+      initState: (_) => _con.getUserChatList(widget.chatId).then((value) {
+        setState(() {
+          chatloading = false;
+        });
+      }),
     );
   }
 }

@@ -194,15 +194,19 @@ class GroupInvitation extends StatelessWidget {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => GroupDetails(
-                                        group_id: _con
-                                            .groupInvitations[index].groupId,
-                                        created_date: _con
-                                            .groupInvitations[index]
-                                            .createdDate,
-                                        image_url:
-                                            _con.groupInvitations[index].image,
-                                        grp_name: _con.groupInvitations[index]
-                                            .groupName)));
+                                          group_id: _con
+                                              .groupInvitations[index].groupId,
+                                          created_date: _con
+                                              .groupInvitations[index]
+                                              .createdDate,
+                                          image_url: _con
+                                              .groupInvitations[index].image,
+                                          grp_name: _con.groupInvitations[index]
+                                              .groupName,
+                                          members: _con.groupInvitations[index]
+                                              .totalMember,
+                                          notgroupmember: true,
+                                        )));
                           });
                         }),
               ],

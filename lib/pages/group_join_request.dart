@@ -30,6 +30,10 @@ class _GroupJoinRequestState extends State<GroupJoinRequest> {
         builder: (_) => Stack(
           fit: StackFit.expand,
           children: [
+            Image.asset(
+              EkuaboAsset.bottom_image,
+              width: double.infinity,
+            ).objectBottomLeft(),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -242,10 +246,6 @@ class _GroupJoinRequestState extends State<GroupJoinRequest> {
                         }),
               ],
             ),
-            Image.asset(
-              EkuaboAsset.bottom_image,
-              width: double.infinity,
-            ).objectBottomLeft()
           ],
         ),
         initState: (_) {

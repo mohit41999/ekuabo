@@ -409,7 +409,7 @@ class _UserMarketPlaceDetailsState extends State<UserMarketPlaceDetails> {
                             .withRounded(value: 7)
                             .white
                             .make()
-                            .onTap(() => _homeController.bottomNavPop())
+                            .onTap(() => _homeController.bottomNavPop(context))
                             .pOnly(top: 10, left: 10, right: 10);
                       },
                       shrinkWrap: true,

@@ -12,7 +12,9 @@ import 'package:http/http.dart' as http;
 class GroupMembers extends StatefulWidget {
   final String group_id;
   final String group_name;
-  const GroupMembers({Key key, this.group_id, this.group_name})
+  final bool notgrpmemeber;
+  const GroupMembers(
+      {Key key, this.group_id, this.group_name, this.notgrpmemeber = false})
       : super(key: key);
 
   @override
@@ -54,22 +56,24 @@ class _GroupMembersState extends State<GroupMembers> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: MyColor.mainColor,
-        label: Text(
-          'Add Memebers +',
-          style: TextStyle(color: Colors.white),
-        ),
-        onPressed: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => AddGroupMembers(
-                        group_name: widget.group_name,
-                      )));
-        },
-        // tooltip: ,
-      ),
+      floatingActionButton: (widget.notgrpmemeber)
+          ? null
+          : FloatingActionButton.extended(
+              backgroundColor: MyColor.mainColor,
+              label: Text(
+                'Add Memebers +',
+                style: TextStyle(color: Colors.white),
+              ),
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => AddGroupMembers(
+                              group_name: widget.group_name,
+                            )));
+              },
+              // tooltip: ,
+            ),
       appBar: EcuaboAppBar().getAppBar(context),
       body: (loading)
           ? Center(

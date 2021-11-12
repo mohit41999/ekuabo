@@ -371,7 +371,7 @@ class _PostNewListingState extends State<PostNewListing> {
                                             )
                                           : Text(
                                               _con.currency_code,
-                                              style: TextStyle(fontSize: 15),
+                                              style: TextStyle(fontSize: 20),
                                             ),
                                       Icon(Icons.arrow_drop_down),
                                     ],
@@ -380,7 +380,7 @@ class _PostNewListingState extends State<PostNewListing> {
                           ),
                           5.widthBox,
                           Expanded(
-                            flex: 5,
+                            flex: 3,
                             child: Container(
                               height: 40,
                               child: TextFormField(

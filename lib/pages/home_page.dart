@@ -35,16 +35,6 @@ import 'news_feeds_view_all.dart';
 
 class HomePage extends StatelessWidget {
   final _con = Get.find<HomeController>();
-  final listOfMoreMenu = [
-    "Private Message",
-    "My Profile",
-    "My Posted Banner Ad",
-    "My Groups",
-    "Received Group\n Invitation",
-    "Received Group\n Join Request",
-    "Transaction History",
-    "Settings"
-  ];
 
   @override
   Widget build(BuildContext context) {

@@ -40,6 +40,7 @@ class GroupNewFeedController extends GetxController {
       };
       var result = await _groupnewfeedRepository.addGroupFeed(param);
       loader.dismiss();
+      Navigator.pop(context);
       messageCtl.clear();
       if (result != null) {
         BaseBean baseBean = result;
@@ -68,6 +69,7 @@ class GroupNewFeedController extends GetxController {
       };
       var result = await _groupnewfeedRepository.postImage(param);
       loader.dismiss();
+      Navigator.pop(context);
       messageCtl.clear();
       if (result != null) {
         BaseBean baseBean = result;

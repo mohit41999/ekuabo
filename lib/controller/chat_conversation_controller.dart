@@ -8,12 +8,13 @@ import 'package:get/get.dart';
 
 class ChatConversationController extends GetxController {
   PrivateMsgRepository _repository;
+
   List<UserChatDataBean> chatList = [];
   var msgCtl = TextEditingController();
   ChatConversationController() {
     _repository = Get.find<PrivateMsgRepository>();
   }
-  void getUserChatList(String chatId) async {
+  Future getUserChatList(String chatId) async {
     var userBean = await PrefManager.getUser();
     var param = {'chat_id': chatId, 'user_id': userBean.data.id};
     /*var param={
@@ -28,8 +29,7 @@ class ChatConversationController extends GetxController {
       } else {
         chatList = [];
       }
-    }
-    else{
+    } else {
       chatList = [];
     }
     update();

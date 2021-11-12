@@ -25,14 +25,13 @@ class EcuaboAppBar {
       list.add(PopupMenuItem(
           value: element,
           enabled: true,
-          child: VxBox(
+          child: Container(
+                  width: MediaQuery.of(context).size.width,
                   child: element.text
                       .size(14)
                       .medium
                       .color(MyColor.lightBlueColor)
                       .make())
-              .width(150)
-              .make()
               .onTap(
             () {
               _selectMoreOption(listOfMoreMenu.indexOf(element), context);
@@ -46,8 +45,7 @@ class EcuaboAppBar {
     var sizeOfScreen = MediaQuery.of(context).size;
     await showMenu(
         context: context,
-        position: RelativeRect.fromLTRB(sizeOfScreen.width - 100,
-            sizeOfScreen.height - 100, sizeOfScreen.width - 100, 100),
+        position: RelativeRect.fromLTRB(sizeOfScreen.width, 100, 0, 0),
         items: list,
         useRootNavigator: true);
   }

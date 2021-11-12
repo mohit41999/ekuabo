@@ -19,6 +19,7 @@ class GroupDetails extends StatefulWidget {
   final String image_url;
   final String grp_name;
   final String members;
+  final bool notgroupmember;
 
   const GroupDetails(
       {Key key,
@@ -26,7 +27,8 @@ class GroupDetails extends StatefulWidget {
       @required this.created_date,
       @required this.image_url,
       @required this.grp_name,
-      this.members})
+      this.members,
+      this.notgroupmember = false})
       : super(key: key);
 
   @override
@@ -62,23 +64,25 @@ class _GroupDetailsState extends State<GroupDetails> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => PostNewGroupFeed(
-                        group_id: widget.group_id,
-                      ))).then((value) {
-            inititalize();
-          });
-        },
-        child: Icon(
-          Icons.add,
-          color: Colors.white,
-        ),
-        backgroundColor: MyColor.mainColor,
-      ),
+      floatingActionButton: (widget.notgroupmember)
+          ? null
+          : FloatingActionButton(
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => PostNewGroupFeed(
+                              group_id: widget.group_id,
+                            ))).then((value) {
+                  inititalize();
+                });
+              },
+              child: Icon(
+                Icons.add,
+                color: Colors.white,
+              ),
+              backgroundColor: MyColor.mainColor,
+            ),
       appBar: EcuaboAppBar().getAppBar(context),
       body: (loading)
           ? Center(child: CircularProgressIndicator())
@@ -108,6 +112,8 @@ class _GroupDetailsState extends State<GroupDetails> {
                                       builder: (context) => GroupMembers(
                                             group_id: widget.group_id,
                                             group_name: widget.grp_name,
+                                            notgrpmemeber:
+                                                widget.notgroupmember,
                                           )));
                             }),
                             shadows: const [
@@ -143,10 +149,23 @@ class _GroupDetailsState extends State<GroupDetails> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                commonRow(
-                                    data: '${widget.members} Members',
-                                    iconData: Icons.people,
-                                    iconColor: Colors.grey),
+                                GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => GroupMembers(
+                                                  group_id: widget.group_id,
+                                                  group_name: widget.grp_name,
+                                                  notgrpmemeber:
+                                                      widget.notgroupmember,
+                                                )));
+                                  },
+                                  child: commonRow(
+                                      data: '${widget.members} Members',
+                                      iconData: Icons.people,
+                                      iconColor: Colors.grey),
+                                ),
                                 SizedBox(
                                   width: 15,
                                 ),
@@ -186,6 +205,8 @@ class _GroupDetailsState extends State<GroupDetails> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => GroupMembers(
+                                              notgrpmemeber:
+                                                  widget.notgroupmember,
                                               group_id: widget.group_id,
                                               group_name: widget.grp_name,
                                             )));
@@ -225,12 +246,26 @@ class _GroupDetailsState extends State<GroupDetails> {
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  commonRow(
-                                      data: _groupModel
-                                              .data.groupDetails.totalMember +
-                                          ' Members',
-                                      iconData: Icons.people,
-                                      iconColor: Colors.grey),
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  GroupMembers(
+                                                    notgrpmemeber:
+                                                        widget.notgroupmember,
+                                                    group_id: widget.group_id,
+                                                    group_name: widget.grp_name,
+                                                  )));
+                                    },
+                                    child: commonRow(
+                                        data: _groupModel
+                                                .data.groupDetails.totalMember +
+                                            ' Members',
+                                        iconData: Icons.people,
+                                        iconColor: Colors.grey),
+                                  ),
                                   SizedBox(
                                     width: 15,
                                   ),

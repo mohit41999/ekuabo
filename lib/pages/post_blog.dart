@@ -26,7 +26,7 @@ class PostBlog extends StatelessWidget {
             Row(
               children: [
                 IconButton(
-                    onPressed: () => _homeController.bottomNavPop(),
+                    onPressed: () => _homeController.bottomNavPop(context),
                     icon: Icon(
                       Icons.arrow_back,
                       color: MyColor.mainColor,

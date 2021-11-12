@@ -75,6 +75,38 @@ class PrivateMessageBoard extends StatelessWidget {
                             itemBuilder: (ctx, index) {
                               return Dismissible(
                                 key: UniqueKey(),
+                                confirmDismiss:
+                                    (DismissDirection dismissDirection) async {
+                                  return await showDialog(
+                                      context: context,
+                                      builder: (context) => AlertDialog(
+                                            title: Text(
+                                                'Are you Sure you want to Delete chat with ${_con.chatList[index].username}'),
+                                            actions: [
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  MaterialButton(
+                                                    onPressed: () {
+                                                      Navigator.of(context)
+                                                          .pop(false);
+                                                    },
+                                                    child: Text('No'),
+                                                  ),
+                                                  MaterialButton(
+                                                    onPressed: () {
+                                                      Navigator.of(context)
+                                                          .pop(true);
+                                                    },
+                                                    child: Text('yes'),
+                                                  )
+                                                ],
+                                              )
+                                            ],
+                                          ));
+                                },
                                 onDismissed: (direction) =>
                                     _con.deleteChat(index),
                                 background: Icon(
