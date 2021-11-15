@@ -11,6 +11,7 @@ import 'package:ekuabo/widgets/UnderlineWidget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_share/flutter_share.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 class GroupDetails extends StatefulWidget {
@@ -20,6 +21,7 @@ class GroupDetails extends StatefulWidget {
   final String grp_name;
   final String members;
   final bool notgroupmember;
+  final bool admin;
 
   const GroupDetails(
       {Key key,
@@ -27,6 +29,7 @@ class GroupDetails extends StatefulWidget {
       @required this.created_date,
       @required this.image_url,
       @required this.grp_name,
+      this.admin = false,
       this.members,
       this.notgroupmember = false})
       : super(key: key);
@@ -37,10 +40,11 @@ class GroupDetails extends StatefulWidget {
 
 class _GroupDetailsState extends State<GroupDetails> {
   Future<GroupDetailsModel> groupmodel;
+  TextEditingController commentCtl = TextEditingController();
   GroupDetailsModel _groupModel;
   bool loading = true;
   bool isgroupfeed = false;
-  void inititalize() {
+  void groupinititalize() {
     groupmodel =
         GroupDetailsServices().getgroupdetails(widget.group_id).then((value) {
       setState(() {
@@ -52,11 +56,90 @@ class _GroupDetailsState extends State<GroupDetails> {
     });
   }
 
+  void like(BuildContext context, String feedId) {
+    GroupDetailsServices().likefeed(feedId).then((value) {
+      setState(() {
+        groupinititalize();
+      });
+    });
+  }
+
+  void report(BuildContext context, feedId) {
+    GroupDetailsServices().reportgroupfeed(feedId).then((value) {
+      setState(() {
+        groupinititalize();
+      });
+    });
+  }
+
+  void delete(BuildContext context, feedId) {
+    GroupDetailsServices().deletegroupfeed(feedId).then((value) {
+      setState(() {
+        groupinititalize();
+      });
+    });
+  }
+
+  void comment(BuildContext context, feed_id, String comment) {
+    GroupDetailsServices().commentgroupfeed(feed_id, comment).then((value) {
+      setState(() {
+        groupinititalize();
+        commentCtl.clear();
+      });
+    });
+  }
+
+  void unlike(BuildContext context, feedId) {
+    GroupDetailsServices().unlikefeed(feedId).then((value) {
+      setState(() {
+        groupinititalize();
+      });
+    });
+  }
+
+  void deletedialog(String feed_id) {
+    showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+              content: Text('Are you Sure You Want to Delete?'),
+              actions: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    MaterialButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: Text('No'),
+                      color: Colors.red,
+                    ),
+                    MaterialButton(
+                      onPressed: () {
+                        delete(context, feed_id);
+                        Navigator.pop(context);
+                      },
+                      child: Text('Yes'),
+                      color: Colors.green,
+                    ),
+                  ],
+                )
+              ],
+            ));
+  }
+
+  Future<void> _share(GroupFeed groupFeedData) async {
+    await FlutterShare.share(
+        title: groupFeedData.userFeedDetails.username,
+        text: groupFeedData.message,
+        linkUrl: groupFeedData.uploadPath,
+        chooserTitle: 'Choose App to share');
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     setState(() {
-      inititalize();
+      groupinititalize();
     });
     super.initState();
   }
@@ -74,7 +157,7 @@ class _GroupDetailsState extends State<GroupDetails> {
                         builder: (context) => PostNewGroupFeed(
                               group_id: widget.group_id,
                             ))).then((value) {
-                  inititalize();
+                  groupinititalize();
                 });
               },
               child: Icon(
@@ -114,6 +197,7 @@ class _GroupDetailsState extends State<GroupDetails> {
                                             group_name: widget.grp_name,
                                             notgrpmemeber:
                                                 widget.notgroupmember,
+                                            admin: widget.admin,
                                           )));
                             }),
                             shadows: const [
@@ -159,6 +243,7 @@ class _GroupDetailsState extends State<GroupDetails> {
                                                   group_name: widget.grp_name,
                                                   notgrpmemeber:
                                                       widget.notgroupmember,
+                                                  admin: widget.admin,
                                                 )));
                                   },
                                   child: commonRow(
@@ -209,6 +294,7 @@ class _GroupDetailsState extends State<GroupDetails> {
                                                   widget.notgroupmember,
                                               group_id: widget.group_id,
                                               group_name: widget.grp_name,
+                                              admin: widget.admin,
                                             )));
                               }),
                               shadows: const [
@@ -253,11 +339,12 @@ class _GroupDetailsState extends State<GroupDetails> {
                                           MaterialPageRoute(
                                               builder: (context) =>
                                                   GroupMembers(
-                                                    notgrpmemeber:
-                                                        widget.notgroupmember,
-                                                    group_id: widget.group_id,
-                                                    group_name: widget.grp_name,
-                                                  )));
+                                                      notgrpmemeber:
+                                                          widget.notgroupmember,
+                                                      group_id: widget.group_id,
+                                                      group_name:
+                                                          widget.grp_name,
+                                                      admin: widget.admin)));
                                     },
                                     child: commonRow(
                                         data: _groupModel
@@ -283,6 +370,7 @@ class _GroupDetailsState extends State<GroupDetails> {
                         ListView.builder(
                             physics: NeverScrollableScrollPhysics(),
                             shrinkWrap: true,
+                            reverse: true,
                             itemCount: _groupModel.data.groupFeed.length,
                             itemBuilder: (context, index) {
                               return VxCard(Column(
@@ -404,6 +492,19 @@ class _GroupDetailsState extends State<GroupDetails> {
                                               ),
                                             ],
                                           ),
+                                          (widget.admin)
+                                              ? IconButton(
+                                                  onPressed: () {
+                                                    deletedialog(_groupModel
+                                                        .data
+                                                        .groupFeed[index]
+                                                        .feedId);
+                                                  },
+                                                  icon: Icon(
+                                                    Icons.delete,
+                                                    color: Colors.red,
+                                                  ))
+                                              : Container()
                                         ],
                                       ),
                                       Html(
@@ -444,41 +545,71 @@ class _GroupDetailsState extends State<GroupDetails> {
                                           .pOnly(left: 10, right: 10),
                                       10.heightBox,
                                       Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Image.asset(
-                                            _groupModel.data.groupFeed[index]
+                                          Row(
+                                            children: [
+                                              Image.asset(
+                                                _groupModel
+                                                            .data
+                                                            .groupFeed[index]
+                                                            .isUserLike ==
+                                                        "n"
+                                                    ? EkuaboAsset.ic_like
+                                                    : EkuaboAsset.ic_liked,
+                                                width: 16,
+                                                height: 16,
+                                              ).onTap(() {
+                                                if (_groupModel
+                                                        .data
+                                                        .groupFeed[index]
                                                         .isUserLike ==
-                                                    "n"
-                                                ? EkuaboAsset.ic_like
-                                                : EkuaboAsset.ic_liked,
-                                            width: 16,
-                                            height: 16,
-                                          ).onTap(() {
-                                            // if (_groupModel.data.groupFeed[index].isUserLike == "n")
-                                            //   _con.like(context, newsFeed.feedId);
-                                            // else
-                                            //   _con.unlike(context, newsFeed.feedId);
-                                          }),
-                                          30.widthBox,
-                                          Image.asset(
-                                            EkuaboAsset.ic_comment,
-                                            width: 16,
-                                            height: 16,
-                                          ).onTap(() {
-                                            _groupModel.data.groupFeed[index]
-                                                    .isCommentExpand =
-                                                !_groupModel
-                                                    .data
-                                                    .groupFeed[index]
-                                                    .isCommentExpand;
-                                            // _con.update();
-                                          }),
-                                          30.widthBox,
-                                          Image.asset(
-                                            EkuaboAsset.ic_share,
-                                            width: 16,
-                                            height: 16,
-                                          ).onTap(() {}),
+                                                    "n")
+                                                  like(
+                                                      context,
+                                                      _groupModel
+                                                          .data
+                                                          .groupFeed[index]
+                                                          .feedId);
+                                                else
+                                                  unlike(
+                                                      context,
+                                                      _groupModel
+                                                          .data
+                                                          .groupFeed[index]
+                                                          .feedId);
+                                              }),
+                                              30.widthBox,
+                                              Image.asset(
+                                                EkuaboAsset.ic_comment,
+                                                width: 16,
+                                                height: 16,
+                                              ).onTap(() {
+                                                setState(() {
+                                                  _groupModel
+                                                          .data
+                                                          .groupFeed[index]
+                                                          .isCommentExpand =
+                                                      !_groupModel
+                                                          .data
+                                                          .groupFeed[index]
+                                                          .isCommentExpand;
+                                                });
+
+                                                // _con.update();
+                                              }),
+                                              30.widthBox,
+                                              Image.asset(
+                                                EkuaboAsset.ic_share,
+                                                width: 16,
+                                                height: 16,
+                                              ).onTap(() {
+                                                _share(_groupModel
+                                                    .data.groupFeed[index]);
+                                              }),
+                                            ],
+                                          ),
                                           _groupModel.data.groupFeed[index]
                                                       .isUserReported ==
                                                   "n"
@@ -489,14 +620,22 @@ class _GroupDetailsState extends State<GroupDetails> {
                                                   .light
                                                   .underline
                                                   .make()
-                                                  .onTap(() {})
-                                                  .pOnly(
-                                                      left:
-                                                          MediaQuery.of(context)
-                                                                  .size
-                                                                  .width *
-                                                              0.44)
-                                              : SizedBox(),
+                                                  .onTap(() {
+                                                  report(
+                                                      context,
+                                                      _groupModel
+                                                          .data
+                                                          .groupFeed[index]
+                                                          .feedId);
+                                                })
+                                              : EkuaboString.reported.text
+                                                  .color(MyColor.mainColor
+                                                      .withOpacity(0.6))
+                                                  .size(10)
+                                                  .light
+                                                  .underline
+                                                  .make()
+                                                  .onTap(() {}),
                                         ],
                                       ).pOnly(left: 10, right: 10),
                                       _groupModel.data.groupFeed[index]
@@ -542,9 +681,10 @@ class _GroupDetailsState extends State<GroupDetails> {
                                                               CircleAvatar(
                                                                 child:
                                                                     CachedNetworkImage(
-                                                                  imageUrl: comment
-                                                                          .userDetails
-                                                                          .profile ??
+                                                                  imageUrl: comment['user_details']
+                                                                              [
+                                                                              'profile']
+                                                                          .toString() ??
                                                                       '',
                                                                   placeholder: (_,
                                                                           __) =>
@@ -564,9 +704,10 @@ class _GroupDetailsState extends State<GroupDetails> {
                                                                     CrossAxisAlignment
                                                                         .start,
                                                                 children: [
-                                                                  comment
-                                                                      .userDetails
-                                                                      .username
+                                                                  comment['user_details']
+                                                                          [
+                                                                          'username']
+                                                                      .toString()
                                                                       .text
                                                                       .medium
                                                                       .size(10)
@@ -574,8 +715,8 @@ class _GroupDetailsState extends State<GroupDetails> {
                                                                           .mainColor)
                                                                       .make(),
                                                                   5.heightBox,
-                                                                  comment
-                                                                      .comment
+                                                                  comment['comment']
+                                                                      .toString()
                                                                       .text
                                                                       .medium
                                                                       .size(10)
@@ -621,6 +762,7 @@ class _GroupDetailsState extends State<GroupDetails> {
                                           Expanded(
                                             flex: 4,
                                             child: TextFormField(
+                                              controller: commentCtl,
                                               decoration: InputDecoration(
                                                 border: InputBorder.none,
                                                 hintText: EkuaboString
@@ -640,7 +782,13 @@ class _GroupDetailsState extends State<GroupDetails> {
                                               EkuaboAsset.ic_send,
                                               width: 16,
                                               height: 16,
-                                            ).onTap(() {}),
+                                            ).onTap(() {
+                                              comment(
+                                                  context,
+                                                  _groupModel.data
+                                                      .groupFeed[index].feedId,
+                                                  commentCtl.text);
+                                            }),
                                           )
                                         ],
                                       )

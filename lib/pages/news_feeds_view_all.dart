@@ -1,11 +1,9 @@
 import 'dart:convert';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:ekuabo/controller/home_view_controller.dart';
 import 'package:ekuabo/controller/news_feeds_view_all_controller.dart';
 import 'package:ekuabo/model/apimodel/home/news_feeds.dart';
 import 'package:ekuabo/model/apimodel/market_place/category_bean.dart';
-import 'package:ekuabo/model/apimodel/user_bean.dart';
 import 'package:ekuabo/network/repository/market_place_repository.dart';
 import 'package:ekuabo/pages/search_group_page.dart';
 import 'package:ekuabo/utils/color.dart';
@@ -19,12 +17,11 @@ import 'package:ekuabo/widgets/UnderlineWidget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_share/flutter_share.dart';
 import 'package:get/get.dart';
-import 'package:velocity_x/velocity_x.dart';
 import 'package:http/http.dart' as http;
+import 'package:velocity_x/velocity_x.dart';
 
 class NewsFeedsViewAll extends StatefulWidget {
   const NewsFeedsViewAll({
@@ -391,35 +388,40 @@ class _NewsFeedsViewAllState extends State<NewsFeedsViewAll> {
                                 .pOnly(left: 10, right: 10),
                             10.heightBox,
                             Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Image.asset(
-                                  newsFeed.isUserLike == "n"
-                                      ? EkuaboAsset.ic_like
-                                      : EkuaboAsset.ic_liked,
-                                  width: 16,
-                                  height: 16,
-                                ).onTap(() {
-                                  if (newsFeed.isUserLike == "n")
-                                    _con.like(context, newsFeed.feedId);
-                                  else
-                                    _con.unlike(context, newsFeed.feedId);
-                                }),
-                                30.widthBox,
-                                Image.asset(
-                                  EkuaboAsset.ic_comment,
-                                  width: 16,
-                                  height: 16,
-                                ).onTap(() {
-                                  newsFeed.isCommentExpand =
-                                      !newsFeed.isCommentExpand;
-                                  _con.update();
-                                }),
-                                30.widthBox,
-                                Image.asset(
-                                  EkuaboAsset.ic_share,
-                                  width: 16,
-                                  height: 16,
-                                ).onTap(() async => _share(newsFeed)),
+                                Row(
+                                  children: [
+                                    Image.asset(
+                                      newsFeed.isUserLike == "n"
+                                          ? EkuaboAsset.ic_like
+                                          : EkuaboAsset.ic_liked,
+                                      width: 16,
+                                      height: 16,
+                                    ).onTap(() {
+                                      if (newsFeed.isUserLike == "n")
+                                        _con.like(context, newsFeed.feedId);
+                                      else
+                                        _con.unlike(context, newsFeed.feedId);
+                                    }),
+                                    30.widthBox,
+                                    Image.asset(
+                                      EkuaboAsset.ic_comment,
+                                      width: 16,
+                                      height: 16,
+                                    ).onTap(() {
+                                      newsFeed.isCommentExpand =
+                                          !newsFeed.isCommentExpand;
+                                      _con.update();
+                                    }),
+                                    30.widthBox,
+                                    Image.asset(
+                                      EkuaboAsset.ic_share,
+                                      width: 16,
+                                      height: 16,
+                                    ).onTap(() async => _share(newsFeed)),
+                                  ],
+                                ),
                                 newsFeed.isUserReported == "n"
                                     ? EkuaboString.report.text
                                         .color(
@@ -430,12 +432,13 @@ class _NewsFeedsViewAllState extends State<NewsFeedsViewAll> {
                                         .make()
                                         .onTap(() => _con.report(
                                             context, newsFeed.feedId))
-                                        .pOnly(
-                                            left: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.44)
-                                    : SizedBox(),
+                                    : EkuaboString.reported.text
+                                        .color(
+                                            MyColor.mainColor.withOpacity(0.6))
+                                        .size(10)
+                                        .light
+                                        .underline
+                                        .make(),
                               ],
                             ).pOnly(left: 10, right: 10),
                             newsFeed.isCommentExpand

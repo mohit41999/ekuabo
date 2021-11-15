@@ -1,15 +1,12 @@
 import 'dart:convert';
 
 import 'package:ekuabo/model/apimodel/market_place/searchMarketplaceModel.dart';
-import 'package:ekuabo/model/apimodel/searchgroup/searchgroupmodel.dart';
 import 'package:ekuabo/model/apimodel/user_bean.dart';
 import 'package:ekuabo/network/repository/market_place_repository.dart';
 import 'package:ekuabo/network/repository/searchgroupservices.dart';
 import 'package:ekuabo/pages/search_group_page.dart';
-import 'package:ekuabo/pages/userShopMarket.dart';
 import 'package:ekuabo/pages/userShopMarketListing.dart';
 import 'package:ekuabo/utils/color.dart';
-import 'package:ekuabo/utils/ekuabo_asset.dart';
 import 'package:ekuabo/utils/pref_manager.dart';
 import 'package:ekuabo/widgets/UnderlineWidget.dart';
 import 'package:flutter/cupertino.dart';
@@ -18,8 +15,6 @@ import 'package:flutter/painting.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:velocity_x/velocity_x.dart';
 
 class SearchPanel extends StatefulWidget {
   final String Category;
@@ -495,8 +490,29 @@ class _SearchPanelState extends State<SearchPanel> {
                             Navigator.pop(context);
                           },
                           child: (bool)
-                              ? Text(data[index].cateName)
-                              : Text(data[index].subCateName));
+                              ? Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Container(
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                            color: MyColor.mainColor),
+                                        borderRadius: BorderRadius.circular(20),
+                                      ),
+                                      child: Center(
+                                          child: Text(data[index].cateName))),
+                                )
+                              : Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Container(
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                            color: MyColor.mainColor),
+                                        borderRadius: BorderRadius.circular(20),
+                                      ),
+                                      child: Center(
+                                          child:
+                                              Text(data[index].subCateName))),
+                                ));
                     }),
               ),
             ),

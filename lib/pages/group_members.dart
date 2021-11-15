@@ -13,8 +13,13 @@ class GroupMembers extends StatefulWidget {
   final String group_id;
   final String group_name;
   final bool notgrpmemeber;
+  final bool admin;
   const GroupMembers(
-      {Key key, this.group_id, this.group_name, this.notgrpmemeber = false})
+      {Key key,
+      this.group_id,
+      this.group_name,
+      this.notgrpmemeber = false,
+      this.admin = false})
       : super(key: key);
 
   @override
@@ -58,22 +63,24 @@ class _GroupMembersState extends State<GroupMembers> {
     return Scaffold(
       floatingActionButton: (widget.notgrpmemeber)
           ? null
-          : FloatingActionButton.extended(
-              backgroundColor: MyColor.mainColor,
-              label: Text(
-                'Add Memebers +',
-                style: TextStyle(color: Colors.white),
-              ),
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => AddGroupMembers(
-                              group_name: widget.group_name,
-                            )));
-              },
-              // tooltip: ,
-            ),
+          : (widget.admin)
+              ? FloatingActionButton.extended(
+                  backgroundColor: MyColor.mainColor,
+                  label: Text(
+                    'Add Memebers +',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => AddGroupMembers(
+                                  group_name: widget.group_name,
+                                )));
+                  },
+                  // tooltip: ,
+                )
+              : null,
       appBar: EcuaboAppBar().getAppBar(context),
       body: (loading)
           ? Center(

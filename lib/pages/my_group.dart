@@ -1,16 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:ekuabo/controller/home_controller.dart';
 import 'package:ekuabo/controller/my_group_controller.dart';
-import 'package:ekuabo/pages/userShopMarketListing.dart';
 import 'package:ekuabo/utils/color.dart';
 import 'package:ekuabo/utils/ekuabo_asset.dart';
 import 'package:ekuabo/utils/ekuabo_route.dart';
 import 'package:ekuabo/utils/ekuabo_string.dart';
 import 'package:ekuabo/widgets/EcuaboAppBar.dart';
 import 'package:ekuabo/widgets/UnderlineWidget.dart';
-import 'package:ekuabo/widgets/lifecycle_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:velocity_x/velocity_x.dart';
 
@@ -216,6 +213,7 @@ class MyGroups extends StatelessWidget {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => GroupDetails(
+                                              admin: true,
                                               group_id:
                                                   _con.myGroups[index].groupId,
                                               created_date: _con

@@ -72,6 +72,7 @@ class EkuaboString {
   /// News Feeds Details
   static const searchGroup = "Search Group";
   static const report = "Report !";
+  static const reported = "Reported";
   static const insert_comments_here = "Insert comments here !!!";
 
   /// Market Place
