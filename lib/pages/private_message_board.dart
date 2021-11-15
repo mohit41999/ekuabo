@@ -47,10 +47,10 @@ class PrivateMessageBoard extends StatelessWidget {
                       Icons.add,
                       color: Colors.white,
                     ).onFeedBackTap(() async {
-                      Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => UsersList()))
+                      _homeController.navigationQueue.addLast(0);
+                      _homeController.bottomNavigatorKey.currentState
+                          .push(MaterialPageRoute(
+                              builder: (context) => UsersList()))
                           .then((value) => _con.getChatList());
                     }),
                     shadows: const [
@@ -160,7 +160,7 @@ class PrivateMessageBoard extends StatelessWidget {
                                     .make()
                                     .pOnly(top: 16)
                                     .onTap(() {
-                                  _homeController.navigationQueue.addLast(4);
+                                  _homeController.navigationQueue.addLast(0);
                                   _homeController
                                       .bottomNavigatorKey.currentState
                                       .pushNamed(EkuaboRoute.chatConversation,

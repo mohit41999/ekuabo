@@ -51,37 +51,42 @@ class EcuaboAppBar {
   }
 
   void _selectMoreOption(int index, BuildContext context) {
-    _con.navigationQueue.addLast(4);
+    _con.navigationQueue.addLast(0);
     switch (index) {
       case 0:
-        Navigator.pushNamed(context, EkuaboRoute.privateMessageBoard);
+        _con.bottomNavigatorKey.currentState
+            .pushNamed(EkuaboRoute.privateMessageBoard);
 
         break;
       case 1:
-        Navigator.pushNamed(context, EkuaboRoute.more);
+        _con.bottomNavigatorKey.currentState.pushNamed(EkuaboRoute.more);
         break;
       case 2:
-        Navigator.pushNamed(context, EkuaboRoute.myPostBannerAd);
+        _con.bottomNavigatorKey.currentState
+            .pushNamed(EkuaboRoute.myPostBannerAd);
 
         break;
       case 3:
-        Navigator.pushNamed(context, EkuaboRoute.myGroup);
+        _con.bottomNavigatorKey.currentState.pushNamed(EkuaboRoute.myGroup);
 
         break;
       case 4:
-        Navigator.pushNamed(context, EkuaboRoute.groupInvitation);
+        _con.bottomNavigatorKey.currentState
+            .pushNamed(EkuaboRoute.groupInvitation);
 
         break;
       case 5:
-        Navigator.pushNamed(context, EkuaboRoute.groupJoinRequest);
+        _con.bottomNavigatorKey.currentState
+            .pushNamed(EkuaboRoute.groupJoinRequest);
 
         break;
       case 6:
-        Navigator.pushNamed(context, EkuaboRoute.transactionHistory);
+        _con.bottomNavigatorKey.currentState
+            .pushNamed(EkuaboRoute.transactionHistory);
 
         break;
       case 7:
-        Navigator.pushNamed(context, EkuaboRoute.setting);
+        _con.bottomNavigatorKey.currentState.pushNamed(EkuaboRoute.setting);
 
         break;
     }

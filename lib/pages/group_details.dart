@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:ekuabo/controller/home_controller.dart';
 import 'package:ekuabo/model/apimodel/group/GroupdetailsModel.dart';
 import 'package:ekuabo/network/repository/group_details_services.dart';
 import 'package:ekuabo/pages/group_members.dart';
@@ -12,6 +13,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_share/flutter_share.dart';
+import 'package:get/get.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 class GroupDetails extends StatefulWidget {
@@ -39,6 +41,7 @@ class GroupDetails extends StatefulWidget {
 }
 
 class _GroupDetailsState extends State<GroupDetails> {
+  final _homeController = Get.find<HomeController>();
   Future<GroupDetailsModel> groupmodel;
   TextEditingController commentCtl = TextEditingController();
   GroupDetailsModel _groupModel;
@@ -72,8 +75,8 @@ class _GroupDetailsState extends State<GroupDetails> {
     });
   }
 
-  void delete(BuildContext context, feedId) {
-    GroupDetailsServices().deletegroupfeed(feedId).then((value) {
+  void delete(BuildContext context, feedId, userId) {
+    GroupDetailsServices().deletegroupfeed(feedId, userId).then((value) {
       setState(() {
         groupinititalize();
       });
@@ -97,7 +100,7 @@ class _GroupDetailsState extends State<GroupDetails> {
     });
   }
 
-  void deletedialog(String feed_id) {
+  void deletedialog(String feed_id, String user_id) {
     showDialog(
         context: context,
         builder: (context) => AlertDialog(
@@ -115,7 +118,7 @@ class _GroupDetailsState extends State<GroupDetails> {
                     ),
                     MaterialButton(
                       onPressed: () {
-                        delete(context, feed_id);
+                        delete(context, feed_id, user_id);
                         Navigator.pop(context);
                       },
                       child: Text('Yes'),
@@ -189,9 +192,9 @@ class _GroupDetailsState extends State<GroupDetails> {
                               Icons.people,
                               color: Colors.white,
                             ).onFeedBackTap(() async {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
+                              _homeController.navigationQueue.addLast(0);
+                              _homeController.bottomNavigatorKey.currentState
+                                  .push(MaterialPageRoute(
                                       builder: (context) => GroupMembers(
                                             group_id: widget.group_id,
                                             group_name: widget.grp_name,
@@ -235,9 +238,10 @@ class _GroupDetailsState extends State<GroupDetails> {
                               children: [
                                 GestureDetector(
                                   onTap: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
+                                    _homeController.navigationQueue.addLast(4);
+                                    _homeController
+                                        .bottomNavigatorKey.currentState
+                                        .push(MaterialPageRoute(
                                             builder: (context) => GroupMembers(
                                                   group_id: widget.group_id,
                                                   group_name: widget.grp_name,
@@ -286,9 +290,9 @@ class _GroupDetailsState extends State<GroupDetails> {
                                 Icons.people,
                                 color: Colors.white,
                               ).onFeedBackTap(() async {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
+                                _homeController.navigationQueue.addLast(4);
+                                _homeController.bottomNavigatorKey.currentState
+                                    .push(MaterialPageRoute(
                                         builder: (context) => GroupMembers(
                                               notgrpmemeber:
                                                   widget.notgroupmember,
@@ -334,9 +338,11 @@ class _GroupDetailsState extends State<GroupDetails> {
                                 children: [
                                   GestureDetector(
                                     onTap: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
+                                      _homeController.navigationQueue
+                                          .addLast(4);
+                                      _homeController
+                                          .bottomNavigatorKey.currentState
+                                          .push(MaterialPageRoute(
                                               builder: (context) =>
                                                   GroupMembers(
                                                       notgrpmemeber:
@@ -495,10 +501,15 @@ class _GroupDetailsState extends State<GroupDetails> {
                                           (widget.admin)
                                               ? IconButton(
                                                   onPressed: () {
-                                                    deletedialog(_groupModel
-                                                        .data
-                                                        .groupFeed[index]
-                                                        .feedId);
+                                                    deletedialog(
+                                                        _groupModel
+                                                            .data
+                                                            .groupFeed[index]
+                                                            .feedId,
+                                                        _groupModel
+                                                            .data
+                                                            .groupFeed[index]
+                                                            .userId);
                                                   },
                                                   icon: Icon(
                                                     Icons.delete,

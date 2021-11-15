@@ -56,7 +56,7 @@ class MyPostedBannerAd extends StatelessWidget {
                           Icons.add,
                           color: Colors.white,
                         ).onFeedBackTap(() {
-                          _homeController.navigationQueue.addLast(4);
+                          _homeController.navigationQueue.addLast(0);
                           _homeController.bottomNavigatorKey.currentState
                               .pushNamed(EkuaboRoute.createMyAd);
                         }),

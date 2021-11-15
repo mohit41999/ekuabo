@@ -49,7 +49,7 @@ class MyGroups extends StatelessWidget {
                             Icons.add,
                             color: Colors.white,
                           ).onFeedBackTap(() {
-                            _homeController.navigationQueue.addLast(4);
+                            _homeController.navigationQueue.addLast(0);
                             _homeController.bottomNavigatorKey.currentState
                                 .pushNamed(EkuaboRoute.postNewGroup);
                           }),
@@ -209,9 +209,9 @@ class MyGroups extends StatelessWidget {
                                   .wh(double.infinity, 200)
                                   .pOnly(top: 10, left: 10, right: 10)
                                   .onTap(() {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
+                                _homeController.navigationQueue.addLast(0);
+                                _homeController.bottomNavigatorKey.currentState
+                                    .push(MaterialPageRoute(
                                         builder: (context) => GroupDetails(
                                               admin: true,
                                               group_id:
@@ -394,9 +394,9 @@ class MyGroups extends StatelessWidget {
                                   .make()
                                   .wh(double.infinity, 200)
                                   .onTap(() {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
+                                _homeController.navigationQueue.addLast(0);
+                                _homeController.bottomNavigatorKey.currentState
+                                    .push(MaterialPageRoute(
                                         builder: (context) => GroupDetails(
                                             members: _con.myJoiningGroups[index]
                                                 .totalMember,

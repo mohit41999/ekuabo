@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:ekuabo/controller/home_controller.dart';
 import 'package:ekuabo/model/apimodel/groups/group_member_model.dart';
 import 'package:ekuabo/model/apimodel/user_bean.dart';
 import 'package:ekuabo/pages/AddGroupMembers.dart';
@@ -7,6 +8,7 @@ import 'package:ekuabo/utils/color.dart';
 import 'package:ekuabo/utils/pref_manager.dart';
 import 'package:ekuabo/widgets/EcuaboAppBar.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
 class GroupMembers extends StatefulWidget {
@@ -27,6 +29,7 @@ class GroupMembers extends StatefulWidget {
 }
 
 class _GroupMembersState extends State<GroupMembers> {
+  final _homeController = Get.find<HomeController>();
   String Token = '123456789';
   GroupMemberModel memberdetail;
   bool loading = true;
@@ -71,9 +74,9 @@ class _GroupMembersState extends State<GroupMembers> {
                     style: TextStyle(color: Colors.white),
                   ),
                   onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
+                    _homeController.navigationQueue.addLast(0);
+                    _homeController.bottomNavigatorKey.currentState
+                        .push(MaterialPageRoute(
                             builder: (context) => AddGroupMembers(
                                   group_name: widget.group_name,
                                 )));

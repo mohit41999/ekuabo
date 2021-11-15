@@ -1,11 +1,13 @@
 import 'dart:convert';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:ekuabo/controller/home_controller.dart';
 import 'package:ekuabo/model/apimodel/user_bean.dart';
 import 'package:ekuabo/utils/color.dart';
 import 'package:ekuabo/utils/pref_manager.dart';
 import 'package:ekuabo/widgets/EcuaboAppBar.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
 class AddGroupMembers extends StatefulWidget {
@@ -17,6 +19,7 @@ class AddGroupMembers extends StatefulWidget {
 }
 
 class _AddGroupMembersState extends State<AddGroupMembers> {
+  final _homeController = Get.find<HomeController>();
   String Token = '123456789';
   List Members = [];
   Future getMembers() async {

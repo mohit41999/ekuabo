@@ -85,13 +85,13 @@ class GroupDetailsServices {
     print(Response);
   }
 
-  Future deletegroupfeed(String feed_id) async {
+  Future deletegroupfeed(String feed_id, String userID) async {
     UserBean userBean = await PrefManager.getUser();
     var response = await http.post(
         Uri.parse('https://eku-abo.com/api/group/delete_group_feed.php'),
         body: {
           'token': token,
-          'user_id': userBean.data.id,
+          'user_id': userID,
           'feed_id': feed_id,
         });
 

@@ -101,11 +101,11 @@ class HomePage extends StatelessWidget {
                           _con.bottomNavigatorKey.currentState
                               .pushNamed(EkuaboRoute.blog);
                           break;
-                        case 4:
-                          _con.bottomNavigatorKey.currentState
-                              .pushNamed(EkuaboRoute.more);
-
-                          break;
+                        // case 4:
+                        //   _con.bottomNavigatorKey.currentState
+                        //       .pushNamed(EkuaboRoute.more);
+                        //
+                        //   break;
                       }
                       _con.changeBottomNavIndex(index);
                     }
