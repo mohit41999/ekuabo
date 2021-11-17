@@ -20,6 +20,7 @@ class _UsersListState extends State<UsersList> {
   String Token = '123456789';
   List UsersList = [];
   final _con = Get.find<PrivateMessageBoardController>();
+  TextEditingController _username = TextEditingController();
 
   Future getusers() async {
     UserBean userBean = await PrefManager.getUser();
@@ -33,6 +34,7 @@ class _UsersListState extends State<UsersList> {
     return Response;
   }
 
+  List _foundUsers = [];
   @override
   void initState() {
     getusers().then((value) {
@@ -40,49 +42,99 @@ class _UsersListState extends State<UsersList> {
         UsersList = value['data'];
       });
     });
+
     // TODO: implement initState
     super.initState();
+  }
+
+  // This function is called whenever the text field changes
+  void _runFilter(String enteredKeyword) {
+    List results = [];
+    if (enteredKeyword.isEmpty) {
+      // if the search field is empty or only contains white-space, we'll display all users
+      // results = UsersList;
+      results = [];
+    } else {
+      results = UsersList.where((user) =>
+              user['name'].toLowerCase().contains(enteredKeyword.toLowerCase()))
+          .toList();
+      // we use the toLowerCase() method to make it case-insensitive
+    }
+
+    // Refresh the UI
+    setState(() {
+      _foundUsers = results;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: EcuaboAppBar().getAppBar(context),
-      body: ListView.builder(
-          itemCount: UsersList.length,
-          itemBuilder: (context, index) {
-            return ListTile(
-              leading: CachedNetworkImage(
-                imageUrl: UsersList[index]['profile_picture'],
-                placeholder: (_, __) => Center(
-                  child: CircularProgressIndicator(),
-                ),
-                errorWidget: (_, __, ___) =>
-                    Image.asset('asset/images/error_img.jpg'),
-                width: 40,
-                height: 40,
-                fit: BoxFit.cover,
-              ),
-              title: Text(UsersList[index]['name']),
-              trailing: IconButton(
-                icon: Icon(
-                  Icons.chat,
-                  color: MyColor.mainColor,
-                ),
-                onPressed: () {
-                  Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => ChatNewUserConversation(
-                                username: UsersList[index]['name'],
-                                chatId: UsersList[index]['user_id'],
-                              ))).then((value) {
-                    _con.getChatList();
-                  });
-                },
-              ),
-            );
-          }),
+      body: Column(
+        children: [
+          ConstrainedBox(
+            constraints: BoxConstraints.tightFor(height: 40, width: 290),
+            child: TextField(
+              controller: _username,
+              onChanged: (value) {
+                setState(() {
+                  _runFilter(_username.text);
+                });
+              },
+              decoration: InputDecoration(
+                  isDense: true,
+                  filled: true,
+                  hintText: 'Search username',
+                  hintStyle: TextStyle(color: Colors.grey, fontSize: 12),
+                  fillColor: Colors.white,
+                  border: OutlineInputBorder(
+                      borderSide:
+                          BorderSide(color: Color(0x70707061), width: 10),
+                      borderRadius: BorderRadius.circular(40)),
+                  enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(40))),
+            ),
+          ),
+          Expanded(
+            child: ListView.builder(
+                itemCount: _foundUsers.length,
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    leading: CachedNetworkImage(
+                      imageUrl: _foundUsers[index]['profile_picture'],
+                      placeholder: (_, __) => Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                      errorWidget: (_, __, ___) =>
+                          Image.asset('asset/images/error_img.jpg'),
+                      width: 40,
+                      height: 40,
+                      fit: BoxFit.cover,
+                    ),
+                    title: Text(_foundUsers[index]['name']),
+                    trailing: IconButton(
+                      icon: Icon(
+                        Icons.chat,
+                        color: MyColor.mainColor,
+                      ),
+                      onPressed: () {
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ChatNewUserConversation(
+                                      username: _foundUsers[index]['name'],
+                                      chatId: _foundUsers[index]['user_id'],
+                                    ))).then((value) {
+                          _con.getChatList();
+                        });
+                      },
+                    ),
+                  );
+                }),
+          ),
+        ],
+      ),
     );
   }
 }

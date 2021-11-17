@@ -22,6 +22,8 @@ class _AddGroupMembersState extends State<AddGroupMembers> {
   final _homeController = Get.find<HomeController>();
   String Token = '123456789';
   List Members = [];
+  List _foundUsers = [];
+  TextEditingController _username = TextEditingController();
   Future getMembers() async {
     UserBean userBean = await PrefManager.getUser();
     var response = await http.post(
@@ -61,73 +63,122 @@ class _AddGroupMembersState extends State<AddGroupMembers> {
     super.initState();
   }
 
+  // This function is called whenever the text field changes
+  void _runFilter(String enteredKeyword) {
+    List results = [];
+    if (enteredKeyword.isEmpty) {
+      // if the search field is empty or only contains white-space, we'll display all users
+      //results = Members;
+      results = [];
+    } else {
+      results = Members.where((user) =>
+              user['name'].toLowerCase().contains(enteredKeyword.toLowerCase()))
+          .toList();
+      // we use the toLowerCase() method to make it case-insensitive
+    }
+
+    // Refresh the UI
+    setState(() {
+      _foundUsers = results;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: EcuaboAppBar().getAppBar(context),
-      body: ListView.builder(
-          itemCount: Members.length,
-          itemBuilder: (context, index) {
-            return ExpansionTile(
-              leading: CachedNetworkImage(
-                imageUrl: Members[index]['profile_picture'],
-                placeholder: (_, __) => Center(
-                  child: CircularProgressIndicator(),
-                ),
-                errorWidget: (_, __, ___) =>
-                    Image.asset('asset/images/error_img.jpg'),
-                width: 40,
-                height: 40,
-                fit: BoxFit.cover,
-              ),
-              title: Text(Members[index]['name']),
-              trailing: Icon(Icons.add_circle),
-              children: [
-                Text('My Groups'),
-                ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: Members[index]["group_info"].length,
-                    itemBuilder: (context, ind) {
-                      return ListTile(
-                        leading: CachedNetworkImage(
-                          imageUrl: Members[index]["group_info"][ind]
-                              ["group_img"],
-                          placeholder: (_, __) => Center(
-                            child: CircularProgressIndicator(),
-                          ),
-                          errorWidget: (_, __, ___) =>
-                              Image.asset('asset/images/error_img.jpg'),
-                          width: 40,
-                          height: 40,
-                          fit: BoxFit.cover,
-                        ),
-                        title: Text(
-                            Members[index]["group_info"][ind]["group_name"]),
-                        trailing: ElevatedButton(
-                            onPressed: () {
-                              sendGroupInvitation(
-                                      Members[index]['email'],
-                                      Members[index]["group_info"][ind]
-                                          ["group_id"])
-                                  .then((value) {
-                                getMembers().then((value) {
-                                  setState(() {
-                                    Members = value['data'];
-                                  });
-                                });
-                              });
-                            },
-                            child: (Members[index]["group_info"][ind]
-                                            ["invite_status"]
-                                        .toString() ==
-                                    'n')
-                                ? Text('Send Invitation')
-                                : Text('Pending')),
-                      );
-                    })
-              ],
-            );
-          }),
+      body: Column(
+        children: [
+          ConstrainedBox(
+            constraints: BoxConstraints.tightFor(height: 40, width: 290),
+            child: TextField(
+              controller: _username,
+              onChanged: (value) {
+                setState(() {
+                  _runFilter(_username.text);
+                });
+              },
+              decoration: InputDecoration(
+                  isDense: true,
+                  filled: true,
+                  hintText: 'Search username',
+                  hintStyle: TextStyle(color: Colors.grey, fontSize: 12),
+                  fillColor: Colors.white,
+                  border: OutlineInputBorder(
+                      borderSide:
+                          BorderSide(color: Color(0x70707061), width: 10),
+                      borderRadius: BorderRadius.circular(40)),
+                  enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(40))),
+            ),
+          ),
+          Expanded(
+            child: ListView.builder(
+                itemCount: _foundUsers.length,
+                itemBuilder: (context, index) {
+                  return ExpansionTile(
+                    leading: CachedNetworkImage(
+                      imageUrl: _foundUsers[index]['profile_picture'],
+                      placeholder: (_, __) => Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                      errorWidget: (_, __, ___) =>
+                          Image.asset('asset/images/error_img.jpg'),
+                      width: 40,
+                      height: 40,
+                      fit: BoxFit.cover,
+                    ),
+                    title: Text(_foundUsers[index]['name']),
+                    trailing: Icon(Icons.add_circle),
+                    children: [
+                      Text('My Groups'),
+                      ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: _foundUsers[index]["group_info"].length,
+                          itemBuilder: (context, ind) {
+                            return ListTile(
+                              leading: CachedNetworkImage(
+                                imageUrl: _foundUsers[index]["group_info"][ind]
+                                    ["group_img"],
+                                placeholder: (_, __) => Center(
+                                  child: CircularProgressIndicator(),
+                                ),
+                                errorWidget: (_, __, ___) =>
+                                    Image.asset('asset/images/error_img.jpg'),
+                                width: 40,
+                                height: 40,
+                                fit: BoxFit.cover,
+                              ),
+                              title: Text(_foundUsers[index]["group_info"][ind]
+                                  ["group_name"]),
+                              trailing: ElevatedButton(
+                                  onPressed: () {
+                                    sendGroupInvitation(
+                                            _foundUsers[index]['email'],
+                                            _foundUsers[index]["group_info"]
+                                                [ind]["group_id"])
+                                        .then((value) {
+                                      getMembers().then((value) {
+                                        setState(() {
+                                          _foundUsers = value['data'];
+                                        });
+                                      });
+                                    });
+                                  },
+                                  child: (_foundUsers[index]["group_info"][ind]
+                                                  ["invite_status"]
+                                              .toString() ==
+                                          'n')
+                                      ? Text('Send Invitation')
+                                      : Text('Pending')),
+                            );
+                          })
+                    ],
+                  );
+                }),
+          ),
+        ],
+      ),
     );
   }
 }

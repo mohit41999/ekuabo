@@ -9,6 +9,7 @@ import 'package:ekuabo/utils/ekuabo_asset.dart';
 import 'package:ekuabo/utils/ekuabo_string.dart';
 import 'package:ekuabo/widgets/EcuaboAppBar.dart';
 import 'package:ekuabo/widgets/UnderlineWidget.dart';
+import 'package:ekuabo/widgets/progress_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
@@ -59,10 +60,13 @@ class _GroupDetailsState extends State<GroupDetails> {
     });
   }
 
-  void like(BuildContext context, String feedId) {
+  Future like(BuildContext context, String feedId) async {
+    var loader = ProgressView(context);
+    loader.show();
     GroupDetailsServices().likefeed(feedId).then((value) {
       setState(() {
         groupinititalize();
+        loader.dismiss();
       });
     });
   }
@@ -93,9 +97,13 @@ class _GroupDetailsState extends State<GroupDetails> {
   }
 
   void unlike(BuildContext context, feedId) {
+    var loader = ProgressView(context);
+    loader.show();
+
     GroupDetailsServices().unlikefeed(feedId).then((value) {
       setState(() {
         groupinititalize();
+        loader.dismiss();
       });
     });
   }
@@ -238,7 +246,7 @@ class _GroupDetailsState extends State<GroupDetails> {
                               children: [
                                 GestureDetector(
                                   onTap: () {
-                                    _homeController.navigationQueue.addLast(4);
+                                    _homeController.navigationQueue.addLast(0);
                                     _homeController
                                         .bottomNavigatorKey.currentState
                                         .push(MaterialPageRoute(
@@ -290,7 +298,7 @@ class _GroupDetailsState extends State<GroupDetails> {
                                 Icons.people,
                                 color: Colors.white,
                               ).onFeedBackTap(() async {
-                                _homeController.navigationQueue.addLast(4);
+                                _homeController.navigationQueue.addLast(0);
                                 _homeController.bottomNavigatorKey.currentState
                                     .push(MaterialPageRoute(
                                         builder: (context) => GroupMembers(
@@ -339,7 +347,7 @@ class _GroupDetailsState extends State<GroupDetails> {
                                   GestureDetector(
                                     onTap: () {
                                       _homeController.navigationQueue
-                                          .addLast(4);
+                                          .addLast(0);
                                       _homeController
                                           .bottomNavigatorKey.currentState
                                           .push(MaterialPageRoute(
@@ -555,100 +563,114 @@ class _GroupDetailsState extends State<GroupDetails> {
                                           .make()
                                           .pOnly(left: 10, right: 10),
                                       10.heightBox,
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Row(
-                                            children: [
-                                              Image.asset(
-                                                _groupModel
-                                                            .data
-                                                            .groupFeed[index]
-                                                            .isUserLike ==
-                                                        "n"
-                                                    ? EkuaboAsset.ic_like
-                                                    : EkuaboAsset.ic_liked,
-                                                width: 16,
-                                                height: 16,
-                                              ).onTap(() {
-                                                if (_groupModel
-                                                        .data
-                                                        .groupFeed[index]
-                                                        .isUserLike ==
-                                                    "n")
-                                                  like(
-                                                      context,
+                                      Container(
+                                        height: 50,
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Row(
+                                              children: [
+                                                GestureDetector(
+                                                    onTap: () {
+                                                      if (_groupModel
+                                                              .data
+                                                              .groupFeed[index]
+                                                              .isUserLike ==
+                                                          "n")
+                                                        like(
+                                                            context,
+                                                            _groupModel
+                                                                .data
+                                                                .groupFeed[
+                                                                    index]
+                                                                .feedId);
+                                                      else
+                                                        unlike(
+                                                            context,
+                                                            _groupModel
+                                                                .data
+                                                                .groupFeed[
+                                                                    index]
+                                                                .feedId);
+                                                    },
+                                                    child: Image.asset(
                                                       _groupModel
-                                                          .data
-                                                          .groupFeed[index]
-                                                          .feedId);
-                                                else
-                                                  unlike(
-                                                      context,
-                                                      _groupModel
-                                                          .data
-                                                          .groupFeed[index]
-                                                          .feedId);
-                                              }),
-                                              30.widthBox,
-                                              Image.asset(
-                                                EkuaboAsset.ic_comment,
-                                                width: 16,
-                                                height: 16,
-                                              ).onTap(() {
-                                                setState(() {
-                                                  _groupModel
-                                                          .data
-                                                          .groupFeed[index]
-                                                          .isCommentExpand =
-                                                      !_groupModel
-                                                          .data
-                                                          .groupFeed[index]
-                                                          .isCommentExpand;
-                                                });
-
-                                                // _con.update();
-                                              }),
-                                              30.widthBox,
-                                              Image.asset(
-                                                EkuaboAsset.ic_share,
-                                                width: 16,
-                                                height: 16,
-                                              ).onTap(() {
-                                                _share(_groupModel
-                                                    .data.groupFeed[index]);
-                                              }),
-                                            ],
-                                          ),
-                                          _groupModel.data.groupFeed[index]
-                                                      .isUserReported ==
-                                                  "n"
-                                              ? EkuaboString.report.text
-                                                  .color(MyColor.mainColor
-                                                      .withOpacity(0.6))
-                                                  .size(10)
-                                                  .light
-                                                  .underline
-                                                  .make()
-                                                  .onTap(() {
-                                                  report(
-                                                      context,
-                                                      _groupModel
-                                                          .data
-                                                          .groupFeed[index]
-                                                          .feedId);
-                                                })
-                                              : EkuaboString.reported.text
-                                                  .color(MyColor.mainColor
-                                                      .withOpacity(0.6))
-                                                  .size(10)
-                                                  .light
-                                                  .underline
-                                                  .make()
-                                                  .onTap(() {}),
-                                        ],
-                                      ).pOnly(left: 10, right: 10),
+                                                                  .data
+                                                                  .groupFeed[
+                                                                      index]
+                                                                  .isUserLike ==
+                                                              "n"
+                                                          ? EkuaboAsset.ic_like
+                                                          : EkuaboAsset
+                                                              .ic_liked,
+                                                      width: 20,
+                                                      height: 20,
+                                                    )),
+                                                30.widthBox,
+                                                GestureDetector(
+                                                    onTap: () {
+                                                      setState(() {
+                                                        _groupModel
+                                                                .data
+                                                                .groupFeed[index]
+                                                                .isCommentExpand =
+                                                            !_groupModel
+                                                                .data
+                                                                .groupFeed[
+                                                                    index]
+                                                                .isCommentExpand;
+                                                      });
+                                                    },
+                                                    child: Image.asset(
+                                                      EkuaboAsset.ic_comment,
+                                                      width: 20,
+                                                      height: 20,
+                                                    )),
+                                                30.widthBox,
+                                                GestureDetector(
+                                                    onTap: () {
+                                                      _share(_groupModel.data
+                                                          .groupFeed[index]);
+                                                    },
+                                                    child: Image.asset(
+                                                      EkuaboAsset.ic_share,
+                                                      width: 20,
+                                                      height: 20,
+                                                    )),
+                                              ],
+                                            ),
+                                            _groupModel.data.groupFeed[index]
+                                                        .isUserReported ==
+                                                    "n"
+                                                ? GestureDetector(
+                                                    onTap: () {
+                                                      report(
+                                                          context,
+                                                          _groupModel
+                                                              .data
+                                                              .groupFeed[index]
+                                                              .feedId);
+                                                    },
+                                                    child: EkuaboString
+                                                        .report.text
+                                                        .color(MyColor.mainColor
+                                                            .withOpacity(0.6))
+                                                        .size(10)
+                                                        .light
+                                                        .underline
+                                                        .make())
+                                                : EkuaboString.reported.text
+                                                    .color(MyColor.mainColor
+                                                        .withOpacity(0.6))
+                                                    .size(10)
+                                                    .light
+                                                    .underline
+                                                    .make()
+                                                    .onTap(() {}),
+                                          ],
+                                        ).pOnly(left: 10, right: 10),
+                                      ),
                                       _groupModel.data.groupFeed[index]
                                               .isCommentExpand
                                           ? Column(
