@@ -64,7 +64,7 @@ class _UserMarketPlaceDetailsState extends State<UserMarketPlaceDetails> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: EcuaboAppBar().getAppBar(context),
+      appBar: EcuaboAppBar(),
       body: (loading)
           ? Center(
               child: CircularProgressIndicator(),

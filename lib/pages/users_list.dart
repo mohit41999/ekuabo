@@ -70,7 +70,7 @@ class _UsersListState extends State<UsersList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: EcuaboAppBar().getAppBar(context),
+      appBar: EcuaboAppBar(),
       body: Column(
         children: [
           ConstrainedBox(

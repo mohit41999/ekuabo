@@ -1,3 +1,4 @@
+import 'package:currency_picker/currency_picker.dart';
 import 'package:ekuabo/controller/add_banner_controller.dart';
 import 'package:ekuabo/controller/home_controller.dart';
 
@@ -20,13 +21,14 @@ class _CreateMyAdState extends State<CreateMyAd> {
   final _homeController = Get.find<HomeController>();
 
   final _con = Get.find<AddBannerController>();
+  int val = -1;
 
   @override
   Widget build(BuildContext context) {
     return GetBuilder<AddBannerController>(
       builder: (_) => Scaffold(
         backgroundColor: Colors.white,
-        appBar: EcuaboAppBar().getAppBar(context),
+        appBar: EcuaboAppBar(),
         body: _con.bannerSlots.isNotEmpty
             ? SingleChildScrollView(
                 physics: BouncingScrollPhysics(),
@@ -127,15 +129,35 @@ class _CreateMyAdState extends State<CreateMyAd> {
                                     children: [
                                       Expanded(
                                           flex: 2,
-                                          child: Checkbox(
-                                              value: _con
-                                                  .bannerSlots[index].isChecked,
+                                          child: Radio(
+                                              value: index,
+                                              groupValue: val,
                                               onChanged: (v) {
-                                                _con.bannerSlots[index]
-                                                        .isChecked =
-                                                    !_con.bannerSlots[index]
-                                                        .isChecked;
-                                                _con.update();
+                                                setState(() {
+                                                  print(v.toString() +
+                                                      'ppppppppp---------');
+                                                  val = v;
+                                                  for (int i = 0;
+                                                      i <=
+                                                          _con.bannerSlots
+                                                                  .length -
+                                                              1;
+                                                      i++) {
+                                                    if (i == val) {
+                                                      _con.bannerSlots[i]
+                                                          .isChecked = true;
+                                                    } else {
+                                                      _con.bannerSlots[i]
+                                                          .isChecked = false;
+                                                    }
+                                                  }
+                                                });
+
+                                                // _con.bannerSlots[index]
+                                                //         .isChecked =
+                                                //     !_con.bannerSlots[index]
+                                                //         .isChecked;
+                                                // _con.update();
                                               })),
                                       Expanded(
                                         flex: 2,
@@ -171,179 +193,6 @@ class _CreateMyAdState extends State<CreateMyAd> {
                                   shrinkWrap: true,
                                   itemCount: _con.bannerSlots.length,
                                 )
-                                /* Row(
-                                  children: [
-                                    Expanded(flex:2,child: Checkbox(value: true, onChanged:(v){})),
-                                    Expanded(
-                                      flex:2,
-                                      child: EkuaboString.homePage
-                                          .text
-                                          .medium
-                                          .size(12)
-                                          .color(MyColor.blackColor.withOpacity(0.6))
-                                          .make(),
-                                    ),
-                                    10.widthBox,
-                                    Expanded(
-                                      flex:2,
-                                      child: EkuaboString.horizontal
-                                          .text
-                                          .medium
-                                          .size(12)
-                                          .color(MyColor.blackColor.withOpacity(0.6))
-                                          .make(),
-                                    ),
-                                    10.widthBox,
-                                    Expanded(
-                                      flex:2,
-                                      child: "1"
-                                          .text
-                                          .medium
-                                          .size(12)
-                                          .color(MyColor.blackColor.withOpacity(0.6))
-                                          .make(),
-                                    ),
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    Expanded(flex:2,child: Checkbox(value: true, onChanged:(v){})),
-                                    Expanded(
-                                      flex:2,
-                                      child: EkuaboString.searchPage
-                                          .text
-                                          .medium
-                                          .size(12)
-                                          .color(MyColor.blackColor.withOpacity(0.6))
-                                          .make(),
-                                    ),
-                                    10.widthBox,
-                                    Expanded(
-                                      flex:2,
-                                      child: EkuaboString.horizontal
-                                          .text
-                                          .medium
-                                          .size(12)
-                                          .color(MyColor.blackColor.withOpacity(0.6))
-                                          .make(),
-                                    ),
-                                    10.widthBox,
-                                    Expanded(
-                                      flex:2,
-                                      child: "1"
-                                          .text
-                                          .medium
-                                          .size(12)
-                                          .color(MyColor.blackColor.withOpacity(0.6))
-                                          .make(),
-                                    ),
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    Expanded(flex:2,child: Checkbox(value: true, onChanged:(v){})),
-                                    Expanded(
-                                      flex:2,
-                                      child: EkuaboString.searchPage
-                                          .text
-                                          .medium
-                                          .size(12)
-                                          .color(MyColor.blackColor.withOpacity(0.6))
-                                          .make(),
-                                    ),
-                                    10.widthBox,
-                                    Expanded(
-                                      flex:2,
-                                      child: EkuaboString.vertical
-                                          .text
-                                          .medium
-                                          .size(12)
-                                          .color(MyColor.blackColor.withOpacity(0.6))
-                                          .make(),
-                                    ),
-                                    10.widthBox,
-                                    Expanded(
-                                      flex:2,
-                                      child: "1"
-                                          .text
-                                          .medium
-                                          .size(12)
-                                          .color(MyColor.blackColor.withOpacity(0.6))
-                                          .make(),
-                                    ),
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    Expanded(flex:2,child: Checkbox(value: true, onChanged:(v){})),
-                                    Expanded(
-                                      flex:2,
-                                      child: EkuaboString.marketPlacePage
-                                          .text
-                                          .medium
-                                          .size(12)
-                                          .color(MyColor.blackColor.withOpacity(0.6))
-                                          .make(),
-                                    ),
-                                    10.widthBox,
-                                    Expanded(
-                                      flex:2,
-                                      child: EkuaboString.horizontal
-                                          .text
-                                          .medium
-                                          .size(12)
-                                          .color(MyColor.blackColor.withOpacity(0.6))
-                                          .make(),
-                                    ),
-                                    10.widthBox,
-                                    Expanded(
-                                      flex:2,
-                                      child: "1"
-                                          .text
-                                          .medium
-                                          .size(12)
-                                          .color(MyColor.blackColor.withOpacity(0.6))
-                                          .make(),
-                                    ),
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-
-                                    Expanded(flex:2,child: Checkbox(value: true, onChanged:(v){})),
-
-                                    Expanded(
-                                      flex:2,
-                                      child: EkuaboString.marketPlacePage
-                                          .text
-                                          .medium
-                                          .size(12)
-                                          .color(MyColor.blackColor.withOpacity(0.6))
-                                          .make(),
-                                    ),
-                                    10.widthBox,
-
-                                    Expanded(
-                                      flex:2,
-                                      child: EkuaboString.vertical
-                                          .text
-                                          .medium
-                                          .size(12)
-                                          .color(MyColor.blackColor.withOpacity(0.6))
-                                          .make(),
-                                    ),
-                                    10.widthBox,
-                                    Expanded(
-                                      flex:2,
-                                      child: "1"
-                                          .text
-                                          .medium
-                                          .size(12)
-                                          .color(MyColor.blackColor.withOpacity(0.6))
-                                          .make(),
-                                    ),
-                                  ],
-                                ),*/
                               ],
                             ).pOnly(top: 10, bottom: 10))
                                 .withRounded(value: 10)
@@ -462,33 +311,90 @@ class _CreateMyAdState extends State<CreateMyAd> {
                               ),
                             ),
                             16.heightBox,
-                            ConstrainedBox(
-                              constraints: const BoxConstraints(
-                                  minHeight: 10, maxHeight: 40),
-                              child: TextFormField(
-                                controller: _con.bannerPriceCtl,
-                                keyboardType: TextInputType.number,
-                                decoration: InputDecoration(
-                                    filled: true,
-                                    labelText: EkuaboString.enterProductPrice,
-                                    labelStyle: const TextStyle(
-                                        fontFamily: EkuaboAsset.CERA_PRO_FONT,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w200,
-                                        color: MyColor.secondColor),
-                                    hintText: EkuaboString.enterProductPrice,
-                                    hintStyle: const TextStyle(
-                                        fontFamily: EkuaboAsset.CERA_PRO_FONT,
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w200),
-                                    fillColor: Colors.white,
-                                    border: const OutlineInputBorder(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(7)),
-                                        borderSide: BorderSide(
-                                            width: 1,
-                                            color: MyColor.mainColor))),
-                              ),
+                            Row(
+                              children: [
+                                Expanded(
+                                  flex: 1,
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      showCurrencyPicker(
+                                        context: context,
+                                        showFlag: true,
+                                        showCurrencyName: true,
+                                        showCurrencyCode: true,
+                                        favorite: [],
+                                        onSelect: (Currency currency) {
+                                          print(
+                                              'Select currency: ${currency.symbol}');
+                                          setState(() {
+                                            _con.currency_code =
+                                                currency.symbol.toString();
+                                          });
+                                        },
+                                      );
+                                    },
+                                    child: Container(
+                                        height: 40,
+                                        decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            border: Border.all(
+                                                color: MyColor.mainColor),
+                                            borderRadius:
+                                                BorderRadius.circular(7)),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              _con.currency_code,
+                                              style: TextStyle(fontSize: 20),
+                                            ),
+                                            Icon(Icons.arrow_drop_down),
+                                          ],
+                                        )),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 5,
+                                ),
+                                Expanded(
+                                  flex: 3,
+                                  child: ConstrainedBox(
+                                    constraints: const BoxConstraints(
+                                        minHeight: 10, maxHeight: 40),
+                                    child: TextFormField(
+                                      controller: _con.bannerPriceCtl,
+                                      keyboardType: TextInputType.number,
+                                      decoration: InputDecoration(
+                                          filled: true,
+                                          labelText:
+                                              EkuaboString.enterProductPrice +
+                                                  _con.currency_code,
+                                          labelStyle: const TextStyle(
+                                              fontFamily:
+                                                  EkuaboAsset.CERA_PRO_FONT,
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w200,
+                                              color: MyColor.secondColor),
+                                          hintText:
+                                              EkuaboString.enterProductPrice +
+                                                  _con.currency_code,
+                                          hintStyle: const TextStyle(
+                                              fontFamily:
+                                                  EkuaboAsset.CERA_PRO_FONT,
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w200),
+                                          fillColor: Colors.white,
+                                          border: const OutlineInputBorder(
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(7)),
+                                              borderSide: BorderSide(
+                                                  width: 1,
+                                                  color: MyColor.mainColor))),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
                         )).p(15),

@@ -165,7 +165,7 @@ class EkuaboString {
   static const enterRedirectionUrl = "Enter Redirection URL";
   static const enterDesc = "Enter Description";
   static const enterNoOfDays = "Enter No. of Days";
-  static const enterProductPrice = "Enter Product Price (\$)";
+  static const enterProductPrice = "Enter Product Price ";
 
   /// Private Message Board
   static const private_message_board = "Private Message Board";

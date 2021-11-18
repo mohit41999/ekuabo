@@ -1,13 +1,35 @@
 import 'package:ekuabo/controller/home_controller.dart';
+import 'package:ekuabo/controller/market_place_controller.dart';
 import 'package:ekuabo/utils/color.dart';
 import 'package:ekuabo/utils/ekuabo_asset.dart';
 import 'package:ekuabo/utils/ekuabo_route.dart';
+import 'package:ekuabo/utils/navigationDrawer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:velocity_x/velocity_x.dart';
 
-class EcuaboAppBar {
+class EcuaboAppBar extends StatefulWidget implements PreferredSizeWidget {
+  const EcuaboAppBar({
+    Key key,
+    this.action = null,
+  }) : super(key: key);
+  final Widget action;
+
+  @override
+  _EcuaboAppBarState createState() => _EcuaboAppBarState();
+
+  @override
+  // TODO: implement preferredSize
+  Size get preferredSize => Size.fromHeight(50);
+}
+
+class _EcuaboAppBarState extends State<EcuaboAppBar> {
+  @override
+  Widget build(BuildContext context) {
+    return getAppBar(context, action: widget.action);
+  }
+
   final _con = Get.find<HomeController>();
   final listOfMoreMenu = [
     "Private Message",
@@ -92,10 +114,21 @@ class EcuaboAppBar {
     }
   }
 
-  Widget getAppBar(BuildContext context,
-      {Widget action = null, Widget leading = null}) {
+  Widget getAppBar(BuildContext context, {Widget action = null}) {
     return AppBar(
-      leading: (leading == null) ? Container() : leading,
+      leading: Builder(
+        builder: (context) => IconButton(
+          icon: Icon(
+            Icons.menu,
+            color: MyColor.mainColor,
+          ),
+          onPressed: () {
+            setState(() {
+              Scaffold.of(context).openDrawer();
+            });
+          },
+        ),
+      ),
       elevation: 0,
       actions: [
         (action == null) ? Container() : action,
@@ -116,5 +149,27 @@ class EcuaboAppBar {
       ),
       centerTitle: true,
     );
+  }
+}
+
+class CommonNavigationDrawer extends StatefulWidget {
+  const CommonNavigationDrawer({Key key}) : super(key: key);
+
+  @override
+  _CommonNavigationDrawerState createState() => _CommonNavigationDrawerState();
+}
+
+class _CommonNavigationDrawerState extends State<CommonNavigationDrawer> {
+  final _con = Get.find<MarketPlaceController>();
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _con.getMarketPlaceCategory;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return NavigationDrawer(_con.getMarketPlaceCategory);
   }
 }

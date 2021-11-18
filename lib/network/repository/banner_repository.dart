@@ -73,6 +73,7 @@ class BannerRepository {
       request.fields['description'] = param['description'];
       request.fields['total_days'] = param['total_days'];
       request.fields['price'] = param['price'];
+      request.fields['currency_code'] = param['currency_code'];
 
       var pic = await http.MultipartFile.fromPath(
           "banner_image", param['banner_image']);

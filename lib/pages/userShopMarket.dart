@@ -31,7 +31,7 @@ class _userShopMarketPlaceState extends State<userShopMarketPlace> {
     return GetBuilder<MarketPlaceController>(
       builder: (_) => Scaffold(
         backgroundColor: Colors.white,
-        appBar: EcuaboAppBar().getAppBar(context),
+        appBar: EcuaboAppBar(),
         body: Stack(
           fit: StackFit.expand,
           children: [

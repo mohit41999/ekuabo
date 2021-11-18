@@ -29,7 +29,6 @@ class _MarketPlaceState extends State<MarketPlace> {
 
   final _con = Get.find<MarketPlaceController>();
   final _adcon = Get.find<AddBannerController>();
-  Future<CategoryBean> getMarketPlaceCategory;
   List<BannerModelData> MarketHorizontalAd = [];
   List<BannerModelData> MarketVerticalAd = [];
   void callads() {
@@ -47,16 +46,10 @@ class _MarketPlaceState extends State<MarketPlace> {
     });
   }
 
-  void initialize() {
-    setState(() {
-      getMarketPlaceCategory = MarketPlaceRepository().getCategory();
-    });
-  }
-
   @override
   void initState() {
     // TODO: implement initState
-    initialize();
+
     callads();
     super.initState();
   }
@@ -66,23 +59,8 @@ class _MarketPlaceState extends State<MarketPlace> {
     return GetBuilder<MarketPlaceController>(
       builder: (_) => Scaffold(
         backgroundColor: Colors.white,
-        appBar: EcuaboAppBar().getAppBar(
-          context,
-          leading: Builder(
-            builder: (context) => IconButton(
-              icon: Icon(
-                Icons.menu,
-                color: MyColor.mainColor,
-              ),
-              onPressed: () {
-                setState(() {
-                  Scaffold.of(context).openDrawer();
-                });
-              },
-            ),
-          ),
-        ),
-        drawer: NavigationDrawer(getMarketPlaceCategory),
+        appBar: EcuaboAppBar(),
+        drawer: CommonNavigationDrawer(),
         // appBar: AppBar(
         //   foregroundColor: MyColor.mainColor,
         //   backgroundColor: Colors.white,

@@ -20,7 +20,7 @@ class PrivateMessageBoard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: EcuaboAppBar().getAppBar(context),
+      appBar: EcuaboAppBar(),
       body: GetBuilder<PrivateMessageBoardController>(
         builder: (_) => SingleChildScrollView(
           physics: BouncingScrollPhysics(),
@@ -114,8 +114,12 @@ class PrivateMessageBoard extends StatelessWidget {
                                   color: MyColor.mainColor,
                                   size: 24,
                                 ).pOnly(right: Get.width - 150),
-                                secondaryBackground: VxBox().make(),
-                                direction: DismissDirection.startToEnd,
+                                secondaryBackground: Icon(
+                                  Icons.delete,
+                                  color: MyColor.mainColor,
+                                  size: 24,
+                                ).pOnly(left: Get.width - 150),
+                                direction: DismissDirection.horizontal,
                                 child: VxBox(
                                         child: Row(
                                   children: [

@@ -3,7 +3,9 @@ import 'package:ekuabo/controller/add_banner_controller.dart';
 import 'package:ekuabo/controller/blog_controller.dart';
 import 'package:ekuabo/controller/home_controller.dart';
 import 'package:ekuabo/controller/home_view_controller.dart';
+import 'package:ekuabo/controller/market_place_controller.dart';
 import 'package:ekuabo/model/apimodel/banner/display_banner_ads.dart';
+import 'package:ekuabo/model/apimodel/market_place/category_bean.dart';
 
 import 'package:ekuabo/model/uiModel/MostRecentFeedModel.dart';
 import 'package:ekuabo/pages/userShopMarket.dart';
@@ -11,6 +13,7 @@ import 'package:ekuabo/utils/color.dart';
 import 'package:ekuabo/utils/ekuabo_asset.dart';
 import 'package:ekuabo/utils/ekuabo_route.dart';
 import 'package:ekuabo/utils/ekuabo_string.dart';
+import 'package:ekuabo/utils/navigationDrawer.dart';
 import 'package:ekuabo/widgets/EcuaboAppBar.dart';
 import 'package:ekuabo/widgets/UnderlineWidget.dart';
 import 'package:expandable_text/expandable_text.dart';
@@ -79,7 +82,8 @@ class _HomeViewState extends State<HomeView> {
 
     return GetBuilder<HomeViewController>(
       builder: (_) => Scaffold(
-        appBar: EcuaboAppBar().getAppBar(context),
+        appBar: EcuaboAppBar(),
+        drawer: CommonNavigationDrawer(),
         body: RefreshIndicator(
           onRefresh: () {
             setState(() {

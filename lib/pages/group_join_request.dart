@@ -25,7 +25,7 @@ class _GroupJoinRequestState extends State<GroupJoinRequest> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: EcuaboAppBar().getAppBar(context),
+      appBar: EcuaboAppBar(),
       body: GetBuilder<GroupJoinRequestController>(
         builder: (_) => Stack(
           fit: StackFit.expand,

@@ -126,7 +126,7 @@ class _PostNewListingState extends State<PostNewListing> {
     return GetBuilder<AddMarketPlaceController>(
       builder: (_) => Scaffold(
         backgroundColor: Colors.white,
-        appBar: EcuaboAppBar().getAppBar(context),
+        appBar: EcuaboAppBar(),
         body: SingleChildScrollView(
             child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -364,15 +364,10 @@ class _PostNewListingState extends State<PostNewListing> {
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      (_con.currency_code == '')
-                                          ? Text(
-                                              '\$',
-                                              style: TextStyle(fontSize: 20),
-                                            )
-                                          : Text(
-                                              _con.currency_code,
-                                              style: TextStyle(fontSize: 20),
-                                            ),
+                                      Text(
+                                        _con.currency_code,
+                                        style: TextStyle(fontSize: 20),
+                                      ),
                                       Icon(Icons.arrow_drop_down),
                                     ],
                                   )),

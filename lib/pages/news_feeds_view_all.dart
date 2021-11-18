@@ -108,22 +108,7 @@ class _NewsFeedsViewAllState extends State<NewsFeedsViewAll> {
     return GetBuilder<NewsFeedsViewAllController>(
       builder: (_) => Scaffold(
         backgroundColor: Colors.white,
-        appBar: EcuaboAppBar().getAppBar(
-          context,
-          leading: Builder(
-            builder: (context) => IconButton(
-              icon: Icon(
-                Icons.menu,
-                color: MyColor.mainColor,
-              ),
-              onPressed: () {
-                setState(() {
-                  Scaffold.of(context).openDrawer();
-                });
-              },
-            ),
-          ),
-        ),
+        appBar: EcuaboAppBar(),
         // AppBar(
         //   foregroundColor: MyColor.mainColor,
         //   backgroundColor: Colors.white,

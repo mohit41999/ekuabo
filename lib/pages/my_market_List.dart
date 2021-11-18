@@ -72,15 +72,7 @@ class _MyMarketPlaceState extends State<MyMarketPlace> {
     return GetBuilder<MarketPlaceController>(
       builder: (_) => Scaffold(
         backgroundColor: Colors.white,
-        appBar: EcuaboAppBar().getAppBar(context,
-            leading: IconButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                icon: Icon(
-                  Icons.arrow_back,
-                  color: MyColor.mainColor,
-                ))),
+        appBar: EcuaboAppBar(),
         body: Stack(
           fit: StackFit.expand,
           children: [

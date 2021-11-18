@@ -84,7 +84,7 @@ class _GroupMembersState extends State<GroupMembers> {
                   // tooltip: ,
                 )
               : null,
-      appBar: EcuaboAppBar().getAppBar(context),
+      appBar: EcuaboAppBar(),
       body: (loading)
           ? Center(
               child: CircularProgressIndicator(),

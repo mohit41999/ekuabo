@@ -6,6 +6,7 @@ import 'package:ekuabo/utils/ekuabo_asset.dart';
 import 'package:ekuabo/utils/ekuabo_string.dart';
 import 'package:ekuabo/utils/pref_manager.dart';
 import 'package:ekuabo/widgets/EcuaboAppBar.dart';
+import 'package:ekuabo/widgets/progress_view.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:velocity_x/velocity_x.dart';
@@ -25,6 +26,8 @@ class _EditNeighbourhoodDetailsState extends State<EditNeighbourhoodDetails> {
   var SelectedLGA;
   String Token = '123456789';
   Future Submit() async {
+    var loader = ProgressView(context);
+    loader.show();
     UserBean userBean = await PrefManager.getUser();
     var response = await http
         .post(Uri.parse('https://eku-abo.com/api/update_lga.php'), body: {
@@ -34,12 +37,15 @@ class _EditNeighbourhoodDetailsState extends State<EditNeighbourhoodDetails> {
       'state_id': SelectedState['StateID'],
       'lga_id': SelectedLGA['id']
     });
+
+    var Response = jsonDecode(response.body);
+
+    print(Response);
+    loader.dismiss();
     userBean.data.lga_name = SelectedLGA['lga_name'];
     userBean.data.lgaId = SelectedLGA['id'];
     String jsonString = json.encode(userBean);
     PrefManager.putString(PrefManager.USER_DATA, jsonString);
-    var Response = jsonDecode(response.body);
-    print(Response);
     print(SelectedLGA['lga_name']);
     UserBean user = await PrefManager.getUser();
   }
@@ -88,7 +94,7 @@ class _EditNeighbourhoodDetailsState extends State<EditNeighbourhoodDetails> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: EcuaboAppBar().getAppBar(context),
+      appBar: EcuaboAppBar(),
       body: VxCard(
         Column(
           children: [

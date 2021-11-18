@@ -19,7 +19,7 @@ class Setting extends StatelessWidget {
     return GetBuilder<SettingController>(
       builder: (_) => Scaffold(
         backgroundColor: Colors.white,
-        appBar: EcuaboAppBar().getAppBar(context),
+        appBar: EcuaboAppBar(),
         body: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

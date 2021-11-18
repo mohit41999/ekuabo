@@ -32,7 +32,7 @@ class _ChatNewUserConversationState extends State<ChatNewUserConversation> {
     return GetBuilder<ChatConversationController>(
       builder: (_) => Scaffold(
         backgroundColor: Colors.white,
-        appBar: EcuaboAppBar().getAppBar(context),
+        appBar: EcuaboAppBar(),
         body: SingleChildScrollView(
           physics: BouncingScrollPhysics(),
           child: Column(

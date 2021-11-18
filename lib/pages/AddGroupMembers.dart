@@ -86,7 +86,7 @@ class _AddGroupMembersState extends State<AddGroupMembers> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: EcuaboAppBar().getAppBar(context),
+      appBar: EcuaboAppBar(),
       body: Column(
         children: [
           ConstrainedBox(

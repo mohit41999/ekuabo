@@ -18,7 +18,7 @@ class EditProfile extends StatelessWidget {
     _con.fillvalues();
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: EcuaboAppBar().getAppBar(context),
+      appBar: EcuaboAppBar(),
       body: SingleChildScrollView(
         physics: BouncingScrollPhysics(),
         child: Column(

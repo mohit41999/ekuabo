@@ -23,6 +23,7 @@ class EditProfileController extends GetxController {
   var occupationCtl = TextEditingController();
   var interestCtl = TextEditingController();
   var funFactCtl = TextEditingController();
+
   Future<void> fillvalues() async {
     var userBean = await PrefManager.getUser();
     nameCtl.text = userBean.data.userName;

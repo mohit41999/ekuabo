@@ -1,3 +1,4 @@
+import 'package:ekuabo/model/apimodel/market_place/category_bean.dart';
 import 'package:ekuabo/model/apimodel/market_place/market_place_bean.dart';
 import 'package:ekuabo/network/repository/market_place_repository.dart';
 import 'package:ekuabo/utils/pref_manager.dart';
@@ -8,7 +9,8 @@ class MarketPlaceController extends GetxController {
 
   List<MarketPlaceData> marketPlaces = [];
   List<MarketPlaceData> mymarketPlaces = [];
-
+  Future<CategoryBean> getMarketPlaceCategory =
+      MarketPlaceRepository().getCategory();
   MarketPlaceController() {
     _marketPlaceRepository = Get.find<MarketPlaceRepository>();
   }

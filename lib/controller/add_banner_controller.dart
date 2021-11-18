@@ -22,6 +22,7 @@ class AddBannerController extends GetxController {
   var bannerDescCtl = TextEditingController();
   var bannerDaysCtl = TextEditingController();
   var bannerPriceCtl = TextEditingController();
+  String currency_code = '\$';
   void clearcontrollers() {
     bannerPriceCtl.clear();
     bannerDaysCtl.clear();
@@ -75,7 +76,8 @@ class AddBannerController extends GetxController {
         'url': bannerUrlCtl.text,
         'description': bannerDescCtl.text,
         'total_days': bannerDaysCtl.text,
-        'price': bannerPriceCtl.text
+        'price': bannerPriceCtl.text,
+        'currency_code': currency_code,
       };
       var result = await _bannerRepository.addBannerAd(param);
       loader.dismiss();
@@ -85,8 +87,10 @@ class AddBannerController extends GetxController {
         Utils().showSnackBar(context, bannerAdBean.message);
         if (bannerAdBean.status) {
           Get.toNamed(EkuaboRoute.payment_web_view,
-              arguments: bannerAdBean.data.paymentUrl);
-          homeController.bottomNavigatorKey.currentState.pop();
+                  arguments: bannerAdBean.data.paymentUrl)
+              .then((value) {
+            homeController.bottomNavigatorKey.currentState.pop();
+          });
         }
       }
     }
@@ -124,7 +128,8 @@ class AddBannerController extends GetxController {
         'description': bannerDescCtl.text,
         'total_days': bannerDaysCtl.text,
         'price': bannerPriceCtl.text,
-        'banner_image': image.path
+        'banner_image': image.path,
+        'currency_code': currency_code
       };
       var result = await _bannerRepository.addBannerAdwithImage(param);
       loader.dismiss();
@@ -134,8 +139,10 @@ class AddBannerController extends GetxController {
         Utils().showSnackBar(context, bannerAdBean.message);
         if (bannerAdBean.status) {
           Get.toNamed(EkuaboRoute.payment_web_view,
-              arguments: bannerAdBean.data.paymentUrl);
-          homeController.bottomNavigatorKey.currentState.pop();
+                  arguments: bannerAdBean.data.paymentUrl)
+              .then((value) {
+            homeController.bottomNavigatorKey.currentState.pop();
+          });
         }
       }
     }

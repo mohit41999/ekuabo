@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:ekuabo/controller/more_controller.dart';
 import 'package:ekuabo/model/apimodel/user_bean.dart';
 import 'package:ekuabo/utils/color.dart';
 import 'package:ekuabo/utils/ekuabo_asset.dart';
@@ -9,6 +10,7 @@ import 'package:ekuabo/widgets/EcuaboAppBar.dart';
 import 'package:ekuabo/widgets/UnderlineWidget.dart';
 import 'package:ekuabo/widgets/progress_view.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:velocity_x/velocity_x.dart';
@@ -23,6 +25,8 @@ class EditMarketPlaceInfo extends StatefulWidget {
 
 class _EditMarketPlaceInfoState extends State<EditMarketPlaceInfo> {
   String Token = '123456789';
+  final _morecon = Get.find<MoreController>();
+  PickedFile image;
 
   TextEditingController market_TitleCtl = TextEditingController();
   TextEditingController market_DescCtl = TextEditingController();
@@ -38,7 +42,18 @@ class _EditMarketPlaceInfoState extends State<EditMarketPlaceInfo> {
     market_WebsiteCtl.clear();
   }
 
-  PickedFile image;
+  Future<void> fillvalues() async {
+    market_TitleCtl.text =
+        _morecon.userProfileDataBean.marketplaceInfo.marketTitle;
+    market_DescCtl.text = _morecon.userProfileDataBean.marketplaceInfo.message;
+    market_AddressCtl.text =
+        _morecon.userProfileDataBean.marketplaceInfo.marketAddress;
+  }
+
+  Future initialize() async {
+    await _morecon.getUserProfile();
+    return _morecon.userProfileDataBean;
+  }
 
   Future editMarketPlaceInfo() async {
     var loader = ProgressView(context);
@@ -93,6 +108,7 @@ class _EditMarketPlaceInfoState extends State<EditMarketPlaceInfo> {
     loader.dismiss();
     clearcontrollers();
   }
+
   // Future postImage(String imagePath) async {
   //   UserBean userBean = await PrefManager.getUser();
   //   var request = http.MultipartRequest(
@@ -115,12 +131,21 @@ class _EditMarketPlaceInfoState extends State<EditMarketPlaceInfo> {
   //   var responseString = String.fromCharCodes(responseData);
   //   print(responseString + 'kkkkkkkkkkkkkkkkkkkkkkkkk');
   // }
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    initialize().then((value) {
+      setState(() {});
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    fillvalues();
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: EcuaboAppBar().getAppBar(context),
+      appBar: EcuaboAppBar(),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
