@@ -197,7 +197,7 @@ class _UserMarketPlaceDetailsState extends State<UserMarketPlaceDetails> {
                             onPressed: () {},
                             child: Row(
                               children: [
-                                "\$"
+                                "${marketplaceDetails.data[0].currency_code}"
                                     .text
                                     .medium
                                     .size(16)

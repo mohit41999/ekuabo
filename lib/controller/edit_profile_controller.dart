@@ -97,6 +97,7 @@ class EditProfileController extends GetxController {
       var result = await _repository.updateProfile(param);
       loader.dismiss();
       clearControllers();
+      Navigator.pop(context);
       UserBean w = await PrefManager.getUser();
       print(w.data.userName.toString() + 'heloooooooowowowowoooooooooo');
       if (result != null) {

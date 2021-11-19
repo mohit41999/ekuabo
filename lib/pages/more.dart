@@ -296,10 +296,19 @@ class More extends StatelessWidget {
                                   MaterialPageRoute(
                                       builder: (context) => EditMarketPlaceInfo(
                                             market_id: _morecon
+                                                        .userProfileDataBean
+                                                        .marketplaceInfo
+                                                        .marketId
+                                                        .toString() ==
+                                                    ""
+                                                ? '0'
+                                                : _morecon.userProfileDataBean
+                                                    .marketplaceInfo.marketId
+                                                    .toString(),
+                                            Website: _morecon
                                                 .userProfileDataBean
-                                                .marketplaceInfo
-                                                .marketId
-                                                .toString(),
+                                                .profile
+                                                .website,
                                           ))).then((value) {
                                 _morecon.getUserProfile();
                               });

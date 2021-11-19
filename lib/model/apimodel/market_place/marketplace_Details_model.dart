@@ -53,6 +53,7 @@ class Datum {
     @required this.created,
     @required this.userDetails,
     @required this.image,
+    @required this.currency_code,
   });
 
   String marketplaceId;
@@ -69,6 +70,7 @@ class Datum {
   String neigborhood;
   DateTime created;
   UserDetails userDetails;
+  String currency_code;
   List<DetailsImage> image;
 
   factory Datum.fromJson(Map<String, dynamic> json) => Datum(
@@ -84,6 +86,7 @@ class Datum {
         contactNumber: json["contact_number"],
         price: json["price"],
         neigborhood: json["neigborhood"],
+        currency_code: json["currency_code"],
         created: DateTime.parse(json["created"]),
         userDetails: UserDetails.fromJson(json["user_details"]),
         image: List<DetailsImage>.from(
@@ -103,6 +106,7 @@ class Datum {
         "contact_number": contactNumber,
         "price": price,
         "neigborhood": neigborhood,
+        "currency_code": currency_code,
         "created": created.toIso8601String(),
         "user_details": userDetails.toJson(),
         "image": List<dynamic>.from(image.map((x) => x.toJson())),

@@ -9,6 +9,7 @@ import 'package:ekuabo/model/apimodel/market_place/category_bean.dart';
 
 import 'package:ekuabo/model/uiModel/MostRecentFeedModel.dart';
 import 'package:ekuabo/pages/userShopMarket.dart';
+import 'package:ekuabo/pages/userShopMarketListing.dart';
 import 'package:ekuabo/utils/color.dart';
 import 'package:ekuabo/utils/ekuabo_asset.dart';
 import 'package:ekuabo/utils/ekuabo_route.dart';
@@ -480,7 +481,9 @@ class _HomeViewState extends State<HomeView> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       CachedNetworkImage(
-                                        imageUrl: homeMarketPlace.image ?? '',
+                                        imageUrl:
+                                            homeMarketPlace.image[0].image ??
+                                                '',
                                         placeholder: (ctx, _) => const SizedBox(
                                           width: 20,
                                           height: 20,
@@ -499,8 +502,7 @@ class _HomeViewState extends State<HomeView> {
                                      ),*/
                                       10.heightBox,
                                       Flexible(
-                                          child: homeMarketPlace
-                                              .marketTitle.text
+                                          child: homeMarketPlace.title.text
                                               .maxLines(1)
                                               .ellipsis
                                               .size(12)
@@ -510,7 +512,7 @@ class _HomeViewState extends State<HomeView> {
                                               .pOnly(left: 10)),
                                       Flexible(
                                           child: homeMarketPlace
-                                              .marketDescription.text
+                                              .listingDescription.text
                                               .maxLines(3)
                                               .ellipsis
                                               .light
@@ -522,28 +524,26 @@ class _HomeViewState extends State<HomeView> {
                                         children: [
                                           Row(
                                             children: [
-                                              CachedNetworkImage(
-                                                imageUrl: homeMarketPlace
-                                                        .userDetail.profile ??
-                                                    '',
-                                                placeholder: (ctx, _) =>
-                                                    const SizedBox(
-                                                  width: 10,
-                                                  height: 10,
-                                                  child:
-                                                      CircularProgressIndicator(),
-                                                ),
-                                                height: 14,
-                                                width: 14,
-                                              ),
+                                              // CachedNetworkImage(
+                                              //   imageUrl: homeMarketPlace.
+                                              //           ..profile ??
+                                              //       '',
+                                              //   placeholder: (ctx, _) =>
+                                              //       const SizedBox(
+                                              //     width: 10,
+                                              //     height: 10,
+                                              //     child:
+                                              //         CircularProgressIndicator(),
+                                              //   ),
+                                              //   height: 14,
+                                              //   width: 14,
+                                              // ),
                                               /*Image.asset(EkuaboAsset.ic_user2,color: MyColor.mainColor,width: 14,
                                                height: 14,
                                              ),*/
 
                                               5.widthBox,
-                                              homeMarketPlace.userDetail
-                                                          .username ==
-                                                      null
+                                              homeMarketPlace.email == null
                                                   ? ''
                                                       .text
                                                       .maxLines(1)
@@ -552,8 +552,7 @@ class _HomeViewState extends State<HomeView> {
                                                       .light
                                                       .black
                                                       .make()
-                                                  : homeMarketPlace
-                                                      .userDetail.username.text
+                                                  : homeMarketPlace.email.text
                                                       .maxLines(1)
                                                       .ellipsis
                                                       .size(10)
@@ -566,12 +565,12 @@ class _HomeViewState extends State<HomeView> {
                                           Row(
                                             children: [
                                               Icon(
-                                                Icons.access_time_rounded,
+                                                Icons.phone,
                                                 color: MyColor.mainColor,
                                                 size: 14,
                                               ),
                                               5.widthBox,
-                                              homeMarketPlace.created.text
+                                              homeMarketPlace.contactNumber.text
                                                   .size(10)
                                                   .light
                                                   .black
@@ -591,11 +590,10 @@ class _HomeViewState extends State<HomeView> {
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) =>
-                                                userShopMarketPlace(
-                                                    user_id: _con
+                                                UserMarketPlaceDetails(
+                                                    market_id: _con
                                                         .homeMarketPlaces[index]
-                                                        .userDetail
-                                                        .userId)));
+                                                        .marketplaceId)));
                                   });
                                 }),
                           ),

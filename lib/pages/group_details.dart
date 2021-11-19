@@ -608,25 +608,46 @@ class _GroupDetailsState extends State<GroupDetails> {
                                                       height: 20,
                                                     )),
                                                 30.widthBox,
-                                                GestureDetector(
-                                                    onTap: () {
-                                                      setState(() {
-                                                        _groupModel
-                                                                .data
-                                                                .groupFeed[index]
-                                                                .isCommentExpand =
-                                                            !_groupModel
-                                                                .data
-                                                                .groupFeed[
-                                                                    index]
-                                                                .isCommentExpand;
-                                                      });
-                                                    },
-                                                    child: Image.asset(
-                                                      EkuaboAsset.ic_comment,
-                                                      width: 20,
-                                                      height: 20,
-                                                    )),
+                                                Row(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.end,
+                                                  children: [
+                                                    GestureDetector(
+                                                        onTap: () {
+                                                          setState(() {
+                                                            _groupModel
+                                                                    .data
+                                                                    .groupFeed[
+                                                                        index]
+                                                                    .isCommentExpand =
+                                                                !_groupModel
+                                                                    .data
+                                                                    .groupFeed[
+                                                                        index]
+                                                                    .isCommentExpand;
+                                                          });
+                                                        },
+                                                        child: Image.asset(
+                                                          EkuaboAsset
+                                                              .ic_comment,
+                                                          width: 20,
+                                                          height: 20,
+                                                        )),
+                                                    Text(
+                                                      _groupModel
+                                                          .data
+                                                          .groupFeed[index]
+                                                          .comment
+                                                          .length
+                                                          .toString(),
+                                                      style: TextStyle(
+                                                          color:
+                                                              MyColor.mainColor,
+                                                          fontWeight:
+                                                              FontWeight.bold),
+                                                    )
+                                                  ],
+                                                ),
                                                 30.widthBox,
                                                 GestureDetector(
                                                     onTap: () {
@@ -666,8 +687,7 @@ class _GroupDetailsState extends State<GroupDetails> {
                                                     .size(10)
                                                     .light
                                                     .underline
-                                                    .make()
-                                                    .onTap(() {}),
+                                                    .make(),
                                           ],
                                         ).pOnly(left: 10, right: 10),
                                       ),
@@ -813,8 +833,8 @@ class _GroupDetailsState extends State<GroupDetails> {
                                             flex: 1,
                                             child: Image.asset(
                                               EkuaboAsset.ic_send,
-                                              width: 16,
-                                              height: 16,
+                                              width: 20,
+                                              height: 20,
                                             ).onTap(() {
                                               comment(
                                                   context,

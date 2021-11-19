@@ -1,11 +1,12 @@
 import 'package:ekuabo/model/apimodel/home/home_market_place.dart';
 import 'package:ekuabo/model/apimodel/home/most_recent_new_feed.dart';
+import 'package:ekuabo/model/apimodel/market_place/market_place_bean.dart';
 import 'package:ekuabo/network/repository/home_view_repository.dart';
 import 'package:get/get.dart';
 
 class HomeViewController extends GetxController {
   HomeViewRepository _homeViewRepository;
-  List<HomeMarketPlaceData> homeMarketPlaces = [];
+  List<MarketPlaceData> homeMarketPlaces = [];
   List<MostRecentNewFeedData> mostRecentNewsFeeds = [];
 
   HomeViewController() {
@@ -37,9 +38,9 @@ class HomeViewController extends GetxController {
   void _getHomeMarketPlace() async {
     var result = await _homeViewRepository.getHomeMarketPlace();
     if (result != null) {
-      HomeMarketPlaceBean marketPlaceBean = result;
+      MarketPlaceBean marketPlaceBean = result;
       if (marketPlaceBean.status) {
-        homeMarketPlaces = marketPlaceBean.data;
+        homeMarketPlaces = marketPlaceBean.data.take(10).toList();
       }
     }
     update();

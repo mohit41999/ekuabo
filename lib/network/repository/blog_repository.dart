@@ -35,7 +35,7 @@ class BlogRepository {
   // 'image': mediaFile.path,
   // };
 
-  Future<BaseBean> addPostBlog(Map<String, dynamic> param) async {
+  Future<BaseBean> addPostBlogwithImage(Map<String, dynamic> param) async {
     var request = http.MultipartRequest(
         "POST", Uri.parse("https://eku-abo.com/api/blog/add_blog.php"));
     request.fields['user_id'] = param['user_id'];
@@ -58,18 +58,17 @@ class BlogRepository {
     print(responseString + 'kkkkkkkkkkkkkkkkkkkkkkkkk');
   }
 
-  // Future<BaseBean> addPostBlog(Map<String,dynamic> param) async
-  // {
-  //   try {
-  //
-  //     var response = await _httpService.postRequest('blog/add_blog.php',param);
-  //     var jsonString = json.decode(response.data);
-  //     return BaseBean.fromJson(jsonString);
-  //   } on HttpException catch (e) {
-  //     Utils().showSnackBar(Get.context,e.response);
-  //   }
-  //   return null;
-  // }
+  Future<BaseBean> addPostBlog(Map<String, dynamic> param) async {
+    try {
+      var response = await _httpService.postRequest('blog/add_blog.php', param);
+      var jsonString = json.decode(response.data);
+      return BaseBean.fromJson(jsonString);
+    } on HttpException catch (e) {
+      Utils().showSnackBar(Get.context, e.response);
+    }
+    return null;
+  }
+
   Future<BaseBean> addComment(Map<String, dynamic> param) async {
     try {
       var response =

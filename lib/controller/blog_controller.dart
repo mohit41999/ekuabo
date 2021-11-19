@@ -28,7 +28,7 @@ class BlogController extends GetxController {
     update();
   }
 
-  void callDeleteBlogApi(BuildContext context, int index) async {
+  Future callDeleteBlogApi(BuildContext context, int index) async {
     var userBean = await PrefManager.getUser();
     var loader = ProgressView(context);
     loader.show();

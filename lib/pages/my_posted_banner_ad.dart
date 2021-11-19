@@ -111,22 +111,18 @@ class MyPostedBannerAd extends StatelessWidget {
                                           .makeCentered()
                                           .pOnly(left: 20),
                                       10.widthBox,
-                                      const Icon(
-                                        Icons.more_vert,
-                                        color: Colors.black,
-                                      )
                                     ],
                                   ),
                                   16.heightBox,
                                   VxBox(
                                           child: Center(
                                     child: banner.isApproved == 'n'
-                                        ? EkuaboString.approved.text
+                                        ? EkuaboString.pending.text
                                             .color(Colors.grey)
                                             .medium
                                             .size(14)
                                             .make()
-                                        : EkuaboString.pending.text
+                                        : EkuaboString.approved.text
                                             .color(Colors.grey)
                                             .medium
                                             .size(14)

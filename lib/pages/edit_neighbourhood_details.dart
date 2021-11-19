@@ -27,27 +27,34 @@ class _EditNeighbourhoodDetailsState extends State<EditNeighbourhoodDetails> {
   String Token = '123456789';
   Future Submit() async {
     var loader = ProgressView(context);
-    loader.show();
-    UserBean userBean = await PrefManager.getUser();
-    var response = await http
-        .post(Uri.parse('https://eku-abo.com/api/update_lga.php'), body: {
-      'token': Token,
-      'user_id': userBean.data.id,
-      'country_id': SelectedCountry['CountryId'],
-      'state_id': SelectedState['StateID'],
-      'lga_id': SelectedLGA['id']
-    });
 
-    var Response = jsonDecode(response.body);
+    print(SelectedCountry.toString() + '==============================');
+    if (SelectedCountry.toString() == 'null') {
+      Navigator.pop(context);
+    } else {
+      loader.show();
+      UserBean userBean = await PrefManager.getUser();
+      var response = await http
+          .post(Uri.parse('https://eku-abo.com/api/update_lga.php'), body: {
+        'token': Token,
+        'user_id': userBean.data.id,
+        'country_id': SelectedCountry['CountryId'],
+        'state_id': SelectedState['StateID'],
+        'lga_id': SelectedLGA['id']
+      });
 
-    print(Response);
-    loader.dismiss();
-    userBean.data.lga_name = SelectedLGA['lga_name'];
-    userBean.data.lgaId = SelectedLGA['id'];
-    String jsonString = json.encode(userBean);
-    PrefManager.putString(PrefManager.USER_DATA, jsonString);
-    print(SelectedLGA['lga_name']);
-    UserBean user = await PrefManager.getUser();
+      var Response = jsonDecode(response.body);
+
+      print(Response);
+      loader.dismiss();
+      userBean.data.lga_name = SelectedLGA['lga_name'];
+      userBean.data.lgaId = SelectedLGA['id'];
+      String jsonString = json.encode(userBean);
+      PrefManager.putString(PrefManager.USER_DATA, jsonString);
+      print(SelectedLGA['lga_name']);
+      UserBean user = await PrefManager.getUser();
+      Navigator.pop(context);
+    }
   }
 
   Future getCountry() async {

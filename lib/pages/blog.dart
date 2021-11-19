@@ -377,7 +377,11 @@ class _BlogState extends State<Blog> {
             .make()
             .onTap(
           () {
-            _con.callDeleteBlogApi(context, index);
+            _con.callDeleteBlogApi(context, index).then((value) {
+              setState(() {
+                _con.getMostRecent();
+              });
+            });
             Get.back();
           },
         )));

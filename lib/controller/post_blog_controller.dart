@@ -16,7 +16,12 @@ class PostBlogController extends GetxController {
   PostBlogController() {
     _blogRepository = Get.find<BlogRepository>();
   }
-  void callPostBlogApi(BuildContext context) async {
+  void clearcontrollers() {
+    blogDescCtl.clear();
+    blogTitleCtl.clear();
+  }
+
+  void callPostBlogApiwithmedia(BuildContext context) async {
     if (blogTitleCtl.text.isEmpty) {
       Utils().showSnackBar(context, 'Enter Blog title');
     } else if (mediaFile == null) {
@@ -34,12 +39,40 @@ class PostBlogController extends GetxController {
       };
       var loader = ProgressView(context);
       loader.show();
+      var result = await _blogRepository.addPostBlogwithImage(param);
+      loader.dismiss();
+      if (result != null) {
+        BaseBean baseBean = result;
+        Utils().showSnackBar(context, baseBean.message);
+      }
+      clearcontrollers();
+      Navigator.pop(context);
+    }
+  }
+
+  void callPostBlogApi(BuildContext context) async {
+    if (blogTitleCtl.text.isEmpty) {
+      Utils().showSnackBar(context, 'Enter Blog title');
+    } else if (blogDescCtl.text.isEmpty) {
+      Utils().showSnackBar(context, 'Enter Blog description');
+    } else {
+      var userBean = await PrefManager.getUser();
+      var param = {
+        'token': '123456789',
+        'user_id': userBean.data.id,
+        'blog_title': blogTitleCtl.text,
+        'blog_desc': blogDescCtl.text,
+      };
+      var loader = ProgressView(context);
+      loader.show();
       var result = await _blogRepository.addPostBlog(param);
       loader.dismiss();
       if (result != null) {
         BaseBean baseBean = result;
         Utils().showSnackBar(context, baseBean.message);
       }
+      clearcontrollers();
+      Navigator.pop(context);
     }
   }
 }

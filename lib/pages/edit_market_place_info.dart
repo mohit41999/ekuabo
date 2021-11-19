@@ -17,7 +17,10 @@ import 'package:velocity_x/velocity_x.dart';
 
 class EditMarketPlaceInfo extends StatefulWidget {
   final String market_id;
-  const EditMarketPlaceInfo({Key key, this.market_id}) : super(key: key);
+  final String Website;
+
+  const EditMarketPlaceInfo({Key key, this.market_id, @required this.Website})
+      : super(key: key);
 
   @override
   _EditMarketPlaceInfoState createState() => _EditMarketPlaceInfoState();
@@ -31,27 +34,36 @@ class _EditMarketPlaceInfoState extends State<EditMarketPlaceInfo> {
   TextEditingController market_TitleCtl = TextEditingController();
   TextEditingController market_DescCtl = TextEditingController();
   TextEditingController market_AddressCtl = TextEditingController();
-  TextEditingController market_ContactnoCtl = TextEditingController();
+  //TextEditingController market_ContactnoCtl = TextEditingController();
   TextEditingController market_WebsiteCtl = TextEditingController();
   final picker = ImagePicker();
   void clearcontrollers() {
     market_TitleCtl.clear();
     market_DescCtl.clear();
     market_AddressCtl.clear();
-    market_ContactnoCtl.clear();
+    //market_ContactnoCtl.clear();
     market_WebsiteCtl.clear();
   }
 
   Future<void> fillvalues() async {
-    market_TitleCtl.text =
-        _morecon.userProfileDataBean.marketplaceInfo.marketTitle;
-    market_DescCtl.text = _morecon.userProfileDataBean.marketplaceInfo.message;
-    market_AddressCtl.text =
-        _morecon.userProfileDataBean.marketplaceInfo.marketAddress;
+    if (_morecon.userProfileDataBean.marketplaceInfo.marketTitle.toString() ==
+        '') {
+    } else {
+      market_TitleCtl.text =
+          _morecon.userProfileDataBean.marketplaceInfo.marketTitle;
+      market_DescCtl.text =
+          _morecon.userProfileDataBean.marketplaceInfo.message;
+      market_AddressCtl.text =
+          _morecon.userProfileDataBean.marketplaceInfo.marketAddress;
+      market_WebsiteCtl.text = widget.Website;
+    }
   }
 
   Future initialize() async {
     await _morecon.getUserProfile();
+    UserBean userBean = await PrefManager.getUser();
+    print(userBean.data.id.toString() +
+        '=================================================');
     return _morecon.userProfileDataBean;
   }
 
@@ -59,6 +71,9 @@ class _EditMarketPlaceInfoState extends State<EditMarketPlaceInfo> {
     var loader = ProgressView(context);
     loader.show();
     UserBean userBean = await PrefManager.getUser();
+    print(
+        '----------------------------------------\n${Token}\n${userBean.data.id}\n${widget.market_id}\n${market_TitleCtl.text}\n${market_DescCtl.text}'
+        '\n${market_AddressCtl.text}\n${market_WebsiteCtl.text}\n-------------------------------------');
     var response = await http.post(
         Uri.parse(
             'https://eku-abo.com/api/marketplace/update_marketplace_info.php'),
@@ -69,13 +84,14 @@ class _EditMarketPlaceInfoState extends State<EditMarketPlaceInfo> {
           "market_title": market_TitleCtl.text,
           "market_description": market_DescCtl.text,
           "address": market_AddressCtl.text,
-          "contact_no": market_ContactnoCtl.text,
+          //"contact_no": market_ContactnoCtl.text,
           "website": market_WebsiteCtl.text,
         });
     var Response = jsonDecode(response.body);
     print(Response);
     loader.dismiss();
     clearcontrollers();
+    Navigator.pop(context);
   }
 
   Future editMarketPlaceInfoImage(String i) async {
@@ -93,7 +109,7 @@ class _EditMarketPlaceInfoState extends State<EditMarketPlaceInfo> {
     request.fields['market_title'] = market_TitleCtl.text;
     request.fields['market_description'] = market_DescCtl.text;
     request.fields['address'] = market_AddressCtl.text;
-    request.fields['contact_no'] = market_ContactnoCtl.text;
+    // request.fields['contact_no'] = market_ContactnoCtl.text;
     request.fields['website'] = market_WebsiteCtl.text;
 
     var pic = await http.MultipartFile.fromPath("market_image", i);
@@ -107,6 +123,8 @@ class _EditMarketPlaceInfoState extends State<EditMarketPlaceInfo> {
     print(responseString + 'kkkkkkkkkkkkkkkkkkkkkkkkk');
     loader.dismiss();
     clearcontrollers();
+
+    Navigator.pop(context);
   }
 
   // Future postImage(String imagePath) async {
@@ -286,36 +304,36 @@ class _EditMarketPlaceInfoState extends State<EditMarketPlaceInfo> {
                           ),
                         ),
                         10.widthBox,
-                        Expanded(
-                          flex: 1,
-                          child: ConstrainedBox(
-                            constraints: const BoxConstraints(
-                                minHeight: 10, maxHeight: 40),
-                            child: TextFormField(
-                              controller: market_ContactnoCtl,
-                              keyboardType: TextInputType.number,
-                              decoration: InputDecoration(
-                                  filled: true,
-                                  labelText: "contact_no",
-                                  labelStyle: const TextStyle(
-                                      fontFamily: EkuaboAsset.CERA_PRO_FONT,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w200,
-                                      color: MyColor.secondColor),
-                                  hintText: "contact_no",
-                                  hintStyle: const TextStyle(
-                                      fontFamily: EkuaboAsset.CERA_PRO_FONT,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w200),
-                                  fillColor: Colors.white,
-                                  border: const OutlineInputBorder(
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(7)),
-                                      borderSide: BorderSide(
-                                          width: 1, color: MyColor.mainColor))),
-                            ),
-                          ),
-                        )
+                        // Expanded(
+                        //   flex: 1,
+                        //   child: ConstrainedBox(
+                        //     constraints: const BoxConstraints(
+                        //         minHeight: 10, maxHeight: 40),
+                        //     child: TextFormField(
+                        //       controller: market_ContactnoCtl,
+                        //       keyboardType: TextInputType.number,
+                        //       decoration: InputDecoration(
+                        //           filled: true,
+                        //           labelText: "contact_no",
+                        //           labelStyle: const TextStyle(
+                        //               fontFamily: EkuaboAsset.CERA_PRO_FONT,
+                        //               fontSize: 14,
+                        //               fontWeight: FontWeight.w200,
+                        //               color: MyColor.secondColor),
+                        //           hintText: "contact_no",
+                        //           hintStyle: const TextStyle(
+                        //               fontFamily: EkuaboAsset.CERA_PRO_FONT,
+                        //               fontSize: 12,
+                        //               fontWeight: FontWeight.w200),
+                        //           fillColor: Colors.white,
+                        //           border: const OutlineInputBorder(
+                        //               borderRadius:
+                        //                   BorderRadius.all(Radius.circular(7)),
+                        //               borderSide: BorderSide(
+                        //                   width: 1, color: MyColor.mainColor))),
+                        //     ),
+                        //   ),
+                        // )
                       ],
                     ),
                     20.heightBox,

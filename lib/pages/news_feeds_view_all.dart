@@ -377,34 +377,57 @@ class _NewsFeedsViewAllState extends State<NewsFeedsViewAll> {
                               children: [
                                 Row(
                                   children: [
-                                    Image.asset(
-                                      newsFeed.isUserLike == "n"
-                                          ? EkuaboAsset.ic_like
-                                          : EkuaboAsset.ic_liked,
-                                      width: 16,
-                                      height: 16,
-                                    ).onTap(() {
-                                      if (newsFeed.isUserLike == "n")
-                                        _con.like(context, newsFeed.feedId);
-                                      else
-                                        _con.unlike(context, newsFeed.feedId);
-                                    }),
+                                    GestureDetector(
+                                      onTap: () {
+                                        if (newsFeed.isUserLike == "n")
+                                          _con.like(context, newsFeed.feedId);
+                                        else
+                                          _con.unlike(context, newsFeed.feedId);
+                                      },
+                                      child: Image.asset(
+                                        newsFeed.isUserLike == "n"
+                                            ? EkuaboAsset.ic_like
+                                            : EkuaboAsset.ic_liked,
+                                        width: 20,
+                                        height: 20,
+                                      ),
+                                    ),
                                     30.widthBox,
-                                    Image.asset(
-                                      EkuaboAsset.ic_comment,
-                                      width: 16,
-                                      height: 16,
-                                    ).onTap(() {
-                                      newsFeed.isCommentExpand =
-                                          !newsFeed.isCommentExpand;
-                                      _con.update();
-                                    }),
+                                    GestureDetector(
+                                      onTap: () {
+                                        newsFeed.isCommentExpand =
+                                            !newsFeed.isCommentExpand;
+                                        _con.update();
+                                      },
+                                      child: Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.end,
+                                        children: [
+                                          Image.asset(
+                                            EkuaboAsset.ic_comment,
+                                            width: 20,
+                                            height: 20,
+                                          ),
+                                          Text(
+                                            newsFeed.comment.length.toString(),
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                color: MyColor.mainColor),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
                                     30.widthBox,
-                                    Image.asset(
-                                      EkuaboAsset.ic_share,
-                                      width: 16,
-                                      height: 16,
-                                    ).onTap(() async => _share(newsFeed)),
+                                    GestureDetector(
+                                      onTap: () async {
+                                        _share(newsFeed);
+                                      },
+                                      child: Image.asset(
+                                        EkuaboAsset.ic_share,
+                                        width: 20,
+                                        height: 20,
+                                      ),
+                                    ),
                                   ],
                                 ),
                                 newsFeed.isUserReported == "n"
