@@ -102,6 +102,7 @@ class _EditNeighbourhoodDetailsState extends State<EditNeighbourhoodDetails> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: EcuaboAppBar(),
+      drawer: CommonNavigationDrawer(),
       body: VxCard(
         Column(
           children: [

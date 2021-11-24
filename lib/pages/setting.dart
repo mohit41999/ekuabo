@@ -20,6 +20,7 @@ class Setting extends StatelessWidget {
       builder: (_) => Scaffold(
         backgroundColor: Colors.white,
         appBar: EcuaboAppBar(),
+        drawer: CommonNavigationDrawer(),
         body: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

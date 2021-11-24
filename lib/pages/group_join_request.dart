@@ -26,6 +26,7 @@ class _GroupJoinRequestState extends State<GroupJoinRequest> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: EcuaboAppBar(),
+      drawer: CommonNavigationDrawer(),
       body: GetBuilder<GroupJoinRequestController>(
         builder: (_) => Stack(
           fit: StackFit.expand,

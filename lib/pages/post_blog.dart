@@ -18,6 +18,7 @@ class PostBlog extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: EcuaboAppBar(),
+      drawer: CommonNavigationDrawer(),
       body: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -138,7 +139,9 @@ class PostBlog extends StatelessWidget {
                 )).p(15),
                 MaterialButton(
                   minWidth: 170,
-                  onPressed: () =>(_con.mediaFile==null)?_con.callPostBlogApi(context): _con.callPostBlogApiwithmedia(context),
+                  onPressed: () => (_con.mediaFile == null)
+                      ? _con.callPostBlogApi(context)
+                      : _con.callPostBlogApiwithmedia(context),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30)),
                   child: EkuaboString.submit

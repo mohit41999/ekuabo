@@ -21,6 +21,7 @@ class BlogDetail extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: EcuaboAppBar(),
+      drawer: CommonNavigationDrawer(),
       body: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,

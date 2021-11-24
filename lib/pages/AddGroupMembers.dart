@@ -87,6 +87,7 @@ class _AddGroupMembersState extends State<AddGroupMembers> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: EcuaboAppBar(),
+      drawer: CommonNavigationDrawer(),
       body: Column(
         children: [
           ConstrainedBox(

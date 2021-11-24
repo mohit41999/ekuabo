@@ -29,6 +29,7 @@ class _CreateMyAdState extends State<CreateMyAd> {
       builder: (_) => Scaffold(
         backgroundColor: Colors.white,
         appBar: EcuaboAppBar(),
+        drawer: CommonNavigationDrawer(),
         body: _con.bannerSlots.isNotEmpty
             ? SingleChildScrollView(
                 physics: BouncingScrollPhysics(),

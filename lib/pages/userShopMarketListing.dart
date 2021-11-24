@@ -65,6 +65,7 @@ class _UserMarketPlaceDetailsState extends State<UserMarketPlaceDetails> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: EcuaboAppBar(),
+      drawer: CommonNavigationDrawer(),
       body: (loading)
           ? Center(
               child: CircularProgressIndicator(),

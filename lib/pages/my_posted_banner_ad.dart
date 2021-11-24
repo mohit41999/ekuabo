@@ -24,6 +24,7 @@ class MyPostedBannerAd extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: EcuaboAppBar(),
+      drawer: CommonNavigationDrawer(),
       body: GetBuilder<MyPostedBannerAdController>(
         builder: (_) => Stack(
           fit: StackFit.expand,

@@ -19,6 +19,7 @@ class EditProfile extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: EcuaboAppBar(),
+      drawer: CommonNavigationDrawer(),
       body: SingleChildScrollView(
         physics: BouncingScrollPhysics(),
         child: Column(

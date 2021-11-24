@@ -85,6 +85,7 @@ class _GroupMembersState extends State<GroupMembers> {
                 )
               : null,
       appBar: EcuaboAppBar(),
+      drawer: CommonNavigationDrawer(),
       body: (loading)
           ? Center(
               child: CircularProgressIndicator(),

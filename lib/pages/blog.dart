@@ -29,6 +29,7 @@ class _BlogState extends State<Blog> {
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: EcuaboAppBar(),
+        drawer: CommonNavigationDrawer(),
         body: GetBuilder<BlogController>(
           builder: (_) => _con.mostRecentBlogs == null
               ? Stack(

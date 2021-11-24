@@ -164,6 +164,7 @@ class _EditMarketPlaceInfoState extends State<EditMarketPlaceInfo> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: EcuaboAppBar(),
+      drawer: CommonNavigationDrawer(),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

@@ -21,6 +21,7 @@ class PrivateMessageBoard extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: EcuaboAppBar(),
+      drawer: CommonNavigationDrawer(),
       body: GetBuilder<PrivateMessageBoardController>(
         builder: (_) => SingleChildScrollView(
           physics: BouncingScrollPhysics(),

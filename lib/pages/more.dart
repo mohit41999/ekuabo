@@ -32,6 +32,7 @@ class More extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: EcuaboAppBar(),
+      drawer: CommonNavigationDrawer(),
       body: GetBuilder<MoreController>(
         builder: (_) => _morecon.userProfileDataBean != null
             ? SingleChildScrollView(

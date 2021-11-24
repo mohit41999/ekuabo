@@ -32,6 +32,7 @@ class _userShopMarketPlaceState extends State<userShopMarketPlace> {
       builder: (_) => Scaffold(
         backgroundColor: Colors.white,
         appBar: EcuaboAppBar(),
+        drawer: CommonNavigationDrawer(),
         body: Stack(
           fit: StackFit.expand,
           children: [

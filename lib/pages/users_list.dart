@@ -71,6 +71,7 @@ class _UsersListState extends State<UsersList> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: EcuaboAppBar(),
+      drawer: CommonNavigationDrawer(),
       body: Column(
         children: [
           ConstrainedBox(

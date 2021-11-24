@@ -64,6 +64,7 @@ class _MarketPlaceListingState extends State<MarketPlaceListing> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: EcuaboAppBar(),
+      drawer: CommonNavigationDrawer(),
       body: (loading)
           ? Center(
               child: CircularProgressIndicator(),

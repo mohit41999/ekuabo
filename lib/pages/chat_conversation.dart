@@ -32,6 +32,7 @@ class _ChatConversationState extends State<ChatConversation> {
       builder: (_) => Scaffold(
         backgroundColor: Colors.white,
         appBar: EcuaboAppBar(),
+        drawer: CommonNavigationDrawer(),
         body: SingleChildScrollView(
           physics: BouncingScrollPhysics(),
           child: Column(
