@@ -68,6 +68,7 @@ class AddBannerController extends GetxController {
     } else {
       var loader = ProgressView(context);
       loader.show();
+      print(currency_code.toString() + '---------------');
       var userBean = await PrefManager.getUser();
       var param = {
         'user_id': userBean.data.id,
@@ -77,7 +78,7 @@ class AddBannerController extends GetxController {
         'description': bannerDescCtl.text,
         'total_days': bannerDaysCtl.text,
         'price': bannerPriceCtl.text,
-        'currency_code': currency_code,
+        'currency_code': currency_code.toString(),
       };
       var result = await _bannerRepository.addBannerAd(param);
       loader.dismiss();
@@ -129,7 +130,7 @@ class AddBannerController extends GetxController {
         'total_days': bannerDaysCtl.text,
         'price': bannerPriceCtl.text,
         'banner_image': image.path,
-        'currency_code': currency_code
+        'currency_code': currency_code.toString()
       };
       var result = await _bannerRepository.addBannerAdwithImage(param);
       loader.dismiss();

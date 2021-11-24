@@ -202,7 +202,7 @@ class _HomeViewState extends State<HomeView> {
                 ).pOnly(left: 16, right: 20),
                 16.heightBox,
                 // Most Recent
-                _con.mostRecentNewsFeeds.isEmpty
+                _con.newsFeeds.isEmpty
                     ? EkuaboString.no_results_found.text
                         .size(14)
                         .medium
@@ -216,14 +216,14 @@ class _HomeViewState extends State<HomeView> {
                             physics: const BouncingScrollPhysics(),
                             shrinkWrap: true,
                             scrollDirection: Axis.horizontal,
-                            itemCount: _con.mostRecentNewsFeeds.length,
+                            itemCount: _con.newsFeeds.length,
                             itemBuilder: (ctx, index) {
                               return VxCard(Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   CachedNetworkImage(
-                                    imageUrl:
-                                        _con.mostRecentNewsFeeds[index].image,
+                                    imageUrl: _con.newsFeeds[index]
+                                        .userFeedDetails.profile,
                                     placeholder: (_, __) => Center(
                                       child: CircularProgressIndicator(),
                                     ),
@@ -232,7 +232,8 @@ class _HomeViewState extends State<HomeView> {
                                     fit: BoxFit.cover,
                                   ),
                                   10.heightBox,
-                                  _con.mostRecentNewsFeeds[index].userName.text
+                                  _con.newsFeeds[index].userFeedDetails.username
+                                      .text
                                       .size(12)
                                       .bold
                                       .black
@@ -242,19 +243,16 @@ class _HomeViewState extends State<HomeView> {
                                     width: 200,
                                     child: Padding(
                                       padding: const EdgeInsets.all(8.0),
-                                      child: (_con.mostRecentNewsFeeds[index]
-                                                  .feed_msg.length <=
+                                      child: (_con.newsFeeds[index].message
+                                                  .length <=
                                               50)
                                           ? Html(
-                                              data: _con
-                                                  .mostRecentNewsFeeds[index]
-                                                  .feed_msg,
+                                              data:
+                                                  _con.newsFeeds[index].message,
                                             )
                                           : Html(
                                               data: _con
-                                                      .mostRecentNewsFeeds[
-                                                          index]
-                                                      .feed_msg
+                                                      .newsFeeds[index].message
                                                       .substring(0, 51) +
                                                   '...',
                                             ),
@@ -283,8 +281,7 @@ class _HomeViewState extends State<HomeView> {
                                           size: 14,
                                         ),
                                         3.widthBox,
-                                        _con.mostRecentNewsFeeds[index].created
-                                            .text
+                                        _con.newsFeeds[index].createdDate.text
                                             .maxLines(1)
                                             .size(10)
                                             .light

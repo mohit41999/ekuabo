@@ -329,6 +329,8 @@ class _CreateMyAdState extends State<CreateMyAd> {
                                           setState(() {
                                             _con.currency_code =
                                                 currency.symbol.toString();
+                                            print(_con.currency_code +
+                                                '==========');
                                           });
                                         },
                                       );
