@@ -8,7 +8,8 @@ class BannerAdBean {
   BannerAdBean.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     message = json['message'];
-    data = json['data'] != null ? new BannerAdData.fromJson(json['data']) : null;
+    data =
+        json['data'] != null ? new BannerAdData.fromJson(json['data']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -27,13 +28,20 @@ class BannerAdData {
   String bannerId;
   String price;
   String paymentUrl;
+  dynamic banner_price;
 
-  BannerAdData({this.userId, this.bannerId, this.price, this.paymentUrl});
+  BannerAdData(
+      {this.userId,
+      this.bannerId,
+      this.price,
+      this.paymentUrl,
+      this.banner_price});
 
   BannerAdData.fromJson(Map<String, dynamic> json) {
     userId = json['user_id'];
     bannerId = json['banner_id'];
     price = json['price'];
+    banner_price = json['banner_price'];
     paymentUrl = json['payment_url'];
   }
 
@@ -42,6 +50,8 @@ class BannerAdData {
     data['user_id'] = this.userId;
     data['banner_id'] = this.bannerId;
     data['price'] = this.price;
+    data['banner_price'] = this.banner_price;
+
     data['payment_url'] = this.paymentUrl;
     return data;
   }

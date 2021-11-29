@@ -6,7 +6,7 @@ import 'package:ekuabo/controller/home_view_controller.dart';
 import 'package:ekuabo/controller/market_place_controller.dart';
 import 'package:ekuabo/model/apimodel/banner/display_banner_ads.dart';
 import 'package:ekuabo/model/apimodel/market_place/category_bean.dart';
-
+import 'package:url_launcher/url_launcher.dart';
 import 'package:ekuabo/model/uiModel/MostRecentFeedModel.dart';
 import 'package:ekuabo/pages/userShopMarket.dart';
 import 'package:ekuabo/pages/userShopMarketListing.dart';
@@ -647,44 +647,50 @@ class HorizontalAd extends StatelessWidget {
         itemBuilder: (BuildContext context, int index, int pageViewIndex) {
           return Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Container(
-              height: 100,
-              width: 350,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  gradient: LinearGradient(
-                      colors: [MyColor.lightBlueColor, MyColor.mainColor])),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        data[index].title,
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      Container(
-                        width: 200,
-                        child: Text(
-                          data[index].description,
+            child: GestureDetector(
+              onTap: () {
+                AddBannerController()
+                    .launchURL(data[index].url.toString(), context);
+              },
+              child: Container(
+                height: 100,
+                width: 350,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    gradient: LinearGradient(
+                        colors: [MyColor.lightBlueColor, MyColor.mainColor])),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          data[index].title,
                           style: TextStyle(color: Colors.white),
                         ),
-                      ),
-                    ],
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 8.0),
-                    child: CachedNetworkImage(
-                        height: 100,
-                        width: 100,
-                        imageUrl: data[index].image,
-                        errorWidget: (_, __, ___) =>
-                            Image.asset('asset/images/error_img.jpg'),
-                        fit: BoxFit.cover),
-                  ),
-                ],
+                        Container(
+                          width: 200,
+                          child: Text(
+                            data[index].description,
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 8.0),
+                      child: CachedNetworkImage(
+                          height: 100,
+                          width: 100,
+                          imageUrl: data[index].image,
+                          errorWidget: (_, __, ___) =>
+                              Image.asset('asset/images/error_img.jpg'),
+                          fit: BoxFit.cover),
+                    ),
+                  ],
+                ),
               ),
             ),
           );
@@ -716,47 +722,53 @@ class VerticalAd extends StatelessWidget {
         itemBuilder: (BuildContext context, int index, int pageViewIndex) {
           return Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Container(
-              height: 250,
-              width: 200,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  gradient: LinearGradient(colors: [
-                    MyColor.lightBlueColor,
-                    MyColor.mainColor,
-                    Colors.blue
-                  ], begin: Alignment.topLeft, end: Alignment.bottomRight)),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        data[index].title,
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      Container(
-                        width: 200,
-                        child: Text(
-                          data[index].description,
+            child: GestureDetector(
+              onTap: () {
+                AddBannerController()
+                    .launchURL(data[index].url.toString(), context);
+              },
+              child: Container(
+                height: 250,
+                width: 200,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    gradient: LinearGradient(colors: [
+                      MyColor.lightBlueColor,
+                      MyColor.mainColor,
+                      Colors.blue
+                    ], begin: Alignment.topLeft, end: Alignment.bottomRight)),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          data[index].title,
                           style: TextStyle(color: Colors.white),
                         ),
-                      ),
-                    ],
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 8.0),
-                    child: CachedNetworkImage(
-                        height: 150,
-                        width: 100,
-                        imageUrl: data[index].image,
-                        errorWidget: (_, __, ___) =>
-                            Image.asset('asset/images/error_img.jpg'),
-                        fit: BoxFit.cover),
-                  ),
-                ],
+                        Container(
+                          width: 200,
+                          child: Text(
+                            data[index].description,
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 8.0),
+                      child: CachedNetworkImage(
+                          height: 150,
+                          width: 100,
+                          imageUrl: data[index].image,
+                          errorWidget: (_, __, ___) =>
+                              Image.asset('asset/images/error_img.jpg'),
+                          fit: BoxFit.cover),
+                    ),
+                  ],
+                ),
               ),
             ),
           );

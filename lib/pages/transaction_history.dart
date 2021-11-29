@@ -15,8 +15,8 @@ class TransactionHistory extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: EcuaboAppBar(),
-      drawer: CommonNavigationDrawer(),
+      appBar: const EcuaboAppBar(),
+      drawer: const CommonNavigationDrawer(),
       body: GetBuilder<TransactionHistoryController>(
         builder: (_) => Stack(
           fit: StackFit.expand,

@@ -9,8 +9,10 @@ import 'package:ekuabo/utils/pref_manager.dart';
 import 'package:ekuabo/utils/utils.dart';
 import 'package:ekuabo/widgets/progress_view.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class AddBannerController extends GetxController {
   BannerRepository _bannerRepository;
@@ -30,6 +32,23 @@ class AddBannerController extends GetxController {
     bannerUrlCtl.clear();
     bannerTitleCtl.clear();
   }
+
+  Future<void> launchURL(String _url, BuildContext context) async {
+    if (!await launch(
+      _url,
+      forceSafariVC: false,
+      forceWebView: false,
+      headers: <String, String>{'my_header_key': 'my_header_value'},
+    )) {
+      throw showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+                title: Text('Invalid Url'),
+              ));
+    }
+  }
+  //   if (!await launch(_url)) throw 'Could not launch $_url';
+  // }
 
   AddBannerController() {
     _bannerRepository = Get.find<BannerRepository>();
@@ -78,7 +97,7 @@ class AddBannerController extends GetxController {
         'description': bannerDescCtl.text,
         'total_days': bannerDaysCtl.text,
         'price': bannerPriceCtl.text,
-        'currency_code': currency_code.toString(),
+        'currency_code': currency_code,
       };
       var result = await _bannerRepository.addBannerAd(param);
       loader.dismiss();
@@ -130,7 +149,7 @@ class AddBannerController extends GetxController {
         'total_days': bannerDaysCtl.text,
         'price': bannerPriceCtl.text,
         'banner_image': image.path,
-        'currency_code': currency_code.toString()
+        'currency_code': currency_code
       };
       var result = await _bannerRepository.addBannerAdwithImage(param);
       loader.dismiss();
