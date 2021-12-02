@@ -108,7 +108,7 @@ class _GroupMembersState extends State<GroupMembers> {
                             backgroundImage:
                                 NetworkImage(memberdetail.data[index].profile),
                           ),
-                          title: Text(memberdetail.data[index].username),
+                          title: Text('${memberdetail.data[index].username}'),
                         );
                       }),
                 ),

@@ -773,58 +773,5 @@ class VerticalAd extends StatelessWidget {
             ),
           );
         });
-    //   Container(
-    //   height: 250,
-    //   width: double.infinity / 2,
-    //   child: ListView.builder(
-    //       padding: EdgeInsets.zero,
-    //       scrollDirection: Axis.vertical,
-    //       itemCount: data.length,
-    //       itemBuilder: (context, index) {
-    //         return Padding(
-    //           padding: const EdgeInsets.all(8.0),
-    //           child: Container(
-    //             height: 250,
-    //             width: 200,
-    //             decoration: BoxDecoration(
-    //                 borderRadius: BorderRadius.circular(10),
-    //                 gradient: LinearGradient(
-    //                     colors: [MyColor.lightBlueColor, MyColor.mainColor])),
-    //             child: Row(
-    //               mainAxisAlignment: MainAxisAlignment.spaceAround,
-    //               children: [
-    //                 Column(
-    //                   crossAxisAlignment: CrossAxisAlignment.start,
-    //                   mainAxisAlignment: MainAxisAlignment.center,
-    //                   children: [
-    //                     Text(
-    //                       data[index].title,
-    //                       style: TextStyle(color: Colors.white),
-    //                     ),
-    //                     Container(
-    //                       width: 200,
-    //                       child: Text(
-    //                         data[index].description,
-    //                         style: TextStyle(color: Colors.white),
-    //                       ),
-    //                     ),
-    //                   ],
-    //                 ),
-    //                 Padding(
-    //                   padding: const EdgeInsets.only(right: 8.0),
-    //                   child: CachedNetworkImage(
-    //                       height: 250,
-    //                       width: 100,
-    //                       imageUrl: data[index].image,
-    //                       errorWidget: (_, __, ___) =>
-    //                           Image.asset('asset/images/error_img.jpg'),
-    //                       fit: BoxFit.contain),
-    //                 ),
-    //               ],
-    //             ),
-    //           ),
-    //         );
-    //       }),
-    // );
   }
 }

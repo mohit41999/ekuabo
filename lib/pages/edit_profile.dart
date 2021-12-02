@@ -302,71 +302,62 @@ class EditProfile extends StatelessWidget {
                       ),
                     ),
                     16.heightBox,
-                    Row(
-                      children: [
-                        Expanded(
-                          flex: 1,
-                          child: ConstrainedBox(
-                            constraints: const BoxConstraints(
-                                minHeight: 10, maxHeight: 40),
-                            child: TextFormField(
-                              controller: _con.occupationCtl,
-                              keyboardType: TextInputType.text,
-                              decoration: InputDecoration(
-                                  filled: true,
-                                  labelText: "Occupation",
-                                  labelStyle: const TextStyle(
-                                      fontFamily: EkuaboAsset.CERA_PRO_FONT,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w200,
-                                      color: MyColor.secondColor),
-                                  hintText: "Occupation",
-                                  hintStyle: const TextStyle(
-                                      fontFamily: EkuaboAsset.CERA_PRO_FONT,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w200),
-                                  fillColor: Colors.white,
-                                  border: const OutlineInputBorder(
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(7)),
-                                      borderSide: BorderSide(
-                                          width: 1, color: MyColor.mainColor))),
-                            ),
-                          ),
-                        ),
-                        16.widthBox,
-                        Expanded(
-                          flex: 1,
-                          child: ConstrainedBox(
-                            constraints: const BoxConstraints(
-                                minHeight: 10, maxHeight: 40),
-                            child: TextFormField(
-                              controller: _con.interestCtl,
-                              keyboardType: TextInputType.text,
-                              decoration: InputDecoration(
-                                  filled: true,
-                                  labelText: "interest",
-                                  labelStyle: const TextStyle(
-                                      fontFamily: EkuaboAsset.CERA_PRO_FONT,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w200,
-                                      color: MyColor.secondColor),
-                                  hintText: "interest",
-                                  hintStyle: const TextStyle(
-                                      fontFamily: EkuaboAsset.CERA_PRO_FONT,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w200),
-                                  fillColor: Colors.white,
-                                  border: const OutlineInputBorder(
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(7)),
-                                      borderSide: BorderSide(
-                                          width: 1, color: MyColor.mainColor))),
-                            ),
-                          ),
-                        )
-                      ],
+                    ConstrainedBox(
+                      constraints:
+                          const BoxConstraints(minHeight: 10, maxHeight: 40),
+                      child: TextFormField(
+                        controller: _con.occupationCtl,
+                        keyboardType: TextInputType.text,
+                        decoration: InputDecoration(
+                            filled: true,
+                            labelText: "Occupation",
+                            labelStyle: const TextStyle(
+                                fontFamily: EkuaboAsset.CERA_PRO_FONT,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w200,
+                                color: MyColor.secondColor),
+                            hintText: "Occupation",
+                            hintStyle: const TextStyle(
+                                fontFamily: EkuaboAsset.CERA_PRO_FONT,
+                                fontSize: 12,
+                                fontWeight: FontWeight.w200),
+                            fillColor: Colors.white,
+                            border: const OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(7)),
+                                borderSide: BorderSide(
+                                    width: 1, color: MyColor.mainColor))),
+                      ),
                     ),
+                    16.heightBox,
+                    ConstrainedBox(
+                      constraints:
+                          const BoxConstraints(minHeight: 10, maxHeight: 40),
+                      child: TextFormField(
+                        controller: _con.interestCtl,
+                        keyboardType: TextInputType.text,
+                        decoration: InputDecoration(
+                            filled: true,
+                            labelText: "interest",
+                            labelStyle: const TextStyle(
+                                fontFamily: EkuaboAsset.CERA_PRO_FONT,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w200,
+                                color: MyColor.secondColor),
+                            hintText: "interest",
+                            hintStyle: const TextStyle(
+                                fontFamily: EkuaboAsset.CERA_PRO_FONT,
+                                fontSize: 12,
+                                fontWeight: FontWeight.w200),
+                            fillColor: Colors.white,
+                            border: const OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(7)),
+                                borderSide: BorderSide(
+                                    width: 1, color: MyColor.mainColor))),
+                      ),
+                    ),
+
                     16.heightBox,
                     TextFormField(
                       controller: _con.funFactCtl,
@@ -398,7 +389,10 @@ class EditProfile extends StatelessWidget {
                 )).p(15),
                 MaterialButton(
                   minWidth: 170,
-                  onPressed: () => _con.updateProfile(context),
+                  onPressed: () => (_con.mediaFile == null)
+                      ? _con.updateProfile(context)
+                      : _con.updateProfilewithImage(
+                          context, _con.mediaFile.path),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30)),
                   child: EkuaboString.submit

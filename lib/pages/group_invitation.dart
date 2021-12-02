@@ -50,168 +50,177 @@ class GroupInvitation extends StatelessWidget {
                         .size(10)
                         .make()
                         .pOnly(left: 10)
-                    : ListView.builder(
-                        shrinkWrap: true,
-                        physics: BouncingScrollPhysics(),
-                        itemCount: _con.groupInvitations.length,
-                        itemBuilder: (ctx, index) {
-                          return VxCard(Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              CachedNetworkImage(
-                                imageUrl:
-                                    _con.groupInvitations[index].image ?? '',
-                                placeholder: (ctx, _) => const SizedBox(
-                                  width: 20,
-                                  height: 20,
-                                  child: Center(
-                                    child: CircularProgressIndicator(),
-                                  ),
-                                ),
-                                width: 150,
-                                height: 200,
-                                fit: BoxFit.fill,
-                              ),
-                              /* Image.asset(EkuaboAsset.demo_blog1,
-                            width: 150,
-                            height: 200,
-                            fit: BoxFit.fill,
-                          ),*/
-                              10.widthBox,
-                              Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                    : Expanded(
+                        child: ListView.builder(
+                            shrinkWrap: true,
+                            physics: BouncingScrollPhysics(),
+                            itemCount: _con.groupInvitations.length,
+                            itemBuilder: (ctx, index) {
+                              return VxCard(Row(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
-                                    _con.groupInvitations[index].groupName,
-                                  ),
-                                  _con.groupInvitations[index].groupDesc.text
-                                      .maxLines(3)
-                                      .ellipsis
-                                      .size(12)
-                                      .medium
-                                      .align(TextAlign.justify)
-                                      .color(
-                                          MyColor.blackColor.withOpacity(0.6))
-                                      .make()
-                                      .w(200),
-                                  Row(
-                                    children: [
-                                      Image.asset(
-                                        EkuaboAsset.ic_calender,
-                                        width: 16,
-                                        height: 16,
+                                  CachedNetworkImage(
+                                    imageUrl:
+                                        _con.groupInvitations[index].image ??
+                                            '',
+                                    placeholder: (ctx, _) => const SizedBox(
+                                      width: 20,
+                                      height: 20,
+                                      child: Center(
+                                        child: CircularProgressIndicator(),
                                       ),
-                                      _con.groupInvitations[index].createdDate
-                                          .text
-                                          .size(12)
-                                          .medium
-                                          .color(MyColor.blackColor
-                                              .withOpacity(0.8))
-                                          .make()
-                                    ],
+                                    ),
+                                    width: 150,
+                                    height: 200,
+                                    fit: BoxFit.fill,
                                   ),
-                                  Row(
-                                    children: [
-                                      Image.asset(
-                                        EkuaboAsset.ic_people,
-                                        width: 16,
-                                        height: 16,
-                                      ),
-                                      10.widthBox,
-                                      "${_con.groupInvitations[index].totalMember} Members"
-                                          .text
-                                          .size(12)
-                                          .medium
-                                          .color(MyColor.blackColor
-                                              .withOpacity(0.8))
-                                          .make(),
-                                      10.widthBox,
-                                      Image.asset(
-                                        EkuaboAsset.ic_bookmark,
-                                        width: 16,
-                                        height: 16,
-                                      ),
-                                      10.widthBox,
-                                      "${_con.groupInvitations[index].totalFeed} Posts"
-                                          .text
-                                          .size(12)
-                                          .medium
-                                          .color(MyColor.blackColor
-                                              .withOpacity(0.8))
-                                          .make()
-                                    ],
-                                  ),
-                                  Row(
+                                  /* Image.asset(EkuaboAsset.demo_blog1,
+                              width: 150,
+                              height: 200,
+                              fit: BoxFit.fill,
+                            ),*/
+                                  10.widthBox,
+                                  Column(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
-                                      ElevatedButton(
-                                          onPressed: () {
-                                            _con.RejectGroupInvitation(_con
-                                                .groupInvitations[index]
-                                                .invite_id);
-                                          },
-                                          child: Text('Reject')),
-                                      SizedBox(
-                                        width: 10,
+                                      Text(
+                                        _con.groupInvitations[index].groupName,
                                       ),
-                                      ElevatedButton(
-                                          onPressed: () {
-                                            _con.AcceptGroupInvitation(_con
-                                                .groupInvitations[index]
-                                                .invite_id);
-                                          },
-                                          child: Text('Accept'))
-                                    ],
-                                  ),
-                                  /*MaterialButton(onPressed: ()=>_con.callLeaveMyGroupApi(context,index),
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20),
-                                      side: BorderSide(color: MyColor.mainColor,width: 0.8)
-                                  ),
-                                  color: Colors.white,
-                                  child: Row(
-                                    children: [
-                                      Icon(Icons.logout,size: 16,
-                                        color: MyColor.mainColor,
+                                      _con.groupInvitations[index].groupDesc
+                                          .text
+                                          .maxLines(3)
+                                          .ellipsis
+                                          .size(12)
+                                          .medium
+                                          .align(TextAlign.justify)
+                                          .color(MyColor.blackColor
+                                              .withOpacity(0.6))
+                                          .make()
+                                          .w(200),
+                                      Row(
+                                        children: [
+                                          Image.asset(
+                                            EkuaboAsset.ic_calender,
+                                            width: 16,
+                                            height: 16,
+                                          ),
+                                          _con.groupInvitations[index]
+                                              .createdDate.text
+                                              .size(12)
+                                              .medium
+                                              .color(MyColor.blackColor
+                                                  .withOpacity(0.8))
+                                              .make()
+                                        ],
                                       ),
-                                      10.widthBox,
-                                      EkuaboString.leave_group.text.size(10).medium.color(MyColor.mainColor).make()
+                                      Row(
+                                        children: [
+                                          Image.asset(
+                                            EkuaboAsset.ic_people,
+                                            width: 16,
+                                            height: 16,
+                                          ),
+                                          10.widthBox,
+                                          "${_con.groupInvitations[index].totalMember} Members"
+                                              .text
+                                              .size(12)
+                                              .medium
+                                              .color(MyColor.blackColor
+                                                  .withOpacity(0.8))
+                                              .make(),
+                                          10.widthBox,
+                                          Image.asset(
+                                            EkuaboAsset.ic_bookmark,
+                                            width: 16,
+                                            height: 16,
+                                          ),
+                                          10.widthBox,
+                                          "${_con.groupInvitations[index].totalFeed} Posts"
+                                              .text
+                                              .size(12)
+                                              .medium
+                                              .color(MyColor.blackColor
+                                                  .withOpacity(0.8))
+                                              .make()
+                                        ],
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          ElevatedButton(
+                                              onPressed: () {
+                                                _con.RejectGroupInvitation(_con
+                                                    .groupInvitations[index]
+                                                    .invite_id);
+                                              },
+                                              child: Text('Reject')),
+                                          SizedBox(
+                                            width: 10,
+                                          ),
+                                          ElevatedButton(
+                                              onPressed: () {
+                                                _con.AcceptGroupInvitation(_con
+                                                    .groupInvitations[index]
+                                                    .invite_id);
+                                              },
+                                              child: Text('Accept'))
+                                        ],
+                                      ),
+                                      /*MaterialButton(onPressed: ()=>_con.callLeaveMyGroupApi(context,index),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(20),
+                                        side: BorderSide(color: MyColor.mainColor,width: 0.8)
+                                    ),
+                                    color: Colors.white,
+                                    child: Row(
+                                      children: [
+                                        Icon(Icons.logout,size: 16,
+                                          color: MyColor.mainColor,
+                                        ),
+                                        10.widthBox,
+                                        EkuaboString.leave_group.text.size(10).medium.color(MyColor.mainColor).make()
+                                      ],
+                                    ),
+                                  ).pOnly(left: 20,top: 10)*/
                                     ],
-                                  ),
-                                ).pOnly(left: 20,top: 10)*/
+                                  )
                                 ],
-                              )
-                            ],
-                          ))
-                              .elevation(7)
-                              .color(Colors.white)
-                              .withRounded(value: 16)
-                              .make()
-                              .wh(double.infinity, 200)
-                              .pOnly(top: 10, left: 10, right: 10)
-                              .onTap(() {
-                            _homeController.navigationQueue.addLast(0);
-                            _homeController.bottomNavigatorKey.currentState
-                                .push(MaterialPageRoute(
-                                    builder: (context) => GroupDetails(
-                                          group_id: _con
-                                              .groupInvitations[index].groupId,
-                                          created_date: _con
-                                              .groupInvitations[index]
-                                              .createdDate,
-                                          image_url: _con
-                                              .groupInvitations[index].image,
-                                          grp_name: _con.groupInvitations[index]
-                                              .groupName,
-                                          members: _con.groupInvitations[index]
-                                              .totalMember,
-                                          notgroupmember: true,
-                                        )));
-                          });
-                        }),
+                              ))
+                                  .elevation(7)
+                                  .color(Colors.white)
+                                  .withRounded(value: 16)
+                                  .make()
+                                  .wh(double.infinity, 200)
+                                  .pOnly(top: 10, left: 10, right: 10)
+                                  .onTap(() {
+                                _homeController.navigationQueue.addLast(0);
+                                _homeController.bottomNavigatorKey.currentState
+                                    .push(MaterialPageRoute(
+                                        builder: (context) => GroupDetails(
+                                              group_id: _con
+                                                  .groupInvitations[index]
+                                                  .groupId,
+                                              created_date: _con
+                                                  .groupInvitations[index]
+                                                  .createdDate,
+                                              image_url: _con
+                                                  .groupInvitations[index]
+                                                  .image,
+                                              grp_name: _con
+                                                  .groupInvitations[index]
+                                                  .groupName,
+                                              members: _con
+                                                  .groupInvitations[index]
+                                                  .totalMember,
+                                              notgroupmember: true,
+                                            )));
+                              });
+                            }),
+                      ),
               ],
             ),
           ],

@@ -57,6 +57,7 @@ class _AddGroupMembersState extends State<AddGroupMembers> {
     getMembers().then((value) {
       setState(() {
         Members = value['data'];
+        _foundUsers = Members;
       });
     });
     // TODO: implement initState
@@ -68,8 +69,8 @@ class _AddGroupMembersState extends State<AddGroupMembers> {
     List results = [];
     if (enteredKeyword.isEmpty) {
       // if the search field is empty or only contains white-space, we'll display all users
-      //results = Members;
-      results = [];
+      results = Members;
+      // results = [];
     } else {
       results = Members.where((user) =>
               user['name'].toLowerCase().contains(enteredKeyword.toLowerCase()))

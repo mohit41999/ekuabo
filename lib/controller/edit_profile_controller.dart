@@ -9,6 +9,7 @@ import 'package:ekuabo/widgets/progress_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:http/http.dart' as http;
 
 class EditProfileController extends GetxController {
   EditProfileRepository _repository;
@@ -106,5 +107,36 @@ class EditProfileController extends GetxController {
         Utils().showSnackBar(context, baseBean.message);
       }
     }
+  }
+
+  Future updateProfilewithImage(BuildContext context, String imagePath) async {
+    var loader = ProgressView(context);
+    var userBean = await PrefManager.getUser();
+    loader.show();
+    userBean = await PrefManager.getUser();
+
+    var request = http.MultipartRequest(
+        "POST", Uri.parse("https://eku-abo.com/api/update_profile.php"));
+    request.fields['user_id'] = userBean.data.id;
+    request.fields['token'] = '123456789';
+    request.fields['userName'] = nameCtl.text;
+    request.fields['public_email'] = emailCtl.text;
+    request.fields['home_phone_no'] = homeContactCtl.text;
+    request.fields['mobile_no'] = contactNoCtl.text;
+    request.fields['home_town'] = homeTownCtl.text;
+    request.fields['occupation'] = occupationCtl.text;
+    request.fields['interest'] = interestCtl.text;
+    request.fields['fun_facts'] = funFactCtl.text;
+
+    var pic = await http.MultipartFile.fromPath("profile_img", imagePath);
+    request.files.add(pic);
+    var response = await request.send();
+
+    //Get the response from the server
+    var responseData = await response.stream.toBytes();
+    var responseString = String.fromCharCodes(responseData);
+    print(responseString);
+    loader.dismiss();
+    Navigator.pop(context);
   }
 }

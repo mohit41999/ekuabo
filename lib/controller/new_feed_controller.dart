@@ -39,10 +39,12 @@ class NewFeedController extends GetxController {
       };
       var result = await _feedRepository.addFeed(param);
       loader.dismiss();
+
       messageCtl.clear();
       if (result != null) {
         BaseBean baseBean = result;
         Utils().showSnackBar(context, baseBean.message);
+        Navigator.pop(context);
       }
     } else {
       Utils().showSnackBar(context, "Type Message");
@@ -69,6 +71,7 @@ class NewFeedController extends GetxController {
       if (result != null) {
         BaseBean baseBean = result;
         Utils().showSnackBar(context, baseBean.message);
+        Navigator.pop(context);
       }
     } else {
       Utils().showSnackBar(context, "Type Message");

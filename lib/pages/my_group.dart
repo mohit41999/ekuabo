@@ -52,7 +52,8 @@ class MyGroups extends StatelessWidget {
                           ).onFeedBackTap(() {
                             _homeController.navigationQueue.addLast(0);
                             _homeController.bottomNavigatorKey.currentState
-                                .pushNamed(EkuaboRoute.postNewGroup);
+                                .pushNamed(EkuaboRoute.postNewGroup)
+                                .then((value) => _con.getMyGroups());
                           }),
                           shadows: const [
                             BoxShadow(

@@ -155,7 +155,7 @@ class MyPostedBannerAd extends StatelessWidget {
                                       .height(30)
                                       .make()
                                       .pOnly(left: 16, right: 16, top: 10),
-                                  "${banner.defaultCurrency}${banner.price}"
+                                  "${banner.defaultCurrency.toString()}${banner.price}"
                                       .text
                                       .medium
                                       .underline

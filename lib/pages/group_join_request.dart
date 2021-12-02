@@ -52,199 +52,207 @@ class _GroupJoinRequestState extends State<GroupJoinRequest> {
                         .size(10)
                         .make()
                         .pOnly(left: 10)
-                    : ListView.builder(
-                        shrinkWrap: true,
-                        physics: BouncingScrollPhysics(),
-                        itemCount: _con.groupJoinRequests.length,
-                        itemBuilder: (ctx, index) {
-                          return Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: MyColor.lightGrey,
-                                borderRadius: BorderRadius.circular(5),
-                              ),
-                              child: Padding(
+                    : Expanded(
+                        child: ListView.builder(
+                            shrinkWrap: true,
+                            physics: BouncingScrollPhysics(),
+                            itemCount: _con.groupJoinRequests.length,
+                            itemBuilder: (ctx, index) {
+                              return Padding(
                                 padding: const EdgeInsets.all(8.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    10.heightBox,
-                                    _con.groupJoinRequests[index].groupName.text
-                                        .size(20)
-                                        .medium
-                                        .make(),
-                                    10.heightBox,
-                                    Container(
-                                      child: _con.groupJoinRequests[index]
-                                          .requested_username.text
-                                          .maxLines(3)
-                                          .ellipsis
-                                          .size(16)
-                                          .medium
-                                          .align(TextAlign.justify)
-                                          .color(MyColor.blackColor
-                                              .withOpacity(0.6))
-                                          .make()
-                                          .pOnly(right: 20),
-                                    ),
-                                    10.heightBox,
-                                    Container(
-                                      child: (' wants to join Group')
-                                          .text
-                                          .maxLines(3)
-                                          .ellipsis
-                                          .size(12)
-                                          .medium
-                                          .align(TextAlign.justify)
-                                          .color(MyColor.blackColor
-                                              .withOpacity(0.6))
-                                          .make()
-                                          .pOnly(right: 20),
-                                    ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: MyColor.lightGrey,
+                                    borderRadius: BorderRadius.circular(5),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
-                                        ElevatedButton(
-                                            onPressed: () {
-                                              _con.RejectGroupjoinRequest(_con
-                                                  .groupJoinRequests[index]
-                                                  .group_join_id);
-                                            },
-                                            child: Text('Reject')),
-                                        ElevatedButton(
-                                            onPressed: () {
-                                              _con.AcceptGroupjoinRequest(_con
-                                                  .groupJoinRequests[index]
-                                                  .group_join_id);
-                                            },
-                                            child: Text('Accept'))
+                                        10.heightBox,
+                                        _con.groupJoinRequests[index].groupName
+                                            .text
+                                            .size(20)
+                                            .medium
+                                            .make(),
+                                        10.heightBox,
+                                        Container(
+                                          child: _con.groupJoinRequests[index]
+                                              .requested_username.text
+                                              .maxLines(3)
+                                              .ellipsis
+                                              .size(16)
+                                              .medium
+                                              .align(TextAlign.justify)
+                                              .color(MyColor.blackColor
+                                                  .withOpacity(0.6))
+                                              .make()
+                                              .pOnly(right: 20),
+                                        ),
+                                        10.heightBox,
+                                        Container(
+                                          child: (' wants to join Group')
+                                              .text
+                                              .maxLines(3)
+                                              .ellipsis
+                                              .size(12)
+                                              .medium
+                                              .align(TextAlign.justify)
+                                              .color(MyColor.blackColor
+                                                  .withOpacity(0.6))
+                                              .make()
+                                              .pOnly(right: 20),
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            ElevatedButton(
+                                                onPressed: () {
+                                                  _con.RejectGroupjoinRequest(
+                                                      _con
+                                                          .groupJoinRequests[
+                                                              index]
+                                                          .group_join_id);
+                                                },
+                                                child: Text('Reject')),
+                                            ElevatedButton(
+                                                onPressed: () {
+                                                  _con.AcceptGroupjoinRequest(
+                                                      _con
+                                                          .groupJoinRequests[
+                                                              index]
+                                                          .group_join_id);
+                                                },
+                                                child: Text('Accept'))
+                                          ],
+                                        ),
                                       ],
                                     ),
-                                  ],
+                                  ),
                                 ),
-                              ),
-                            ),
-                          );
+                              );
 
-                          //   VxCard(
-                          //     Row(
-                          //       crossAxisAlignment: CrossAxisAlignment.start,
-                          //       children: [
-                          //         CachedNetworkImage(
-                          //           imageUrl:
-                          //           _con.groupJoinRequests[index].image ?? '',
-                          //           placeholder: (ctx, _) =>
-                          //           const SizedBox(
-                          //             width: 20,
-                          //             height: 20,
-                          //             child: Center(
-                          //               child:
-                          //               CircularProgressIndicator(),
-                          //             ),
-                          //           ),
-                          //           width: 150,
-                          //           height: 200,
-                          //           fit: BoxFit.fill,
-                          //         ),
-                          //         /* Image.asset(EkuaboAsset.demo_blog1,
-                          //         width: 150,
-                          //         height: 200,
-                          //         fit: BoxFit.fill,
-                          //       ),*/
-                          //         10.widthBox,
-                          //         Column(
-                          //           crossAxisAlignment: CrossAxisAlignment.start,
-                          //           children: [
-                          //             10.heightBox,
-                          //             _con.groupJoinRequests[index].groupName
-                          //                 .text
-                          //                 .size(16)
-                          //                 .medium
-                          //                 .make(),
-                          //             10.heightBox,
-                          //             Flexible(
-                          //               child: _con.groupJoinRequests[index].groupDesc
-                          //                   .text
-                          //                   .maxLines(3)
-                          //                   .ellipsis
-                          //                   .size(12)
-                          //                   .medium
-                          //                   .align(TextAlign.justify)
-                          //                   .color(MyColor.blackColor.withOpacity(0.6))
-                          //                   .make().pOnly(right: 20),
-                          //             ),
-                          //             10.heightBox,
-                          //             Row(
-                          //               children: [
-                          //                 Image.asset(EkuaboAsset.ic_calender,
-                          //                   width: 16,
-                          //                   height: 16,
-                          //                 ),
-                          //                 10.widthBox,
-                          //                 _con.groupJoinRequests[index].createdDate
-                          //                     .text
-                          //                     .size(12)
-                          //                     .medium
-                          //                     .color(MyColor.blackColor.withOpacity(0.8))
-                          //                     .make()
-                          //               ],
-                          //             ),
-                          //             10.heightBox,
-                          //             Row(
-                          //               children: [
-                          //                 Image.asset(EkuaboAsset.ic_people,
-                          //                   width: 16,
-                          //                   height: 16,
-                          //                 ),
-                          //                 10.widthBox,
-                          //                 "${_con.groupJoinRequests[index].totalMember} Members"
-                          //                     .text
-                          //                     .size(12)
-                          //                     .medium
-                          //                     .color(MyColor.blackColor.withOpacity(0.8))
-                          //                     .make(),
-                          //                 10.widthBox,
-                          //                 Image.asset(EkuaboAsset.ic_bookmark,
-                          //                   width: 16,
-                          //                   height: 16,
-                          //                 ),
-                          //                 10.widthBox,
-                          //                 "${_con.groupJoinRequests[index].totalFeed} Posts"
-                          //                     .text
-                          //                     .size(12)
-                          //                     .medium
-                          //                     .color(MyColor.blackColor.withOpacity(0.8))
-                          //                     .make()
-                          //               ],
-                          //             ),
-                          //             /*MaterialButton(onPressed: ()=>_con.callLeaveMyGroupApi(context,index),
-                          //               shape: RoundedRectangleBorder(
-                          //                   borderRadius: BorderRadius.circular(20),
-                          //                   side: BorderSide(color: MyColor.mainColor,width: 0.8)
-                          //               ),
-                          //               color: Colors.white,
-                          //               child: Row(
-                          //                 children: [
-                          //                   Icon(Icons.logout,size: 16,
-                          //                     color: MyColor.mainColor,
-                          //                   ),
-                          //                   10.widthBox,
-                          //                   EkuaboString.leave_group.text.size(10).medium.color(MyColor.mainColor).make()
-                          //                 ],
-                          //               ),
-                          //             ).pOnly(left: 20,top: 10)*/
-                          //           ],
-                          //         )
-                          //       ],
-                          //     )
-                          // )
-                          //     .elevation(7)
-                          //     .color(MyColor.lightGrey)
-                          //     .withRounded(value: 16)
-                          //     .make().wh(double.infinity, 200).pOnly(top: 10,left: 10,right: 10);
-                        }),
+                              //   VxCard(
+                              //     Row(
+                              //       crossAxisAlignment: CrossAxisAlignment.start,
+                              //       children: [
+                              //         CachedNetworkImage(
+                              //           imageUrl:
+                              //           _con.groupJoinRequests[index].image ?? '',
+                              //           placeholder: (ctx, _) =>
+                              //           const SizedBox(
+                              //             width: 20,
+                              //             height: 20,
+                              //             child: Center(
+                              //               child:
+                              //               CircularProgressIndicator(),
+                              //             ),
+                              //           ),
+                              //           width: 150,
+                              //           height: 200,
+                              //           fit: BoxFit.fill,
+                              //         ),
+                              //         /* Image.asset(EkuaboAsset.demo_blog1,
+                              //         width: 150,
+                              //         height: 200,
+                              //         fit: BoxFit.fill,
+                              //       ),*/
+                              //         10.widthBox,
+                              //         Column(
+                              //           crossAxisAlignment: CrossAxisAlignment.start,
+                              //           children: [
+                              //             10.heightBox,
+                              //             _con.groupJoinRequests[index].groupName
+                              //                 .text
+                              //                 .size(16)
+                              //                 .medium
+                              //                 .make(),
+                              //             10.heightBox,
+                              //             Flexible(
+                              //               child: _con.groupJoinRequests[index].groupDesc
+                              //                   .text
+                              //                   .maxLines(3)
+                              //                   .ellipsis
+                              //                   .size(12)
+                              //                   .medium
+                              //                   .align(TextAlign.justify)
+                              //                   .color(MyColor.blackColor.withOpacity(0.6))
+                              //                   .make().pOnly(right: 20),
+                              //             ),
+                              //             10.heightBox,
+                              //             Row(
+                              //               children: [
+                              //                 Image.asset(EkuaboAsset.ic_calender,
+                              //                   width: 16,
+                              //                   height: 16,
+                              //                 ),
+                              //                 10.widthBox,
+                              //                 _con.groupJoinRequests[index].createdDate
+                              //                     .text
+                              //                     .size(12)
+                              //                     .medium
+                              //                     .color(MyColor.blackColor.withOpacity(0.8))
+                              //                     .make()
+                              //               ],
+                              //             ),
+                              //             10.heightBox,
+                              //             Row(
+                              //               children: [
+                              //                 Image.asset(EkuaboAsset.ic_people,
+                              //                   width: 16,
+                              //                   height: 16,
+                              //                 ),
+                              //                 10.widthBox,
+                              //                 "${_con.groupJoinRequests[index].totalMember} Members"
+                              //                     .text
+                              //                     .size(12)
+                              //                     .medium
+                              //                     .color(MyColor.blackColor.withOpacity(0.8))
+                              //                     .make(),
+                              //                 10.widthBox,
+                              //                 Image.asset(EkuaboAsset.ic_bookmark,
+                              //                   width: 16,
+                              //                   height: 16,
+                              //                 ),
+                              //                 10.widthBox,
+                              //                 "${_con.groupJoinRequests[index].totalFeed} Posts"
+                              //                     .text
+                              //                     .size(12)
+                              //                     .medium
+                              //                     .color(MyColor.blackColor.withOpacity(0.8))
+                              //                     .make()
+                              //               ],
+                              //             ),
+                              //             /*MaterialButton(onPressed: ()=>_con.callLeaveMyGroupApi(context,index),
+                              //               shape: RoundedRectangleBorder(
+                              //                   borderRadius: BorderRadius.circular(20),
+                              //                   side: BorderSide(color: MyColor.mainColor,width: 0.8)
+                              //               ),
+                              //               color: Colors.white,
+                              //               child: Row(
+                              //                 children: [
+                              //                   Icon(Icons.logout,size: 16,
+                              //                     color: MyColor.mainColor,
+                              //                   ),
+                              //                   10.widthBox,
+                              //                   EkuaboString.leave_group.text.size(10).medium.color(MyColor.mainColor).make()
+                              //                 ],
+                              //               ),
+                              //             ).pOnly(left: 20,top: 10)*/
+                              //           ],
+                              //         )
+                              //       ],
+                              //     )
+                              // )
+                              //     .elevation(7)
+                              //     .color(MyColor.lightGrey)
+                              //     .withRounded(value: 16)
+                              //     .make().wh(double.infinity, 200).pOnly(top: 10,left: 10,right: 10);
+                            }),
+                      ),
               ],
             ),
           ],

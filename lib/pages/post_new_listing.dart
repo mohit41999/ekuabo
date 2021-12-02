@@ -28,7 +28,7 @@ class _PostNewListingState extends State<PostNewListing> {
   UserBean userBean;
 
   String _value = 'public';
-  var image;
+  PickedFile image;
   Future getImage() async {
     image = await ImagePicker.platform.pickImage(source: ImageSource.gallery);
   }

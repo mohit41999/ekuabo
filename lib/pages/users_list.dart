@@ -19,6 +19,7 @@ class UsersList extends StatefulWidget {
 class _UsersListState extends State<UsersList> {
   String Token = '123456789';
   List UsersList = [];
+  List results = [];
   final _con = Get.find<PrivateMessageBoardController>();
   TextEditingController _username = TextEditingController();
 
@@ -40,6 +41,7 @@ class _UsersListState extends State<UsersList> {
     getusers().then((value) {
       setState(() {
         UsersList = value['data'];
+        _foundUsers = UsersList;
       });
     });
 
@@ -49,11 +51,10 @@ class _UsersListState extends State<UsersList> {
 
   // This function is called whenever the text field changes
   void _runFilter(String enteredKeyword) {
-    List results = [];
     if (enteredKeyword.isEmpty) {
       // if the search field is empty or only contains white-space, we'll display all users
-      // results = UsersList;
-      results = [];
+      results = UsersList;
+      // results = [];
     } else {
       results = UsersList.where((user) =>
               user['name'].toLowerCase().contains(enteredKeyword.toLowerCase()))

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:ekuabo/controller/home_controller.dart';
 import 'package:ekuabo/controller/news_feeds_view_all_controller.dart';
 import 'package:ekuabo/model/apimodel/home/news_feeds.dart';
 import 'package:ekuabo/model/apimodel/market_place/category_bean.dart';
@@ -102,6 +103,7 @@ class _NewsFeedsViewAllState extends State<NewsFeedsViewAll> {
   }
 
   final _con = Get.find<NewsFeedsViewAllController>();
+  final _homecon = Get.find<HomeController>();
 
   @override
   Widget build(BuildContext context) {
@@ -136,12 +138,35 @@ class _NewsFeedsViewAllState extends State<NewsFeedsViewAll> {
                         child: CircularProgressIndicator(),
                       )
                     : _con.newsFeeds.isEmpty
-                        ? Center(
-                            child: EkuaboString.no_results_found.text
-                                .color(MyColor.blackColor)
-                                .size(10)
-                                .make(),
-                          )
+                        ? Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                                EkuaboString.no_results_found.text
+                                    .color(MyColor.blackColor)
+                                    .size(10)
+                                    .make(),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: VxCircle(
+                                    backgroundColor: MyColor.mainColor,
+                                    child: const Icon(
+                                      Icons.add,
+                                      size: 20,
+                                      color: Colors.white,
+                                    ).onFeedBackTap(() async {
+                                      _homecon.bottomNavigatorKey.currentState
+                                          .pushNamed(EkuaboRoute.newsFeed)
+                                          .then((value) => _con.getNewsFeeds());
+                                      _homecon.navigationQueue.addLast(2);
+                                    }),
+                                    shadows: const [
+                                      BoxShadow(
+                                          color: MyColor.inactiveColor,
+                                          blurRadius: 10)
+                                    ],
+                                  ).wh(30, 30),
+                                )
+                              ])
                         : Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -189,11 +214,9 @@ class _NewsFeedsViewAllState extends State<NewsFeedsViewAll> {
                                     size: 20,
                                     color: Colors.white,
                                   ).onFeedBackTap(() async {
-                                    Navigator.pushNamed(
-                                            context, EkuaboRoute.newsFeed)
-                                        .then((value) {
-                                      _con.getNewsFeeds();
-                                    });
+                                    _homecon.bottomNavigatorKey.currentState
+                                        .pushNamed(EkuaboRoute.newsFeed);
+                                    _homecon.navigationQueue.addLast(2);
                                   }),
                                   shadows: const [
                                     BoxShadow(
@@ -224,6 +247,7 @@ class _NewsFeedsViewAllState extends State<NewsFeedsViewAll> {
                               style: TextStyle(
                                   fontSize: 14, fontWeight: FontWeight.w500),
                             ),
+
                             // _con.userBean.data.lga_name.text.medium
                             //     .size(14)
                             //     .make()

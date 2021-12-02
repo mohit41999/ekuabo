@@ -19,6 +19,11 @@ class PostNewGroupController extends GetxController {
   PostNewGroupController() {
     _repository = Get.find<MyGroupRepository>();
   }
+  void clearControllers() {
+    groupDescCtl.clear();
+    groupNameCtl.clear();
+  }
+
   void addNewGroup(BuildContext context) async {
     if (groupNameCtl.text.isEmpty) {
       Utils().showSnackBar(context, "Enter Group Name");
@@ -57,6 +62,8 @@ class PostNewGroupController extends GetxController {
         if (result != null) {
           BaseBean baseBean = result;
           Utils().showSnackBar(context, baseBean.message);
+          Navigator.pop(context);
+          clearControllers();
         }
       }
     }

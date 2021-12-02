@@ -236,12 +236,6 @@ class marketlistTile extends StatelessWidget {
                     _con.mymarketPlaces[index].image[0].image.toString(),
                     fit: BoxFit.cover,
                   )).w(200).h(130).backgroundColor(Colors.red)),
-              Expanded(
-                child: const Icon(
-                  Icons.more_vert,
-                  color: Colors.black,
-                ),
-              )
             ],
           ),
           "${_con.mymarketPlaces[index].title}"
