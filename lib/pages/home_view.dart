@@ -623,7 +623,9 @@ class _HomeViewState extends State<HomeView> {
   }
 }
 
-class HorizontalAd extends StatelessWidget {
+Future<void> _launched;
+
+class HorizontalAd extends StatefulWidget {
   const HorizontalAd({
     Key key,
     @required this.data,
@@ -631,6 +633,11 @@ class HorizontalAd extends StatelessWidget {
 
   final List<BannerModelData> data;
 
+  @override
+  State<HorizontalAd> createState() => _HorizontalAdState();
+}
+
+class _HorizontalAdState extends State<HorizontalAd> {
   @override
   Widget build(BuildContext context) {
     return CarouselSlider.builder(
@@ -643,14 +650,16 @@ class HorizontalAd extends StatelessWidget {
           scrollDirection: Axis.horizontal,
           viewportFraction: 1,
         ),
-        itemCount: data.length,
+        itemCount: widget.data.length,
         itemBuilder: (BuildContext context, int index, int pageViewIndex) {
           return Padding(
             padding: const EdgeInsets.all(8.0),
             child: GestureDetector(
               onTap: () {
-                AddBannerController()
-                    .launchURL(data[index].url.toString(), context);
+                setState(() {
+                  _launched = AddBannerController()
+                      .launchURL(widget.data[index].url.toString(), context);
+                });
               },
               child: Container(
                 height: 100,
@@ -667,13 +676,13 @@ class HorizontalAd extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          data[index].title,
+                          widget.data[index].title,
                           style: TextStyle(color: Colors.white),
                         ),
                         Container(
                           width: 200,
                           child: Text(
-                            data[index].description,
+                            widget.data[index].description,
                             style: TextStyle(color: Colors.white),
                           ),
                         ),
@@ -684,7 +693,7 @@ class HorizontalAd extends StatelessWidget {
                       child: CachedNetworkImage(
                           height: 100,
                           width: 100,
-                          imageUrl: data[index].image,
+                          imageUrl: widget.data[index].image,
                           errorWidget: (_, __, ___) =>
                               Image.asset('asset/images/error_img.jpg'),
                           fit: BoxFit.cover),
@@ -698,7 +707,7 @@ class HorizontalAd extends StatelessWidget {
   }
 }
 
-class VerticalAd extends StatelessWidget {
+class VerticalAd extends StatefulWidget {
   const VerticalAd({
     Key key,
     @required this.data,
@@ -706,6 +715,11 @@ class VerticalAd extends StatelessWidget {
 
   final List<BannerModelData> data;
 
+  @override
+  State<VerticalAd> createState() => _VerticalAdState();
+}
+
+class _VerticalAdState extends State<VerticalAd> {
   @override
   Widget build(BuildContext context) {
     return CarouselSlider.builder(
@@ -718,14 +732,16 @@ class VerticalAd extends StatelessWidget {
           scrollDirection: Axis.vertical,
           viewportFraction: 1,
         ),
-        itemCount: data.length,
+        itemCount: widget.data.length,
         itemBuilder: (BuildContext context, int index, int pageViewIndex) {
           return Padding(
             padding: const EdgeInsets.all(8.0),
             child: GestureDetector(
               onTap: () {
-                AddBannerController()
-                    .launchURL(data[index].url.toString(), context);
+                setState(() {
+                  _launched = AddBannerController()
+                      .launchURL(widget.data[index].url.toString(), context);
+                });
               },
               child: Container(
                 height: 250,
@@ -745,13 +761,13 @@ class VerticalAd extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          data[index].title,
+                          widget.data[index].title,
                           style: TextStyle(color: Colors.white),
                         ),
                         Container(
                           width: 200,
                           child: Text(
-                            data[index].description,
+                            widget.data[index].description,
                             style: TextStyle(color: Colors.white),
                           ),
                         ),
@@ -762,7 +778,7 @@ class VerticalAd extends StatelessWidget {
                       child: CachedNetworkImage(
                           height: 150,
                           width: 100,
-                          imageUrl: data[index].image,
+                          imageUrl: widget.data[index].image,
                           errorWidget: (_, __, ___) =>
                               Image.asset('asset/images/error_img.jpg'),
                           fit: BoxFit.cover),

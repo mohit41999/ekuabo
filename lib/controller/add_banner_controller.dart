@@ -33,18 +33,38 @@ class AddBannerController extends GetxController {
     bannerTitleCtl.clear();
   }
 
-  Future<void> launchURL(String _url, BuildContext context) async {
-    if (!await launch(
-      _url,
-      forceSafariVC: false,
-      forceWebView: false,
-      headers: <String, String>{'my_header_key': 'my_header_value'},
-    )) {
-      throw showDialog(
+  // Future<void> launchURL(String _url, BuildContext context) async {
+  //   if (!await launch(
+  //     _url,
+  //     forceSafariVC: false,
+  //     forceWebView: false,
+  //     headers: <String, String>{'my_header_key': 'my_header_value'},
+  //   )) {
+  //     print('ok');
+  //   } else {
+  //     print('notok');
+  //   }
+  // }
+  Future<void> launchURL(String url, BuildContext context) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      print('Could not launch $url');
+      return showDialog(
           context: context,
-          builder: (context) => AlertDialog(
-                title: Text('Invalid Url'),
-              ));
+          builder: (context) {
+            return AlertDialog(
+              title: Text('Invalid Url'),
+              content: Text('Could not launch $url'),
+              actions: [
+                TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: Text('OK'))
+              ],
+            );
+          });
     }
   }
   //   if (!await launch(_url)) throw 'Could not launch $_url';
