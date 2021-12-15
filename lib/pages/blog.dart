@@ -1,11 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:ekuabo/controller/blog_controller.dart';
 import 'package:ekuabo/controller/home_controller.dart';
+import 'package:ekuabo/model/apimodel/user_bean.dart';
 
 import 'package:ekuabo/utils/color.dart';
 import 'package:ekuabo/utils/ekuabo_asset.dart';
 import 'package:ekuabo/utils/ekuabo_route.dart';
 import 'package:ekuabo/utils/ekuabo_string.dart';
+import 'package:ekuabo/utils/pref_manager.dart';
 import 'package:ekuabo/widgets/EcuaboAppBar.dart';
 import 'package:ekuabo/widgets/UnderlineWidget.dart';
 import 'package:flutter/cupertino.dart';
@@ -23,6 +25,14 @@ class _BlogState extends State<Blog> {
   final _homeController = Get.find<HomeController>();
 
   final _con = Get.find<BlogController>();
+  var user_id = '';
+  initialize() async {
+    await PrefManager.getUser().then((value) {
+      setState(() {
+        user_id = value.data.id;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -184,11 +194,20 @@ class _BlogState extends State<Blog> {
                                                 .makeCentered()
                                                 .pOnly(left: 20),
                                             10.widthBox,
-                                            const Icon(
-                                              Icons.more_vert,
-                                              color: Colors.black,
-                                            ).onTap(() =>
-                                                _showPopupMenu(context, index)),
+                                            (_con.mostRecentBlogs[index]
+                                                        .profileDetails.userId
+                                                        .toString() ==
+                                                    user_id.toString())
+                                                ? const Icon(
+                                                    Icons.delete,
+                                                    color: Colors.red,
+                                                  ).onTap(() => showmenu(index)
+                                                        .then((value) {
+                                                      setState(() {
+                                                        _con.getMostRecent();
+                                                      });
+                                                    }))
+                                                : Container(),
                                           ],
                                         ),
                                         _con.mostRecentBlogs[index].blogTitle
@@ -289,8 +308,9 @@ class _BlogState extends State<Blog> {
                                       _homeController
                                           .bottomNavigatorKey.currentState
                                           .pushNamed(EkuaboRoute.blog_detail,
-                                              arguments:
-                                                  _con.mostRecentBlogs[index]);
+                                              arguments: _con
+                                                  .mostRecentBlogs[index]
+                                                  .blogId);
                                       _homeController.navigationQueue
                                           .addLast(3);
                                     }).pOnly(top: 10, left: 10, right: 10);
@@ -359,8 +379,35 @@ class _BlogState extends State<Blog> {
           initState: (_) {
             _con.mostRecentBlogs = null;
             _con.getMostRecent();
+            initialize();
           },
         ));
+  }
+
+  Future showmenu(int index) {
+    return showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+              title: Text('Are you Sure you Want to delete ?'),
+              actions: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: Text('Cancel')),
+                    TextButton(
+                        onPressed: () {
+                          _con.callDeleteBlogApi(context, index);
+                          Navigator.pop(context);
+                        },
+                        child: Text('Ok')),
+                  ],
+                )
+              ],
+            ));
   }
 
   void _showPopupMenu(BuildContext context, int index) async {
@@ -378,17 +425,12 @@ class _BlogState extends State<Blog> {
             .make()
             .onTap(
           () {
-            _con.callDeleteBlogApi(context, index).then((value) {
-              setState(() {
-                _con.getMostRecent();
-              });
-            });
             Get.back();
           },
         )));
     await showMenu(
         context: context,
-        position: RelativeRect.fromLTRB(50, 150, 50, 50),
+        position: RelativeRect.fill,
         items: list,
         useRootNavigator: true);
   }

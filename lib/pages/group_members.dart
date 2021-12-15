@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:ekuabo/controller/home_controller.dart';
 import 'package:ekuabo/model/apimodel/groups/group_member_model.dart';
 import 'package:ekuabo/model/apimodel/user_bean.dart';
-import 'package:ekuabo/pages/AddGroupMembers.dart';
+import 'package:ekuabo/pages/add_group_members.dart';
 import 'package:ekuabo/utils/color.dart';
 import 'package:ekuabo/utils/pref_manager.dart';
 import 'package:ekuabo/widgets/EcuaboAppBar.dart';

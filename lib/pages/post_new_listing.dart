@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:ekuabo/controller/add_marketplace_controller.dart';
 import 'package:ekuabo/controller/home_controller.dart';
 import 'package:ekuabo/model/apimodel/user_bean.dart';
+import 'package:ekuabo/utils/amount_seperator.dart';
 import 'package:ekuabo/utils/color.dart';
 import 'package:ekuabo/utils/ekuabo_asset.dart';
 import 'package:ekuabo/utils/ekuabo_string.dart';
@@ -11,9 +12,11 @@ import 'package:ekuabo/widgets/EcuaboAppBar.dart';
 import 'package:ekuabo/widgets/UnderlineWidget.dart';
 import 'package:ekuabo/widgets/progress_view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:currency_picker/currency_picker.dart';
 
@@ -28,17 +31,62 @@ class _PostNewListingState extends State<PostNewListing> {
   UserBean userBean;
 
   String _value = 'public';
-  PickedFile image;
-  Future getImage() async {
-    image = await ImagePicker.platform.pickImage(source: ImageSource.gallery);
+  PickedFile mediaFile;
+  void getImage(context) {
+    showModalBottomSheet(
+        context: context,
+        builder: (BuildContext bc) {
+          return SafeArea(
+            child: Container(
+              child: Wrap(
+                children: <Widget>[
+                  ListTile(
+                      leading: Icon(Icons.photo_library),
+                      title: Text('Photo Library'),
+                      onTap: () {
+                        _imgFromGallery();
+                        Navigator.of(context).pop();
+                      }),
+                  ListTile(
+                    leading: Icon(Icons.photo_camera),
+                    title: Text('Camera'),
+                    onTap: () {
+                      _imgFromCamera();
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
   }
+
+  Future _imgFromCamera() async {
+    var image = await ImagePicker.platform
+        .pickImage(source: ImageSource.camera, imageQuality: 50);
+    setState(() {
+      mediaFile = image;
+    });
+  }
+
+  Future _imgFromGallery() async {
+    var image = await ImagePicker.platform
+        .pickImage(source: ImageSource.gallery, imageQuality: 50);
+    setState(() {
+      mediaFile = image;
+    });
+  }
+  // Future getImage() async {
+  //   mediaFile = await ImagePicker.platform.pickImage(source: ImageSource.gallery);
+  // }
 
   Future postListing() async {
     var loader = ProgressView(context);
     loader.show();
     userBean = await PrefManager.getUser();
-    print(image.toString());
-    if (image.toString() != null.toString()) {
+    print(mediaFile.toString());
+    if (mediaFile.toString() != null.toString()) {
       var request = http.MultipartRequest("POST",
           Uri.parse("https://eku-abo.com/api/marketplace/add_marketplace.php"));
       request.fields['user_id'] = userBean.data.id;
@@ -53,8 +101,8 @@ class _PostNewListingState extends State<PostNewListing> {
       request.fields['email'] = _con.emailcontroller.text;
       request.fields['mobile_no'] = _con.mobilenumbercontroller.text;
       request.fields['neigborhood'] = _value;
-      request.fields['currency_code'] = _con.currency_code;
-      var pic = await http.MultipartFile.fromPath("image[]", image.path);
+      request.fields['currency_code'] = _con.currency_ISO;
+      var pic = await http.MultipartFile.fromPath("image[]", mediaFile.path);
       request.files.add(pic);
       var response = await request.send();
 
@@ -81,7 +129,7 @@ class _PostNewListingState extends State<PostNewListing> {
             'email': _con.emailcontroller.text.toString(),
             'mobile_no': _con.mobilenumbercontroller.text.toString(),
             'neigborhood': _value.toString(),
-            'currency_code': _con.currency_code,
+            'currency_code': _con.currency_ISO,
           });
       var Response = jsonDecode(response.body);
       print(Response);
@@ -252,7 +300,7 @@ class _PostNewListingState extends State<PostNewListing> {
                       GestureDetector(
                         onTap: () {
                           setState(() {
-                            getImage();
+                            getImage(context);
                           });
                         },
                         child: Row(
@@ -347,8 +395,12 @@ class _PostNewListingState extends State<PostNewListing> {
                                   favorite: [],
                                   onSelect: (Currency currency) {
                                     print(
-                                        'Select currency: ${currency.symbol}');
+                                        'Select currency ISO: ${currency.code}');
+                                    print(
+                                        'Select currency : ${currency.symbol}');
                                     setState(() {
+                                      _con.currency_ISO =
+                                          currency.code.toString();
                                       _con.currency_code =
                                           currency.symbol.toString();
                                     });
@@ -380,6 +432,9 @@ class _PostNewListingState extends State<PostNewListing> {
                             child: Container(
                               height: 40,
                               child: TextFormField(
+                                inputFormatters: [
+                                  ThousandsSeparatorInputFormatter()
+                                ],
                                 controller: _con.productpricecontroller,
                                 keyboardType: TextInputType.number,
                                 decoration: InputDecoration(

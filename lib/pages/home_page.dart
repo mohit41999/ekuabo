@@ -198,7 +198,7 @@ class HomePage extends StatelessWidget {
       case EkuaboRoute.marketPlaceListing:
         return MarketPlaceListing();
       case EkuaboRoute.blog_detail:
-        return BlogDetail(mostRecentBlogData: argument);
+        return BlogDetail(blogId: argument);
       case EkuaboRoute.postBlog:
         return PostBlog();
       case EkuaboRoute.postNewListing:

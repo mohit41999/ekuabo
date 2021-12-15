@@ -1,10 +1,12 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:ekuabo/controller/home_controller.dart';
 import 'package:ekuabo/model/apimodel/market_place/marketplace_Details_model.dart';
 import 'package:ekuabo/model/apimodel/user_bean.dart';
 import 'package:ekuabo/pages/market_place.dart';
 import 'package:ekuabo/utils/color.dart';
+import 'package:ekuabo/utils/currency_symbol.dart';
 import 'package:ekuabo/utils/ekuabo_asset.dart';
 import 'package:ekuabo/utils/ekuabo_string.dart';
 import 'package:ekuabo/utils/pref_manager.dart';
@@ -13,6 +15,7 @@ import 'package:ekuabo/widgets/UnderlineWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 class MarketPlaceListing extends StatefulWidget {
@@ -194,7 +197,7 @@ class _MarketPlaceListingState extends State<MarketPlaceListing> {
                             onPressed: () {},
                             child: Row(
                               children: [
-                                "${marketplaceDetails.data[0].currency_code}"
+                                "${currency(context, marketplaceDetails.data[0].currency_code.toString()).currencySymbol}"
                                     .text
                                     .medium
                                     .size(16)

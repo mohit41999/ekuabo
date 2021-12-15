@@ -112,6 +112,17 @@ class MyPostedBannerAd extends StatelessWidget {
                                           .makeCentered()
                                           .pOnly(left: 20),
                                       10.widthBox,
+                                      Icon(
+                                        Icons.delete,
+                                        color: Colors.red,
+                                      ).onTap(() {
+                                        _con
+                                            .deleteBannerAd(
+                                                banner.bannerId, context)
+                                            .then((value) {
+                                          _con.getBannerList();
+                                        });
+                                      })
                                     ],
                                   ),
                                   16.heightBox,

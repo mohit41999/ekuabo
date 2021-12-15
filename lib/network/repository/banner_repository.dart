@@ -60,6 +60,17 @@ class BannerRepository {
     return null;
   }
 
+  Future deleteBannerAd(Map<String, dynamic> param) async {
+    var response =
+        await _httpService.postRequest('banner/delete_banner.php', param);
+    var Response = jsonDecode(response.data);
+    if (Response['status']) {
+      Utils().showSnackBar(Get.context, Response['message']);
+    } else {
+      Utils().showSnackBar(Get.context, Response['message']);
+    }
+  }
+
   Future<BannerAdBean> addBannerAdwithImage(Map<String, dynamic> param) async {
     {
       var request = http.MultipartRequest(

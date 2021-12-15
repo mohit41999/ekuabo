@@ -23,6 +23,7 @@ class _AddGroupMembersState extends State<AddGroupMembers> {
   String Token = '123456789';
   List Members = [];
   List _foundUsers = [];
+  TextEditingController emailvalidate = TextEditingController();
   TextEditingController _username = TextEditingController();
   Future getMembers() async {
     UserBean userBean = await PrefManager.getUser();
@@ -37,8 +38,55 @@ class _AddGroupMembersState extends State<AddGroupMembers> {
     return Response;
   }
 
+  Future validate_email(String email, String group_id) async {
+    return showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+              title: Text('Enter email Id of the user you want to Add'),
+              content: TextFormField(
+                controller: emailvalidate,
+              ),
+              actions: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: Text('Cancel')),
+                    TextButton(
+                        onPressed: () {
+                          if (emailvalidate.text.toString() ==
+                              email.toString()) {
+                            sendGroupInvitation(email, group_id).then((value) {
+                              getMembers().then((value) {
+                                setState(() {
+                                  _foundUsers = value['data'];
+                                });
+                              });
+                            });
+                            Navigator.pop(context);
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                content: Text('Member Added Successfully')));
+                            emailvalidate.clear();
+                          } else {
+                            Navigator.pop(context);
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text('Invalid email Id')));
+                            emailvalidate.clear();
+                          }
+                        },
+                        child: Text('Ok'))
+                  ],
+                )
+              ],
+            ));
+  }
+
   Future sendGroupInvitation(String email, String group_id) async {
     UserBean userBean = await PrefManager.getUser();
+
     var response = await http.post(
         Uri.parse('https://eku-abo.com/api/group/send_group_invitation.php'),
         body: {
@@ -155,17 +203,18 @@ class _AddGroupMembersState extends State<AddGroupMembers> {
                                   ["group_name"]),
                               trailing: ElevatedButton(
                                   onPressed: () {
-                                    sendGroupInvitation(
+                                    (_foundUsers[index]["group_info"][ind]
+                                                    ["invite_status"]
+                                                .toString() ==
+                                            'n')
+                                        ? validate_email(
                                             _foundUsers[index]['email'],
                                             _foundUsers[index]["group_info"]
                                                 [ind]["group_id"])
-                                        .then((value) {
-                                      getMembers().then((value) {
-                                        setState(() {
-                                          _foundUsers = value['data'];
-                                        });
-                                      });
-                                    });
+                                        : ScaffoldMessenger.of(context)
+                                            .showSnackBar(SnackBar(
+                                                content: Text(
+                                                    'Member already invited')));
                                   },
                                   child: (_foundUsers[index]["group_info"][ind]
                                                   ["invite_status"]

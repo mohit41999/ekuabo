@@ -8,6 +8,7 @@ import 'package:ekuabo/pages/home_view.dart';
 import 'package:ekuabo/pages/marketplace_listing.dart';
 import 'package:ekuabo/pages/my_market_List.dart';
 import 'package:ekuabo/utils/color.dart';
+import 'package:ekuabo/utils/currency_symbol.dart';
 import 'package:ekuabo/utils/ekuabo_asset.dart';
 import 'package:ekuabo/utils/ekuabo_string.dart';
 import 'package:ekuabo/utils/navigationDrawer.dart';
@@ -340,7 +341,7 @@ class marketlistTile extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              "${_con.marketPlaces[index].currency_code.toString()}"
+              "${currency(context, _con.marketPlaces[index].currency_code.toString()).currencySymbol}"
                   .text
                   .size(20)
                   .medium
