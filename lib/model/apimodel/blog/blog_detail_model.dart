@@ -45,6 +45,7 @@ class Datum {
     @required this.blogDesc,
     @required this.totalComment,
     @required this.comment,
+    @required this.userProfile,
   });
 
   String blogId;
@@ -52,6 +53,7 @@ class Datum {
   String blogImage;
   String created;
   String blogDesc;
+  String userProfile;
   int totalComment;
   List<Comment> comment;
 
@@ -62,6 +64,7 @@ class Datum {
         created: json["created"],
         blogDesc: json["blog_desc"],
         totalComment: json["total_comment"],
+        userProfile: json["user_profile"],
         comment:
             List<Comment>.from(json["comment"].map((x) => Comment.fromJson(x))),
       );
@@ -73,6 +76,7 @@ class Datum {
         "created": created,
         "blog_desc": blogDesc,
         "total_comment": totalComment,
+        "user_profile": userProfile,
         "comment": List<dynamic>.from(comment.map((x) => x.toJson())),
       };
 }
@@ -82,21 +86,49 @@ class Comment {
     @required this.commentId,
     @required this.blogId,
     @required this.comment,
+    @required this.userDetails,
   });
 
   String commentId;
   String blogId;
   String comment;
+  UserDetails userDetails;
 
   factory Comment.fromJson(Map<String, dynamic> json) => Comment(
         commentId: json["comment_id"],
         blogId: json["blog_id"],
         comment: json["comment"],
+        userDetails: UserDetails.fromJson(json["user_details"]),
       );
 
   Map<String, dynamic> toJson() => {
         "comment_id": commentId,
         "blog_id": blogId,
         "comment": comment,
+        "user_details": userDetails.toJson(),
+      };
+}
+
+class UserDetails {
+  UserDetails({
+    @required this.userId,
+    @required this.username,
+    @required this.profile,
+  });
+
+  String userId;
+  String username;
+  String profile;
+
+  factory UserDetails.fromJson(Map<String, dynamic> json) => UserDetails(
+        userId: json["user_id"],
+        username: json["username"],
+        profile: json["profile"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "user_id": userId,
+        "username": username,
+        "profile": profile,
       };
 }

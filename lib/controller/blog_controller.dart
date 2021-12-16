@@ -42,7 +42,7 @@ class BlogController extends GetxController {
     if (result != null) {
       BaseBean baseBean = result;
       if (baseBean.status) {
-        // mostRecentBlogs.removeAt(index);
+        mostRecentBlogs.removeAt(index);
         update();
       }
       Utils().showSnackBar(context, baseBean.message);

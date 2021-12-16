@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:ekuabo/controller/blog_controller.dart';
 import 'package:ekuabo/controller/home_controller.dart';
 import 'package:ekuabo/model/apimodel/user_bean.dart';
+import 'package:ekuabo/pages/my_blog.dart';
 
 import 'package:ekuabo/utils/color.dart';
 import 'package:ekuabo/utils/ekuabo_asset.dart';
@@ -12,6 +13,7 @@ import 'package:ekuabo/widgets/EcuaboAppBar.dart';
 import 'package:ekuabo/widgets/UnderlineWidget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:get/get.dart';
 import 'package:velocity_x/velocity_x.dart';
@@ -59,27 +61,32 @@ class _BlogState extends State<Blog> {
                             UnderlineWidget().getUnderlineWidget()
                           ],
                         ),
-                        VxCircle(
-                          backgroundColor: MyColor.mainColor,
-                          child: const Icon(
-                            Icons.add,
-                            color: Colors.white,
-                          ).onFeedBackTap(() {
-                            _homeController.navigationQueue.addLast(3);
-                            _homeController.bottomNavigatorKey.currentState
-                                .pushNamed(EkuaboRoute.postBlog)
-                                .then((value) {
-                              setState(() {
-                                _con.mostRecentBlogs;
-                                _con.getMostRecent();
-                              });
+                        Container(
+                          decoration: BoxDecoration(
+                              color: MyColor.mainColor,
+                              borderRadius: BorderRadius.circular(8)),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: const Text(
+                              'My Blogs',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ).onTap(() {
+                          _homeController.navigationQueue.addLast(3);
+                          _homeController.bottomNavigatorKey.currentState
+                              .push(MaterialPageRoute(
+                                  builder: (context) => MyBlog()))
+                              .then((value) {
+                            setState(() {
+                              _con.mostRecentBlogs;
+                              _con.getMostRecent();
                             });
-                          }),
-                          shadows: const [
-                            BoxShadow(
-                                color: MyColor.inactiveColor, blurRadius: 10)
-                          ],
-                        ).wh(40, 40),
+                          });
+                        }),
                       ],
                     ).pOnly(top: 10, left: 16, right: 16),
                     const Center(
@@ -126,30 +133,33 @@ class _BlogState extends State<Blog> {
                                       UnderlineWidget().getUnderlineWidget()
                                     ],
                                   ),
-                                  VxCircle(
-                                    backgroundColor: MyColor.mainColor,
-                                    child: const Icon(
-                                      Icons.add,
-                                      color: Colors.white,
-                                    ).onFeedBackTap(() {
-                                      _homeController.navigationQueue
-                                          .addLast(3);
-                                      _homeController
-                                          .bottomNavigatorKey.currentState
-                                          .pushNamed(EkuaboRoute.postBlog)
-                                          .then((value) {
-                                        setState(() {
-                                          _con.mostRecentBlogs;
-                                          _con.getMostRecent();
-                                        });
+                                  Container(
+                                    decoration: BoxDecoration(
+                                        color: MyColor.mainColor,
+                                        borderRadius: BorderRadius.circular(8)),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: const Text(
+                                        'My Blogs',
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
+                                  ).onTap(() {
+                                    _homeController.navigationQueue.addLast(3);
+                                    _homeController
+                                        .bottomNavigatorKey.currentState
+                                        .push(MaterialPageRoute(
+                                            builder: (context) => MyBlog()))
+                                        .then((value) {
+                                      setState(() {
+                                        _con.mostRecentBlogs;
+                                        _con.getMostRecent();
                                       });
-                                    }),
-                                    shadows: const [
-                                      BoxShadow(
-                                          color: MyColor.inactiveColor,
-                                          blurRadius: 10)
-                                    ],
-                                  ).wh(40, 40),
+                                    });
+                                  }),
                                 ],
                               ).pOnly(top: 10, left: 16, right: 16),
                               Expanded(

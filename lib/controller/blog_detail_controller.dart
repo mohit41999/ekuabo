@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 
 class BlogDetailController extends GetxController {
   var commentCtl = TextEditingController();
+  bool isExpand = false;
 
   BlogRepository _blogRepository;
 

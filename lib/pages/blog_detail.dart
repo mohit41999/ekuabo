@@ -125,7 +125,8 @@ class _BlogDetailState extends State<BlogDetail> {
                               width: 60,
                               height: 60,
                               child: CircleAvatar(
-                                child: Image.asset(EkuaboAsset.avatar),
+                                backgroundImage: NetworkImage(
+                                    BlogDetails.data[0].userProfile),
                               )).pOnly(top: 120).objectTopCenter()
                         ],
                       ),
@@ -155,31 +156,6 @@ class _BlogDetailState extends State<BlogDetail> {
                    .make()*/
                       ).pOnly(left: 10, right: 10),
                       10.heightBox,
-                      EkuaboString.comments.text
-                          .size(16)
-                          .medium
-                          .make()
-                          .pOnly(left: 10),
-                      10.heightBox,
-                      (BlogDetails.data[0].totalComment == 0)
-                          ? EkuaboString.no_comment_found.text
-                              .size(11)
-                              .medium
-                              .color(MyColor.blackColor.withOpacity(0.6))
-                              .make()
-                              .pOnly(left: 10)
-                          : Container(
-                              height: 200,
-                              child: ListView.builder(
-                                  itemCount: BlogDetails.data[0].comment.length,
-                                  itemBuilder: (context, int index) {
-                                    return Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text(BlogDetails
-                                          .data[0].comment[index].comment),
-                                    );
-                                  }),
-                            ),
                       VxBox(
                               child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -232,7 +208,86 @@ class _BlogDetailState extends State<BlogDetail> {
                           .bottomLeftRounded(value: 12)
                           .height(60)
                           .make()
-                          .pOnly(left: 10, right: 10, top: 16)
+                          .pOnly(left: 10, right: 10, top: 16),
+                      10.heightBox,
+                      Row(
+                        children: [
+                          EkuaboString.comments.text
+                              .size(16)
+                              .medium
+                              .make()
+                              .pOnly(left: 10),
+                          Icon((_con.isExpand)
+                              ? Icons.keyboard_arrow_up
+                              : Icons.keyboard_arrow_down)
+                        ],
+                      ).onTap(() {
+                        setState(() {
+                          _con.isExpand = !_con.isExpand;
+                        });
+                      }),
+                      10.heightBox,
+                      (_con.isExpand)
+                          ? (BlogDetails.data[0].totalComment == 0)
+                              ? EkuaboString.no_comment_found.text
+                                  .size(11)
+                                  .medium
+                                  .color(MyColor.blackColor.withOpacity(0.6))
+                                  .make()
+                                  .pOnly(left: 10)
+                              : Column(
+                                  children: [
+                                    ListView.builder(
+                                        shrinkWrap: true,
+                                        itemCount:
+                                            BlogDetails.data[0].comment.length,
+                                        itemBuilder: (context, int index) {
+                                          var comment = BlogDetails
+                                              .data[0].comment[index];
+                                          return VxBox(
+                                                  child: Row(
+                                            children: [
+                                              CircleAvatar(
+                                                child: CachedNetworkImage(
+                                                  imageUrl: comment.userDetails
+                                                          .profile ??
+                                                      '',
+                                                  placeholder: (_, __) =>
+                                                      CircularProgressIndicator(),
+                                                  errorWidget: (_, __, ___) =>
+                                                      Icon(Icons.person),
+                                                  width: 24,
+                                                  height: 24,
+                                                ),
+                                              ),
+                                              10.widthBox,
+                                              Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  comment.userDetails.username
+                                                      .text.medium
+                                                      .size(10)
+                                                      .color(MyColor.mainColor)
+                                                      .make(),
+                                                  5.heightBox,
+                                                  comment.comment.text.medium
+                                                      .size(10)
+                                                      .make(),
+                                                ],
+                                              )
+                                            ],
+                                          ).p(10))
+                                              .width(double.infinity)
+                                              .withRounded(value: 7)
+                                              .color(MyColor.lightGrey)
+                                              .make()
+                                              .pOnly(
+                                                  left: 10, right: 10, top: 10);
+                                        }),
+                                  ],
+                                )
+                          : Container(),
                     ],
                   ).p(5).pOnly(bottom: 20))
                       .withRounded(value: 7)

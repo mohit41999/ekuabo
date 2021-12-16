@@ -408,7 +408,7 @@ class _HomeViewState extends State<HomeView> {
                                         Navigator.pushNamed(
                                             context, EkuaboRoute.blog_detail,
                                             arguments: _blogcon
-                                                .mostRecentBlogs[index]);
+                                                .mostRecentBlogs[index].blogId);
                                       },
                                       shape: RoundedRectangleBorder(
                                           borderRadius:
@@ -433,7 +433,8 @@ class _HomeViewState extends State<HomeView> {
                                   .onTap(() {
                                 Navigator.pushNamed(
                                     context, EkuaboRoute.blog_detail,
-                                    arguments: _blogcon.mostRecentBlogs[index]);
+                                    arguments:
+                                        _blogcon.mostRecentBlogs[index].blogId);
                               });
                             }),
                       ),
