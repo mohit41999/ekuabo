@@ -107,7 +107,11 @@ class _NewFeedState extends State<NewFeed> {
                           height: 14,
                         )
                       ],
-                    ).onTap(() => _showPicker(context))
+                    ).onTap(() {
+                      setState(() {
+                        _showPicker(context);
+                      });
+                    })
                   ],
                 )).p(15),
                 MaterialButton(
@@ -148,7 +152,7 @@ class _NewFeedState extends State<NewFeed> {
     );
   }
 
-  void _showPicker(context) {
+  Future _showPicker(context) {
     showModalBottomSheet(
         context: context,
         builder: (BuildContext bc) {
@@ -160,14 +164,20 @@ class _NewFeedState extends State<NewFeed> {
                       leading: Icon(Icons.photo_library),
                       title: Text('Photo Library'),
                       onTap: () {
-                        _imgFromGallery();
+                        setState(() {
+                          _imgFromGallery();
+                        });
+
                         Navigator.of(context).pop();
                       }),
                   ListTile(
                     leading: Icon(Icons.photo_camera),
                     title: Text('Camera'),
                     onTap: () {
-                      _imgFromCamera();
+                      setState(() {
+                        _imgFromCamera();
+                      });
+
                       Navigator.of(context).pop();
                     },
                   ),
@@ -181,13 +191,18 @@ class _NewFeedState extends State<NewFeed> {
   Future _imgFromCamera() async {
     var image = await _con.picker
         .getImage(source: ImageSource.camera, imageQuality: 50);
-    _con.mediaFile = image;
-    _con.update();
+    setState(() {
+      _con.mediaFile = image;
+      _con.update();
+    });
   }
 
   Future _imgFromGallery() async {
     var image = await _con.picker
         .getImage(source: ImageSource.gallery, imageQuality: 50);
-    _con.mediaFile = image;
+    setState(() {
+      _con.mediaFile = image;
+      _con.update();
+    });
   }
 }

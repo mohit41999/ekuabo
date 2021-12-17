@@ -1,10 +1,12 @@
 import 'dart:convert';
 
+import 'package:country_picker/country_picker.dart';
 import 'package:ekuabo/controller/add_marketplace_controller.dart';
 import 'package:ekuabo/controller/home_controller.dart';
 import 'package:ekuabo/model/apimodel/user_bean.dart';
 import 'package:ekuabo/utils/amount_seperator.dart';
 import 'package:ekuabo/utils/color.dart';
+import 'package:ekuabo/utils/currency_symbol.dart';
 import 'package:ekuabo/utils/ekuabo_asset.dart';
 import 'package:ekuabo/utils/ekuabo_string.dart';
 import 'package:ekuabo/utils/pref_manager.dart';
@@ -14,6 +16,7 @@ import 'package:ekuabo/widgets/progress_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
@@ -32,7 +35,7 @@ class _PostNewListingState extends State<PostNewListing> {
 
   String _value = 'public';
   PickedFile mediaFile;
-  void getImage(context) {
+  Future getImage(context) {
     showModalBottomSheet(
         context: context,
         builder: (BuildContext bc) {
@@ -44,14 +47,20 @@ class _PostNewListingState extends State<PostNewListing> {
                       leading: Icon(Icons.photo_library),
                       title: Text('Photo Library'),
                       onTap: () {
-                        _imgFromGallery();
+                        setState(() {
+                          _imgFromGallery();
+                        });
+
                         Navigator.of(context).pop();
                       }),
                   ListTile(
                     leading: Icon(Icons.photo_camera),
                     title: Text('Camera'),
                     onTap: () {
-                      _imgFromCamera();
+                      setState(() {
+                        _imgFromCamera();
+                      });
+
                       Navigator.of(context).pop();
                     },
                   ),
@@ -300,14 +309,25 @@ class _PostNewListingState extends State<PostNewListing> {
                       GestureDetector(
                         onTap: () {
                           setState(() {
-                            getImage(context);
+                            getImage(context).then((value) {
+                              setState(() {});
+                            });
                           });
                         },
                         child: Row(
                           children: [
-                            EkuaboString.upload_listing_image.text.medium
-                                .size(11)
-                                .make(),
+                            (mediaFile == null)
+                                ? EkuaboString.upload_listing_image.text.medium
+                                    .size(11)
+                                    .make()
+                                : mediaFile.path
+                                    .substring(
+                                        mediaFile.path.lastIndexOf('/') + 1,
+                                        mediaFile.path.length)
+                                    .text
+                                    .medium
+                                    .size(11)
+                                    .make(),
                             10.widthBox,
                             Image.asset(
                               EkuaboAsset.ic_upload,
@@ -388,6 +408,10 @@ class _PostNewListingState extends State<PostNewListing> {
                             child: GestureDetector(
                               onTap: () {
                                 showCurrencyPicker(
+                                  theme: CurrencyPickerThemeData(
+                                    titleTextStyle: GoogleFonts.roboto(),
+                                    subtitleTextStyle: GoogleFonts.roboto(),
+                                  ),
                                   context: context,
                                   showFlag: true,
                                   showCurrencyName: true,
@@ -398,6 +422,7 @@ class _PostNewListingState extends State<PostNewListing> {
                                         'Select currency ISO: ${currency.code}');
                                     print(
                                         'Select currency : ${currency.symbol}');
+
                                     setState(() {
                                       _con.currency_ISO =
                                           currency.code.toString();
@@ -419,13 +444,68 @@ class _PostNewListingState extends State<PostNewListing> {
                                     children: [
                                       Text(
                                         _con.currency_code,
-                                        style: TextStyle(fontSize: 20),
+                                        style: GoogleFonts.roboto(fontSize: 20),
                                       ),
                                       Icon(Icons.arrow_drop_down),
                                     ],
                                   )),
                             ),
                           ),
+                          // Expanded(
+                          //   flex: 1,
+                          //   child: GestureDetector(
+                          //     onTap: () {
+                          //       showCountryPicker(
+                          //         context: context,
+                          //         //Optional.  Can be used to exclude(remove) one ore more country from the countries list (optional).
+                          //
+                          //         //Optional. Shows phone code before the country name.
+                          //         showPhoneCode: true,
+                          //         onSelect: (Country country) {
+                          //           print(
+                          //               'Select country: ${currency(context, country.name).currencySymbol}');
+                          //         },
+                          //         // Optional. Sets the theme for the country list picker.
+                          //         countryListTheme: CountryListThemeData(
+                          //           // Optional. Sets the border radius for the bottomsheet.
+                          //           borderRadius: BorderRadius.only(
+                          //             topLeft: Radius.circular(40.0),
+                          //             topRight: Radius.circular(40.0),
+                          //           ),
+                          //           // Optional. Styles the search field.
+                          //           inputDecoration: InputDecoration(
+                          //             labelText: 'Search',
+                          //             hintText: 'Start typing to search',
+                          //             prefixIcon: const Icon(Icons.search),
+                          //             border: OutlineInputBorder(
+                          //               borderSide: BorderSide(
+                          //                 color: const Color(0xFF8C98A8)
+                          //                     .withOpacity(0.2),
+                          //               ),
+                          //             ),
+                          //           ),
+                          //         ),
+                          //       );
+                          //     },
+                          //     child: Container(
+                          //         height: 40,
+                          //         decoration: BoxDecoration(
+                          //             color: Colors.white,
+                          //             border:
+                          //                 Border.all(color: MyColor.mainColor),
+                          //             borderRadius: BorderRadius.circular(7)),
+                          //         child: Row(
+                          //           mainAxisAlignment: MainAxisAlignment.center,
+                          //           children: [
+                          //             Text(
+                          //               _con.currency_code,
+                          //               style: GoogleFonts.roboto(fontSize: 20),
+                          //             ),
+                          //             Icon(Icons.arrow_drop_down),
+                          //           ],
+                          //         )),
+                          //   ),
+                          // ),
                           5.widthBox,
                           Expanded(
                             flex: 3,
@@ -442,16 +522,14 @@ class _PostNewListingState extends State<PostNewListing> {
                                     labelText: EkuaboString.enter_product_price
                                             .toString() +
                                         _con.currency_code,
-                                    labelStyle: const TextStyle(
-                                        fontFamily: EkuaboAsset.CERA_PRO_FONT,
+                                    labelStyle: GoogleFonts.roboto(
                                         fontSize: 14,
                                         fontWeight: FontWeight.w200,
                                         color: MyColor.secondColor),
                                     hintText: EkuaboString.enter_product_price
                                             .toString() +
                                         _con.currency_code,
-                                    hintStyle: const TextStyle(
-                                        fontFamily: EkuaboAsset.CERA_PRO_FONT,
+                                    hintStyle: GoogleFonts.roboto(
                                         fontSize: 12,
                                         fontWeight: FontWeight.w200),
                                     fillColor: Colors.white,

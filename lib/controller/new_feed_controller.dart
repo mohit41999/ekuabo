@@ -23,7 +23,7 @@ class NewFeedController extends GetxController {
   NewFeedController() {
     _feedRepository = Get.find<NewFeedRepository>();
   }
-  void addFeed(
+  Future addFeed(
     BuildContext context,
   ) async {
     if (messageCtl.text.isNotEmpty) {
@@ -51,7 +51,7 @@ class NewFeedController extends GetxController {
     }
   }
 
-  void addFeedwithImage(BuildContext context, PickedFile image) async {
+  Future addFeedwithImage(BuildContext context, PickedFile image) async {
     if (messageCtl.text.isNotEmpty) {
       var loader = ProgressView(context);
       loader.show();
@@ -68,6 +68,8 @@ class NewFeedController extends GetxController {
       var result = await _feedRepository.postImage(param);
       loader.dismiss();
       messageCtl.clear();
+      mediaFile = null;
+      Navigator.pop(context);
       if (result != null) {
         BaseBean baseBean = result;
         Utils().showSnackBar(context, baseBean.message);

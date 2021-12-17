@@ -156,7 +156,11 @@ class _NewsFeedsViewAllState extends State<NewsFeedsViewAll> {
                                     ).onFeedBackTap(() async {
                                       _homecon.bottomNavigatorKey.currentState
                                           .pushNamed(EkuaboRoute.newsFeed)
-                                          .then((value) => _con.getNewsFeeds());
+                                          .then((value) {
+                                        setState(() {
+                                          _con.getNewsFeeds();
+                                        });
+                                      });
                                       _homecon.navigationQueue.addLast(2);
                                     }),
                                     shadows: const [
@@ -215,7 +219,12 @@ class _NewsFeedsViewAllState extends State<NewsFeedsViewAll> {
                                     color: Colors.white,
                                   ).onFeedBackTap(() async {
                                     _homecon.bottomNavigatorKey.currentState
-                                        .pushNamed(EkuaboRoute.newsFeed);
+                                        .pushNamed(EkuaboRoute.newsFeed)
+                                        .then((value) {
+                                      setState(() {
+                                        _con.getNewsFeeds();
+                                      });
+                                    });
                                     _homecon.navigationQueue.addLast(2);
                                   }),
                                   shadows: const [

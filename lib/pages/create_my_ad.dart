@@ -9,6 +9,7 @@ import 'package:ekuabo/widgets/EcuaboAppBar.dart';
 import 'package:ekuabo/widgets/UnderlineWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:velocity_x/velocity_x.dart';
 
@@ -350,7 +351,8 @@ class _CreateMyAdState extends State<CreateMyAd> {
                                           children: [
                                             Text(
                                               _con.currency_code,
-                                              style: TextStyle(fontSize: 20),
+                                              style: GoogleFonts.roboto(
+                                                  fontSize: 20),
                                             ),
                                             Icon(Icons.arrow_drop_down),
                                           ],
@@ -373,18 +375,14 @@ class _CreateMyAdState extends State<CreateMyAd> {
                                           labelText:
                                               EkuaboString.enterProductPrice +
                                                   _con.currency_code,
-                                          labelStyle: const TextStyle(
-                                              fontFamily:
-                                                  EkuaboAsset.CERA_PRO_FONT,
+                                          labelStyle: GoogleFonts.roboto(
                                               fontSize: 14,
                                               fontWeight: FontWeight.w200,
                                               color: MyColor.secondColor),
                                           hintText:
                                               EkuaboString.enterProductPrice +
                                                   _con.currency_code,
-                                          hintStyle: const TextStyle(
-                                              fontFamily:
-                                                  EkuaboAsset.CERA_PRO_FONT,
+                                          hintStyle: GoogleFonts.roboto(
                                               fontSize: 12,
                                               fontWeight: FontWeight.w200),
                                           fillColor: Colors.white,

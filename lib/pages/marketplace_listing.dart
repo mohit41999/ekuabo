@@ -14,6 +14,7 @@ import 'package:ekuabo/widgets/EcuaboAppBar.dart';
 import 'package:ekuabo/widgets/UnderlineWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:velocity_x/velocity_x.dart';
@@ -199,6 +200,7 @@ class _MarketPlaceListingState extends State<MarketPlaceListing> {
                               children: [
                                 "${currency(context, marketplaceDetails.data[0].currency_code.toString()).currencySymbol}"
                                     .text
+                                    .textStyle(GoogleFonts.roboto())
                                     .medium
                                     .size(16)
                                     .color(MyColor.lightestGrey)

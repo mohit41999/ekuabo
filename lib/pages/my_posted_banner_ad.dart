@@ -11,6 +11,7 @@ import 'package:ekuabo/widgets/UnderlineWidget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 class MyPostedBannerAd extends StatelessWidget {
@@ -91,19 +92,16 @@ class MyPostedBannerAd extends StatelessWidget {
                                         CrossAxisAlignment.start,
                                     children: [
                                       VxBox(
-                                              child: Hero(
-                                        tag: "Blog",
-                                        child: CachedNetworkImage(
-                                          imageUrl: banner.image ?? '',
-                                          placeholder: (context, url) =>
-                                              const CircularProgressIndicator(),
-                                          errorWidget: (_, __, ___) =>
-                                              Image.asset(
-                                            EkuaboAsset.no_image,
-                                            width: 150,
-                                            height: 200,
-                                            fit: BoxFit.fill,
-                                          ),
+                                              child: CachedNetworkImage(
+                                        imageUrl: banner.image ?? '',
+                                        placeholder: (context, url) =>
+                                            const CircularProgressIndicator(),
+                                        errorWidget: (_, __, ___) =>
+                                            Image.asset(
+                                          EkuaboAsset.no_image,
+                                          width: 150,
+                                          height: 200,
+                                          fit: BoxFit.fill,
                                         ),
                                       ))
                                           .width(134)
@@ -168,6 +166,7 @@ class MyPostedBannerAd extends StatelessWidget {
                                       .pOnly(left: 16, right: 16, top: 10),
                                   "${banner.defaultCurrency.toString()}${banner.price}"
                                       .text
+                                      .textStyle(GoogleFonts.roboto())
                                       .medium
                                       .underline
                                       .size(18)

@@ -201,31 +201,29 @@ class _MyBlogState extends State<MyBlog> {
                                                 children: [
                                                   Expanded(
                                                     child: VxBox(
-                                                            child: Hero(
-                                                      tag: "Blog",
-                                                      child: CachedNetworkImage(
-                                                        imageUrl: _con
-                                                            .mostRecentBlogs[
-                                                                index]
-                                                            .blogImage,
-                                                        fit: BoxFit.cover,
-                                                        placeholder: (context,
-                                                                url) =>
-                                                            const CircularProgressIndicator(),
-                                                        errorWidget:
-                                                            (_, __, ___) {
-                                                          return Container(
-                                                            width: 100,
-                                                            height: 100,
-                                                            decoration: BoxDecoration(
-                                                                image: DecorationImage(
-                                                                    image: AssetImage(
-                                                                        'asset/images/error_img.jpg'),
-                                                                    fit: BoxFit
-                                                                        .cover)),
-                                                          );
-                                                        },
-                                                      ),
+                                                            child:
+                                                                CachedNetworkImage(
+                                                      imageUrl: _con
+                                                          .mostRecentBlogs[
+                                                              index]
+                                                          .blogImage,
+                                                      fit: BoxFit.cover,
+                                                      placeholder: (context,
+                                                              url) =>
+                                                          const CircularProgressIndicator(),
+                                                      errorWidget:
+                                                          (_, __, ___) {
+                                                        return Container(
+                                                          width: 100,
+                                                          height: 100,
+                                                          decoration: BoxDecoration(
+                                                              image: DecorationImage(
+                                                                  image: AssetImage(
+                                                                      'asset/images/error_img.jpg'),
+                                                                  fit: BoxFit
+                                                                      .cover)),
+                                                        );
+                                                      },
                                                     ))
                                                         .width(100)
                                                         .height(100)

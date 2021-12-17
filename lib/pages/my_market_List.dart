@@ -20,6 +20,7 @@ import 'package:ekuabo/widgets/EcuaboAppBar.dart';
 import 'package:ekuabo/widgets/UnderlineWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:http/http.dart' as http;
 
@@ -292,6 +293,7 @@ class marketlistTile extends StatelessWidget {
             children: [
               "${currency(context, _con.mymarketPlaces[index].currency_code.toString()).currencySymbol}"
                   .text
+                  .textStyle(GoogleFonts.roboto())
                   .size(20)
                   .medium
                   .color(MyColor.mainColor)

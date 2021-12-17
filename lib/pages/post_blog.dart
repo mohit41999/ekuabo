@@ -210,5 +210,6 @@ class PostBlog extends StatelessWidget {
     var image = await _con.picker
         .getImage(source: ImageSource.gallery, imageQuality: 50);
     _con.mediaFile = image;
+    _con.update();
   }
 }

@@ -6,6 +6,7 @@ import 'package:ekuabo/model/apimodel/market_place/marketplace_Details_model.dar
 import 'package:ekuabo/model/apimodel/user_bean.dart';
 import 'package:ekuabo/pages/market_place.dart';
 import 'package:ekuabo/utils/color.dart';
+import 'package:ekuabo/utils/currency_symbol.dart';
 import 'package:ekuabo/utils/ekuabo_asset.dart';
 import 'package:ekuabo/utils/ekuabo_route.dart';
 import 'package:ekuabo/utils/ekuabo_string.dart';
@@ -14,6 +15,7 @@ import 'package:ekuabo/widgets/EcuaboAppBar.dart';
 import 'package:ekuabo/widgets/UnderlineWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:http/http.dart' as http;
 
@@ -198,8 +200,9 @@ class _UserMarketPlaceDetailsState extends State<UserMarketPlaceDetails> {
                             onPressed: () {},
                             child: Row(
                               children: [
-                                "${marketplaceDetails.data[0].currency_code}"
+                                "${currency(context, marketplaceDetails.data[0].currency_code).currencySymbol}"
                                     .text
+                                    .textStyle(GoogleFonts.roboto())
                                     .medium
                                     .size(16)
                                     .color(MyColor.lightestGrey)

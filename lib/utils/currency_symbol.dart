@@ -8,9 +8,9 @@ currency(context, ISO) {
 
   var format = NumberFormat.simpleCurrency(
       locale: Platform.localeName, name: ISO.toString());
-  print(format.currencyName);
-  print(format.symbols);
-  print(format.currencySymbol);
+  // print(format.currencyName);
+  // print(format.symbols);
+  // print(format.currencySymbol);
 
   return format;
 }
