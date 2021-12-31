@@ -211,21 +211,38 @@ class _BlogDetailState extends State<BlogDetail> {
                           .pOnly(left: 10, right: 10, top: 16),
                       10.heightBox,
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          EkuaboString.comments.text
-                              .size(16)
-                              .medium
-                              .make()
-                              .pOnly(left: 10),
-                          Icon((_con.isExpand)
-                              ? Icons.keyboard_arrow_up
-                              : Icons.keyboard_arrow_down)
+                          Row(
+                            children: [
+                              EkuaboString.comments.text
+                                  .size(16)
+                                  .medium
+                                  .make()
+                                  .pOnly(left: 10),
+                              Icon((_con.isExpand)
+                                  ? Icons.keyboard_arrow_up
+                                  : Icons.keyboard_arrow_down)
+                            ],
+                          ).onTap(() {
+                            setState(() {
+                              _con.isExpand = !_con.isExpand;
+                            });
+                          }),
+                          Align(
+                              alignment: Alignment.bottomRight,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: TextButton(
+                                    onPressed: () {
+                                      _con.ReportBlog(context, widget.blogId)
+                                          .then((value) =>
+                                              Navigator.pop(context));
+                                    },
+                                    child: const Text('Report')),
+                              ))
                         ],
-                      ).onTap(() {
-                        setState(() {
-                          _con.isExpand = !_con.isExpand;
-                        });
-                      }),
+                      ),
                       10.heightBox,
                       (_con.isExpand)
                           ? (BlogDetails.data[0].totalComment == 0)

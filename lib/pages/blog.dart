@@ -177,24 +177,24 @@ class _BlogState extends State<Blog> {
                                           children: [
                                             VxBox(
                                                     child: CachedNetworkImage(
-                                                      imageUrl: _con
-                                                          .mostRecentBlogs[index]
-                                                          .blogImage,
-                                                      fit: BoxFit.cover,
-                                                      placeholder: (context, url) =>
-                                                          const CircularProgressIndicator(),
-                                                      errorWidget: (_, __, ___) {
-                                                        return Container(
-                                                          width: 100,
-                                                          height: 100,
-                                                          decoration: BoxDecoration(
-                                                              image: DecorationImage(
-                                                                  image: AssetImage(
-                                                                      'asset/images/error_img.jpg'),
-                                                                  fit: BoxFit.cover)),
-                                                        );
-                                                      },
-                                                    ))
+                                              imageUrl: _con
+                                                  .mostRecentBlogs[index]
+                                                  .blogImage,
+                                              fit: BoxFit.cover,
+                                              placeholder: (context, url) =>
+                                                  const CircularProgressIndicator(),
+                                              errorWidget: (_, __, ___) {
+                                                return Container(
+                                                  width: 100,
+                                                  height: 100,
+                                                  decoration: BoxDecoration(
+                                                      image: DecorationImage(
+                                                          image: AssetImage(
+                                                              'asset/images/error_img.jpg'),
+                                                          fit: BoxFit.cover)),
+                                                );
+                                              },
+                                            ))
                                                 .width(100)
                                                 .height(100)
                                                 .bottomLeftRounded(value: 12)
@@ -303,7 +303,28 @@ class _BlogState extends State<Blog> {
                                                   .make(),
                                             )
                                           ],
-                                        ).pOnly(right: 16, bottom: 16)
+                                        ).pOnly(right: 16, bottom: 16),
+                                        Align(
+                                            alignment: Alignment.bottomRight,
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: TextButton(
+                                                  onPressed: () {
+                                                    _con.ReportBlog(
+                                                            context,
+                                                            _con
+                                                                .mostRecentBlogs[
+                                                                    index]
+                                                                .blogId)
+                                                        .then((value) {
+                                                      setState(() {
+                                                        _con.getMostRecent();
+                                                      });
+                                                    });
+                                                  },
+                                                  child: const Text('Report')),
+                                            ))
                                       ],
                                     ))
                                         .elevation(5)

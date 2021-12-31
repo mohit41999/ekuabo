@@ -69,6 +69,18 @@ class BlogRepository {
     return null;
   }
 
+  Future<BaseBean> reportBlog(Map<String, dynamic> param) async {
+    try {
+      var response =
+          await _httpService.postRequest('blog/blog_report.php', param);
+      var jsonString = json.decode(response.data);
+      return BaseBean.fromJson(jsonString);
+    } on HttpException catch (e) {
+      Utils().showSnackBar(Get.context, e.response);
+    }
+    return null;
+  }
+
   Future<BaseBean> addComment(Map<String, dynamic> param) async {
     try {
       var response =

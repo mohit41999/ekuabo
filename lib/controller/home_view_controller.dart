@@ -31,7 +31,7 @@ class HomeViewController extends GetxController {
     if (result != null) {
       MostRecentNewFeed mostRecentNewFeed = result;
       if (mostRecentNewFeed.status) {
-        mostRecentNewsFeeds = mostRecentNewFeed.data;
+        mostRecentNewsFeeds = mostRecentNewFeed.data.take(7);
       }
     }
     _getHomeMarketPlace();

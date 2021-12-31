@@ -126,25 +126,98 @@ class _NewsFeedsViewAllState extends State<NewsFeedsViewAll> {
         // ),
         drawer: NavigationDrawer(getMarketPlaceCategory),
         body: SafeArea(
-          child: SingleChildScrollView(
-            physics: const BouncingScrollPhysics(),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                16.heightBox,
-                _con.isLoad
-                    ? const Center(
-                        child: CircularProgressIndicator(),
-                      )
-                    : _con.newsFeeds.isEmpty
-                        ? Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                                EkuaboString.no_results_found.text
-                                    .color(MyColor.blackColor)
-                                    .size(10)
-                                    .make(),
+          child: RefreshIndicator(
+            onRefresh: () {
+              setState(() {
+                _con.getNewsFeeds();
+                // _blogcon.getMostRecent();
+              });
+              return _con.getNewsFeeds();
+            },
+            child: SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  16.heightBox,
+                  _con.isLoad
+                      ? const Center(
+                          child: CircularProgressIndicator(),
+                        )
+                      : _con.newsFeeds.isEmpty
+                          ? Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                  EkuaboString.no_results_found.text
+                                      .color(MyColor.blackColor)
+                                      .size(10)
+                                      .make(),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: VxCircle(
+                                      backgroundColor: MyColor.mainColor,
+                                      child: const Icon(
+                                        Icons.add,
+                                        size: 20,
+                                        color: Colors.white,
+                                      ).onFeedBackTap(() async {
+                                        _homecon.bottomNavigatorKey.currentState
+                                            .pushNamed(EkuaboRoute.newsFeed)
+                                            .then((value) {
+                                          setState(() {
+                                            _con.getNewsFeeds();
+                                          });
+                                        });
+                                        _homecon.navigationQueue.addLast(2);
+                                      }),
+                                      shadows: const [
+                                        BoxShadow(
+                                            color: MyColor.inactiveColor,
+                                            blurRadius: 10)
+                                      ],
+                                    ).wh(30, 30),
+                                  )
+                                ])
+                          : Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Expanded(
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  SearchGroup()));
+                                    },
+                                    child: VxCard(Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Icon(
+                                          Icons.search,
+                                          color: MyColor.mainColor
+                                              .withOpacity(0.8),
+                                          size: 24,
+                                        ),
+                                        16.widthBox,
+                                        EkuaboString.searchGroup.text
+                                            .color(MyColor.mainColor
+                                                .withOpacity(0.8))
+                                            .light
+                                            .size(16)
+                                            .make()
+                                      ],
+                                    ).p(5))
+                                        .elevation(5)
+                                        .withRounded(value: 7)
+                                        .shadowColor(MyColor.mainColor)
+                                        .make(),
+                                  ),
+                                ),
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: VxCircle(
@@ -170,455 +243,401 @@ class _NewsFeedsViewAllState extends State<NewsFeedsViewAll> {
                                     ],
                                   ).wh(30, 30),
                                 )
-                              ])
-                        : Row(
+                              ],
+                            ),
+                  16.heightBox,
+                  _con.userBean == null
+                      ? "".text.make()
+                      : Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                              Image.asset(
+                                EkuaboAsset.ic_location,
+                                width: 12,
+                                height: 12,
+                                color: MyColor.inactiveColor,
+                              ),
+                              5.widthBox,
+
+                              Text(
+                                '${_con.userBean.data.lga_name.toString()}',
+                                style: TextStyle(
+                                    fontSize: 14, fontWeight: FontWeight.w500),
+                              ),
+
+                              // _con.userBean.data.lga_name.text.medium
+                              //     .size(14)
+                              //     .make()
+                            ]),
+                  UnderlineWidget().getUnderlineWidget(),
+                  ListView.builder(
+                    itemCount: _con.newsFeeds.length,
+                    physics: NeverScrollableScrollPhysics(),
+                    reverse: true,
+                    itemBuilder: (ctx, index) {
+                      var newsFeed = _con.newsFeeds[index];
+                      return VxCard(Column(
+                        children: [
+                          Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Expanded(
-                                child: GestureDetector(
-                                  onTap: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                SearchGroup()));
-                                  },
-                                  child: VxCard(Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Icon(
-                                        Icons.search,
-                                        color:
-                                            MyColor.mainColor.withOpacity(0.8),
-                                        size: 24,
-                                      ),
-                                      16.widthBox,
-                                      EkuaboString.searchGroup.text
-                                          .color(MyColor.mainColor
-                                              .withOpacity(0.8))
-                                          .light
-                                          .size(16)
-                                          .make()
-                                    ],
-                                  ).p(5))
-                                      .elevation(5)
-                                      .withRounded(value: 7)
-                                      .shadowColor(MyColor.mainColor)
-                                      .make(),
-                                ),
+                              Image.asset(
+                                EkuaboAsset.ic_user,
+                                width: 12,
+                                height: 12,
+                                color: MyColor.mainColor,
                               ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: VxCircle(
-                                  backgroundColor: MyColor.mainColor,
-                                  child: const Icon(
-                                    Icons.add,
-                                    size: 20,
-                                    color: Colors.white,
-                                  ).onFeedBackTap(() async {
-                                    _homecon.bottomNavigatorKey.currentState
-                                        .pushNamed(EkuaboRoute.newsFeed)
-                                        .then((value) {
-                                      setState(() {
-                                        _con.getNewsFeeds();
-                                      });
-                                    });
-                                    _homecon.navigationQueue.addLast(2);
-                                  }),
-                                  shadows: const [
-                                    BoxShadow(
-                                        color: MyColor.inactiveColor,
-                                        blurRadius: 10)
-                                  ],
-                                ).wh(30, 30),
+                              Row(
+                                children: [
+                                  const Icon(
+                                    Icons.access_time_rounded,
+                                    color: MyColor.mainColor,
+                                    size: 12,
+                                  ),
+                                  5.widthBox,
+                                  newsFeed.createdDate.text.light
+                                      .size(10)
+                                      .make()
+                                ],
                               )
                             ],
-                          ),
-                16.heightBox,
-                _con.userBean == null
-                    ? "".text.make()
-                    : Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                            Image.asset(
-                              EkuaboAsset.ic_location,
-                              width: 12,
-                              height: 12,
-                              color: MyColor.inactiveColor,
-                            ),
-                            5.widthBox,
-
-                            Text(
-                              '${_con.userBean.data.lga_name.toString()}',
-                              style: TextStyle(
-                                  fontSize: 14, fontWeight: FontWeight.w500),
-                            ),
-
-                            // _con.userBean.data.lga_name.text.medium
-                            //     .size(14)
-                            //     .make()
-                          ]),
-                UnderlineWidget().getUnderlineWidget(),
-                ListView.builder(
-                  itemCount: _con.newsFeeds.length,
-                  physics: NeverScrollableScrollPhysics(),
-                  reverse: true,
-                  itemBuilder: (ctx, index) {
-                    var newsFeed = _con.newsFeeds[index];
-                    return VxCard(Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Image.asset(
-                              EkuaboAsset.ic_user,
-                              width: 12,
-                              height: 12,
-                              color: MyColor.mainColor,
-                            ),
-                            Row(
-                              children: [
-                                const Icon(
-                                  Icons.access_time_rounded,
-                                  color: MyColor.mainColor,
-                                  size: 12,
-                                ),
-                                5.widthBox,
-                                newsFeed.createdDate.text.light.size(10).make()
-                              ],
-                            )
-                          ],
-                        ).p(5),
-                        VxBox(
-                            child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Row(
-                                  children: [
-                                    CircleAvatar(
-                                      child: CachedNetworkImage(
-                                        imageUrl:
-                                            newsFeed.userFeedDetails.profile,
-                                        width: 24,
-                                        height: 24,
-                                        fit: BoxFit.cover,
-                                        placeholder: (_, __) =>
-                                            CircularProgressIndicator(),
-                                        errorWidget: (_, __, ___) =>
-                                            Icon(Icons.person),
+                          ).p(5),
+                          VxBox(
+                              child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Row(
+                                    children: [
+                                      CircleAvatar(
+                                        child: CachedNetworkImage(
+                                          imageUrl:
+                                              newsFeed.userFeedDetails.profile,
+                                          width: 24,
+                                          height: 24,
+                                          fit: BoxFit.cover,
+                                          placeholder: (_, __) =>
+                                              CircularProgressIndicator(),
+                                          errorWidget: (_, __, ___) =>
+                                              Icon(Icons.person),
+                                        ),
+                                        backgroundColor: Colors.transparent,
                                       ),
-                                      backgroundColor: Colors.transparent,
-                                    ),
-                                    Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
+                                      Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          (newsFeed.userFeedDetails.username ==
+                                                  null)
+                                              ? Text('anonymous')
+                                              : newsFeed.userFeedDetails
+                                                  .username.text.bold
+                                                  .size(12)
+                                                  .make(),
+                                          5.heightBox,
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Image.asset(
+                                                EkuaboAsset.ic_location,
+                                                width: 12,
+                                                height: 12,
+                                                color: MyColor.inactiveColor,
+                                              ),
+                                              5.widthBox,
+                                              (newsFeed.userFeedDetails
+                                                          .username ==
+                                                      null)
+                                                  ? Text('anonymous')
+                                                  : newsFeed.userFeedDetails
+                                                      .location.text.light
+                                                      .size(10)
+                                                      .make()
+                                            ],
+                                          )
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                  (_con.userBean.data.id == newsFeed.userId)
+                                      ? IconButton(
+                                          onPressed: () {
+                                            setState(() {
+                                              deletedialog(
+                                                  newsFeed.feedId, index);
+                                            });
+                                          },
+                                          icon: Icon(
+                                            Icons.delete,
+                                            color: Colors.red,
+                                          ))
+                                      : Container()
+                                ],
+                              ),
+                              Html(
+                                data: newsFeed.message,
+                              )
+                                  /*newsFeed.message.text
+                                  .size(12)
+                                  .bold
+                                  .make()*/
+                                  .pOnly(left: 10),
+                              16.heightBox,
+                              CachedNetworkImage(
+                                imageUrl: newsFeed.uploadPath ?? '',
+                                fit: BoxFit.cover,
+                                placeholder: (_, __) => Center(
+                                  child: CircularProgressIndicator(),
+                                ),
+                                errorWidget: (_, __, ___) => Container(),
+                                //       Image.asset(
+                                //     EkuaboAsset.no_image,
+                                //     width: double.infinity,
+                                //     height: 192,
+                                //     fit: BoxFit.cover,
+                                //   ),
+                              ).pOnly(left: 10, right: 10),
+                              16.heightBox,
+                              ""
+                                  .text
+                                  .size(10)
+                                  .light
+                                  .align(TextAlign.justify)
+                                  .color(MyColor.blackColor.withOpacity(0.6))
+                                  .make()
+                                  .pOnly(left: 10, right: 10),
+                              10.heightBox,
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Row(
+                                    children: [
+                                      GestureDetector(
+                                        onTap: () {
+                                          if (newsFeed.isUserLike == "n")
+                                            _con.like(context, newsFeed.feedId);
+                                          else
+                                            _con.unlike(
+                                                context, newsFeed.feedId);
+                                        },
+                                        child: Image.asset(
+                                          newsFeed.isUserLike == "n"
+                                              ? EkuaboAsset.ic_like
+                                              : EkuaboAsset.ic_liked,
+                                          width: 20,
+                                          height: 20,
+                                        ),
+                                      ),
+                                      30.widthBox,
+                                      GestureDetector(
+                                        onTap: () {
+                                          newsFeed.isCommentExpand =
+                                              !newsFeed.isCommentExpand;
+                                          _con.update();
+                                        },
+                                        child: Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.end,
+                                          children: [
+                                            Image.asset(
+                                              EkuaboAsset.ic_comment,
+                                              width: 20,
+                                              height: 20,
+                                            ),
+                                            Text(
+                                              newsFeed.comment.length
+                                                  .toString(),
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  color: MyColor.mainColor),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      30.widthBox,
+                                      GestureDetector(
+                                        onTap: () async {
+                                          _share(newsFeed);
+                                        },
+                                        child: Image.asset(
+                                          EkuaboAsset.ic_share,
+                                          width: 20,
+                                          height: 20,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  newsFeed.isUserReported == "n"
+                                      ? EkuaboString.report.text
+                                          .color(MyColor.mainColor
+                                              .withOpacity(0.6))
+                                          .size(10)
+                                          .light
+                                          .underline
+                                          .make()
+                                          .onTap(() => _con.report(
+                                              context, newsFeed.feedId))
+                                      : EkuaboString.reported.text
+                                          .color(MyColor.mainColor
+                                              .withOpacity(0.6))
+                                          .size(10)
+                                          .light
+                                          .underline
+                                          .make(),
+                                ],
+                              ).pOnly(left: 10, right: 10),
+                              newsFeed.isCommentExpand
+                                  ? Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        (newsFeed.userFeedDetails.username ==
-                                                null)
-                                            ? Text('anonymous')
-                                            : newsFeed.userFeedDetails.username
-                                                .text.bold
+                                        16.heightBox,
+                                        EkuaboString.comments.text.bold
+                                            .size(14)
+                                            .make(),
+                                        10.heightBox,
+                                        newsFeed.comment.isEmpty
+                                            ? EkuaboString
+                                                .no_comments_yet.text.medium
                                                 .size(12)
-                                                .make(),
-                                        5.heightBox,
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Image.asset(
-                                              EkuaboAsset.ic_location,
-                                              width: 12,
-                                              height: 12,
-                                              color: MyColor.inactiveColor,
-                                            ),
-                                            5.widthBox,
-                                            (newsFeed.userFeedDetails
-                                                        .username ==
-                                                    null)
-                                                ? Text('anonymous')
-                                                : newsFeed.userFeedDetails
-                                                    .location.text.light
-                                                    .size(10)
-                                                    .make()
-                                          ],
-                                        )
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                                (_con.userBean.data.id == newsFeed.userId)
-                                    ? IconButton(
-                                        onPressed: () {
-                                          setState(() {
-                                            deletedialog(
-                                                newsFeed.feedId, index);
-                                          });
-                                        },
-                                        icon: Icon(
-                                          Icons.delete,
-                                          color: Colors.red,
-                                        ))
-                                    : Container()
-                              ],
-                            ),
-                            Html(
-                              data: newsFeed.message,
-                            )
-                                /*newsFeed.message.text
-                                .size(12)
-                                .bold
-                                .make()*/
-                                .pOnly(left: 10),
-                            16.heightBox,
-                            CachedNetworkImage(
-                              imageUrl: newsFeed.uploadPath ?? '',
-                              fit: BoxFit.cover,
-                              placeholder: (_, __) => Center(
-                                child: CircularProgressIndicator(),
-                              ),
-                              errorWidget: (_, __, ___) => Container(),
-                              //       Image.asset(
-                              //     EkuaboAsset.no_image,
-                              //     width: double.infinity,
-                              //     height: 192,
-                              //     fit: BoxFit.cover,
-                              //   ),
-                            ).pOnly(left: 10, right: 10),
-                            16.heightBox,
-                            ""
-                                .text
-                                .size(10)
-                                .light
-                                .align(TextAlign.justify)
-                                .color(MyColor.blackColor.withOpacity(0.6))
-                                .make()
-                                .pOnly(left: 10, right: 10),
-                            10.heightBox,
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Row(
-                                  children: [
-                                    GestureDetector(
-                                      onTap: () {
-                                        if (newsFeed.isUserLike == "n")
-                                          _con.like(context, newsFeed.feedId);
-                                        else
-                                          _con.unlike(context, newsFeed.feedId);
-                                      },
-                                      child: Image.asset(
-                                        newsFeed.isUserLike == "n"
-                                            ? EkuaboAsset.ic_like
-                                            : EkuaboAsset.ic_liked,
-                                        width: 20,
-                                        height: 20,
-                                      ),
-                                    ),
-                                    30.widthBox,
-                                    GestureDetector(
-                                      onTap: () {
-                                        newsFeed.isCommentExpand =
-                                            !newsFeed.isCommentExpand;
-                                        _con.update();
-                                      },
-                                      child: Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.end,
-                                        children: [
-                                          Image.asset(
-                                            EkuaboAsset.ic_comment,
-                                            width: 20,
-                                            height: 20,
-                                          ),
-                                          Text(
-                                            newsFeed.comment.length.toString(),
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                color: MyColor.mainColor),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    30.widthBox,
-                                    GestureDetector(
-                                      onTap: () async {
-                                        _share(newsFeed);
-                                      },
-                                      child: Image.asset(
-                                        EkuaboAsset.ic_share,
-                                        width: 20,
-                                        height: 20,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                newsFeed.isUserReported == "n"
-                                    ? EkuaboString.report.text
-                                        .color(
-                                            MyColor.mainColor.withOpacity(0.6))
-                                        .size(10)
-                                        .light
-                                        .underline
-                                        .make()
-                                        .onTap(() => _con.report(
-                                            context, newsFeed.feedId))
-                                    : EkuaboString.reported.text
-                                        .color(
-                                            MyColor.mainColor.withOpacity(0.6))
-                                        .size(10)
-                                        .light
-                                        .underline
-                                        .make(),
-                              ],
-                            ).pOnly(left: 10, right: 10),
-                            newsFeed.isCommentExpand
-                                ? Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      16.heightBox,
-                                      EkuaboString.comments.text.bold
-                                          .size(14)
-                                          .make(),
-                                      10.heightBox,
-                                      newsFeed.comment.isEmpty
-                                          ? EkuaboString
-                                              .no_comments_yet.text.medium
-                                              .size(12)
-                                              .make()
-                                          : ListView.builder(
-                                              shrinkWrap: true,
-                                              itemCount:
-                                                  newsFeed.comment.length,
-                                              itemBuilder: (ctx, index) {
-                                                var comment =
-                                                    newsFeed.comment[index];
-                                                return VxBox(
-                                                        child: Row(
-                                                  children: [
-                                                    CircleAvatar(
-                                                      child: CachedNetworkImage(
-                                                        imageUrl: comment
-                                                                .userDetails
-                                                                .profile ??
-                                                            '',
-                                                        placeholder: (_, __) =>
-                                                            CircularProgressIndicator(),
-                                                        errorWidget: (_, __,
-                                                                ___) =>
-                                                            Icon(Icons.person),
-                                                        width: 24,
-                                                        height: 24,
+                                                .make()
+                                            : ListView.builder(
+                                                shrinkWrap: true,
+                                                itemCount:
+                                                    newsFeed.comment.length,
+                                                itemBuilder: (ctx, index) {
+                                                  var comment =
+                                                      newsFeed.comment[index];
+                                                  return VxBox(
+                                                          child: Row(
+                                                    children: [
+                                                      CircleAvatar(
+                                                        child:
+                                                            CachedNetworkImage(
+                                                          imageUrl: comment
+                                                                  .userDetails
+                                                                  .profile ??
+                                                              '',
+                                                          placeholder: (_,
+                                                                  __) =>
+                                                              CircularProgressIndicator(),
+                                                          errorWidget: (_, __,
+                                                                  ___) =>
+                                                              Icon(
+                                                                  Icons.person),
+                                                          width: 24,
+                                                          height: 24,
+                                                        ),
                                                       ),
-                                                    ),
-                                                    10.widthBox,
-                                                    Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        comment
-                                                            .userDetails
-                                                            .username
-                                                            .text
-                                                            .medium
-                                                            .size(10)
-                                                            .color(MyColor
-                                                                .mainColor)
-                                                            .make(),
-                                                        5.heightBox,
-                                                        comment
-                                                            .comment.text.medium
-                                                            .size(10)
-                                                            .make(),
-                                                      ],
-                                                    )
-                                                  ],
-                                                ).p(10))
-                                                    .width(double.infinity)
-                                                    .withRounded(value: 7)
-                                                    .color(MyColor.lightGrey)
-                                                    .make()
-                                                    .pOnly(
-                                                        left: 10,
-                                                        right: 10,
-                                                        top: 10);
-                                              },
-                                            )
-                                    ],
-                                  ).pOnly(left: 10)
-                                : SizedBox(),
-                            Row(
-                              children: [
-                                Expanded(
-                                  flex: 1,
-                                  child: CircleAvatar(
-                                    child: CachedNetworkImage(
-                                      imageUrl:
-                                          _con.userBean.data.profileImg ?? '',
-                                      width: 24,
-                                      height: 24,
-                                      placeholder: (_, __) =>
-                                          CircularProgressIndicator(),
-                                      errorWidget: (_, __, ___) =>
-                                          Icon(Icons.account_circle),
-                                    ),
-                                    backgroundColor: Colors.transparent,
-                                  ),
-                                ),
-                                Expanded(
-                                  flex: 4,
-                                  child: TextFormField(
-                                    controller: _con.commentCtl,
-                                    decoration: InputDecoration(
-                                      border: InputBorder.none,
-                                      hintText:
-                                          EkuaboString.insert_comments_here,
-                                      hintStyle: TextStyle(
-                                          color: MyColor.blackColor
-                                              .withOpacity(0.4),
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.w300),
+                                                      10.widthBox,
+                                                      Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          comment
+                                                              .userDetails
+                                                              .username
+                                                              .text
+                                                              .medium
+                                                              .size(10)
+                                                              .color(MyColor
+                                                                  .mainColor)
+                                                              .make(),
+                                                          5.heightBox,
+                                                          comment.comment.text
+                                                              .medium
+                                                              .size(10)
+                                                              .make(),
+                                                        ],
+                                                      )
+                                                    ],
+                                                  ).p(10))
+                                                      .width(double.infinity)
+                                                      .withRounded(value: 7)
+                                                      .color(MyColor.lightGrey)
+                                                      .make()
+                                                      .pOnly(
+                                                          left: 10,
+                                                          right: 10,
+                                                          top: 10);
+                                                },
+                                              )
+                                      ],
+                                    ).pOnly(left: 10)
+                                  : SizedBox(),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    flex: 1,
+                                    child: CircleAvatar(
+                                      child: CachedNetworkImage(
+                                        imageUrl:
+                                            _con.userBean.data.profileImg ?? '',
+                                        width: 24,
+                                        height: 24,
+                                        placeholder: (_, __) =>
+                                            CircularProgressIndicator(),
+                                        errorWidget: (_, __, ___) =>
+                                            Icon(Icons.account_circle),
+                                      ),
+                                      backgroundColor: Colors.transparent,
                                     ),
                                   ),
-                                ),
-                                Expanded(
-                                  flex: 1,
-                                  child: Image.asset(
-                                    EkuaboAsset.ic_send,
-                                    width: 16,
-                                    height: 16,
-                                  ).onTap(() =>
-                                      _con.comment(context, newsFeed.feedId)),
-                                )
-                              ],
-                            )
-                                .backgroundColor(Colors.blueGrey.shade50)
-                                .pOnly(top: 20)
-                          ],
-                        )).white.make().p2()
-                      ],
-                    ))
-                        .color(Colors.blueGrey.shade50)
-                        .withRounded(value: 7)
-                        .make()
-                        .pOnly(top: 16);
-                  },
-                  shrinkWrap: true,
-                )
-              ],
-            ).pOnly(left: 16, right: 16),
+                                  Expanded(
+                                    flex: 4,
+                                    child: TextFormField(
+                                      controller: _con.commentCtl,
+                                      decoration: InputDecoration(
+                                        border: InputBorder.none,
+                                        hintText:
+                                            EkuaboString.insert_comments_here,
+                                        hintStyle: TextStyle(
+                                            color: MyColor.blackColor
+                                                .withOpacity(0.4),
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w300),
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    flex: 1,
+                                    child: Image.asset(
+                                      EkuaboAsset.ic_send,
+                                      width: 16,
+                                      height: 16,
+                                    ).onTap(() =>
+                                        _con.comment(context, newsFeed.feedId)),
+                                  )
+                                ],
+                              )
+                                  .backgroundColor(Colors.blueGrey.shade50)
+                                  .pOnly(top: 20)
+                            ],
+                          )).white.make().p2()
+                        ],
+                      ))
+                          .color(Colors.blueGrey.shade50)
+                          .withRounded(value: 7)
+                          .make()
+                          .pOnly(top: 16);
+                    },
+                    shrinkWrap: true,
+                  )
+                ],
+              ).pOnly(left: 16, right: 16),
+            ),
           ),
         ),
       ),

@@ -50,6 +50,8 @@ class PostBlogController extends GetxController {
     }
   }
 
+
+
   void callPostBlogApi(BuildContext context) async {
     if (blogTitleCtl.text.isEmpty) {
       Utils().showSnackBar(context, 'Enter Blog title');

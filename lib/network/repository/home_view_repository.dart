@@ -47,8 +47,9 @@ class HomeViewRepository {
 
   Future<MostRecentNewFeed> getMostRecentNewsFeed() async {
     try {
-      var response =
-          await _httpService.postRequest('feed/most_recent_feed.php', {});
+      var userBean = await PrefManager.getUser();
+      var response = await _httpService
+          .postRequest('feed/feed_list.php', {'user_id': userBean.data.id});
       var jsonString = json.decode(response.data);
       return MostRecentNewFeed.fromJson(jsonString);
     } on HttpException catch (e) {

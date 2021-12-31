@@ -36,4 +36,27 @@ class BlogDetailController extends GetxController {
     }
     update();
   }
+
+  Future ReportBlog(BuildContext context, String blog_id) async {
+    var userBean = await PrefManager.getUser();
+    var param = {
+      'token': '123456789',
+      'user_id': userBean.data.id,
+      'blog_id': blog_id,
+    };
+    var loader = ProgressView(context);
+    loader.show();
+    var result = await _blogRepository.reportBlog(param);
+    loader.dismiss();
+    if (result != null) {
+      BaseBean baseBean = result;
+      if (baseBean.status) {
+        Utils().showSnackBar(context, baseBean.message);
+      } else {
+        Utils().showSnackBar(context, "You cannot Report your Own Blog");
+      }
+    }
+
+    // update();
+  }
 }

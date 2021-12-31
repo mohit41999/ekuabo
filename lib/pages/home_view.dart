@@ -89,7 +89,9 @@ class _HomeViewState extends State<HomeView> {
           onRefresh: () {
             setState(() {
               _con.getMostRecentNewsFeed();
-              _blogcon.getMostRecent();
+              _blogcon.getMostRecent().then((value) {
+                setState(() {});
+              });
             });
             return _con.getMostRecentNewsFeed();
           },
@@ -405,10 +407,18 @@ class _HomeViewState extends State<HomeView> {
                                     ).pOnly(left: 10, right: 10),
                                     MaterialButton(
                                       onPressed: () {
-                                        Navigator.pushNamed(
-                                            context, EkuaboRoute.blog_detail,
-                                            arguments: _blogcon
-                                                .mostRecentBlogs[index].blogId);
+                                        Navigator.pushNamed(context,
+                                                EkuaboRoute.blog_detail,
+                                                arguments: _blogcon
+                                                    .mostRecentBlogs[index]
+                                                    .blogId)
+                                            .then((value) {
+                                          _blogcon
+                                              .getMostRecent()
+                                              .then((value) {
+                                            setState(() {});
+                                          });
+                                        });
                                       },
                                       shape: RoundedRectangleBorder(
                                           borderRadius:
@@ -432,9 +442,14 @@ class _HomeViewState extends State<HomeView> {
                                   .pOnly(left: 10)
                                   .onTap(() {
                                 Navigator.pushNamed(
-                                    context, EkuaboRoute.blog_detail,
-                                    arguments:
-                                        _blogcon.mostRecentBlogs[index].blogId);
+                                        context, EkuaboRoute.blog_detail,
+                                        arguments: _blogcon
+                                            .mostRecentBlogs[index].blogId)
+                                    .then((value) {
+                                  _blogcon.getMostRecent().then((value) {
+                                    setState(() {});
+                                  });
+                                });
                               });
                             }),
                       ),

@@ -21,7 +21,7 @@ class NewsFeedsViewAllController extends GetxController {
     _homeViewRepository = Get.find<HomeViewRepository>();
   }
 
-  void getNewsFeeds() async {
+  Future getNewsFeeds() async {
     isLoad = true;
     userBean = await PrefManager.getUser();
 
@@ -72,6 +72,7 @@ class NewsFeedsViewAllController extends GetxController {
       Utils().showSnackBar(Get.context, baseBean.message);
     }
     getNewsFeeds();
+    update();
   }
 
   void like(BuildContext context, String feedId) async {
