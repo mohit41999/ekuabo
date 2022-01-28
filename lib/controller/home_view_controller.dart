@@ -3,6 +3,9 @@ import 'package:ekuabo/model/apimodel/home/most_recent_new_feed.dart';
 import 'package:ekuabo/model/apimodel/home/news_feeds.dart';
 import 'package:ekuabo/model/apimodel/market_place/market_place_bean.dart';
 import 'package:ekuabo/network/repository/home_view_repository.dart';
+import 'package:ekuabo/utils/utils.dart';
+import 'package:ekuabo/widgets/progress_view.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
 class HomeViewController extends GetxController {
@@ -45,6 +48,20 @@ class HomeViewController extends GetxController {
         homeMarketPlaces = marketPlaceBean.data.take(10).toList();
       }
     }
+    update();
+  }
+
+  void reportMarketplace(BuildContext context, String marketplace_id) async {
+    var loader = ProgressView(context);
+    loader.show();
+    var result = await _homeViewRepository.reportMarketplace(marketplace_id);
+    if (result != null) {
+      (!result.status)
+          ? Utils().showSnackBar(context, result.message)
+          : _getHomeMarketPlace();
+      loader.dismiss();
+    }
+    loader.dismiss();
     update();
   }
 }

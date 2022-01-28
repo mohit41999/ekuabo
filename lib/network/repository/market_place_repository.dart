@@ -5,6 +5,7 @@ import 'package:ekuabo/model/apimodel/market_place/market_place_bean.dart';
 import 'package:ekuabo/model/apimodel/market_place/marketplace_Details_model.dart';
 import 'package:ekuabo/model/apimodel/market_place/searchMarketplaceModel.dart';
 import 'package:ekuabo/model/apimodel/market_place/sub_category_bean.dart';
+import 'package:ekuabo/model/apimodel/user_bean.dart';
 import 'package:ekuabo/network/http_exception.dart';
 import 'package:ekuabo/network/service/http_service.dart';
 import 'package:ekuabo/network/service/http_service_impl.dart';
@@ -77,6 +78,20 @@ class MarketPlaceRepository {
           'marketplace/get_sub_category.php', param);
       var jsonString = json.decode(response.data);
       return SubCategoryBean.fromJson(jsonString);
+    } on HttpException catch (e) {
+      Utils().showSnackBar(Get.context, e.response);
+    }
+    return null;
+  }
+
+  Future<MarketPlaceBean> reportMarketplace(String marketplace_id) async {
+    try {
+      UserBean userBean = await PrefManager.getUser();
+      var response = await _httpService.postRequest(
+          'marketplace/add_marketplace_report.php',
+          {'user_id': userBean.data.id, 'marketplace_id': marketplace_id});
+      var jsonString = json.decode(response.data);
+      return MarketPlaceBean.fromJson(jsonString);
     } on HttpException catch (e) {
       Utils().showSnackBar(Get.context, e.response);
     }

@@ -2,7 +2,10 @@ import 'package:ekuabo/model/apimodel/market_place/category_bean.dart';
 import 'package:ekuabo/model/apimodel/market_place/market_place_bean.dart';
 import 'package:ekuabo/network/repository/market_place_repository.dart';
 import 'package:ekuabo/utils/pref_manager.dart';
+import 'package:ekuabo/utils/utils.dart';
+import 'package:ekuabo/widgets/progress_view.dart';
 import 'package:get/get.dart';
+import 'package:flutter/material.dart';
 
 class MarketPlaceController extends GetxController {
   MarketPlaceRepository _marketPlaceRepository;
@@ -22,6 +25,20 @@ class MarketPlaceController extends GetxController {
         marketPlaces = marketPlaceBean.data;
       }
     }
+    update();
+  }
+
+  void reportMarketplace(BuildContext context, String marketplace_id) async {
+    var loader = ProgressView(context);
+    loader.show();
+    var result = await _marketPlaceRepository.reportMarketplace(marketplace_id);
+    if (result != null) {
+      (!result.status)
+          ? Utils().showSnackBar(context, result.message)
+          : getMarketPlace();
+      loader.dismiss();
+    }
+    loader.dismiss();
     update();
   }
 

@@ -8,7 +8,9 @@ import 'package:ekuabo/pages/search_group_page.dart';
 import 'package:ekuabo/pages/userShopMarketListing.dart';
 import 'package:ekuabo/utils/color.dart';
 import 'package:ekuabo/utils/pref_manager.dart';
+import 'package:ekuabo/utils/utils.dart';
 import 'package:ekuabo/widgets/UnderlineWidget.dart';
+import 'package:ekuabo/widgets/progress_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
@@ -45,6 +47,36 @@ class _SearchPanelState extends State<SearchPanel> {
 
   UserBean userBean;
   TextEditingController _username = TextEditingController();
+  Future ReportMarketplace(String marketplace_id) async {
+    var loader = ProgressView(context);
+    UserBean userBean = await PrefManager.getUser();
+    loader.show();
+    var response = await http.post(
+        Uri.parse(
+            'https://eku-abo.com/api/marketplace/add_marketplace_report.php'),
+        body: {
+          'token': '123456789',
+          'user_id': userBean.data.id,
+          'marketplace_id': marketplace_id
+        });
+    var Response = jsonDecode(response.body);
+    print(Response);
+    loader.dismiss();
+    if (Response['status']) {
+      Utils().showSnackBar(context, Response['message']);
+      setState(() {
+        searchmodel = SearchGroupServices().searchMarketplace(
+            search_keyword: searchController.text,
+            category_id: widget.CategoryId,
+            sub_category_id: widget.SubCategoryId,
+            filter: '');
+      });
+    } else {
+      Utils().showSnackBar(context, Response['message']);
+    }
+    return Response;
+  }
+
   Future getListingid(String marketplace_id) async {
     userBean = await PrefManager.getUser();
     var response = await http.post(
@@ -377,40 +409,66 @@ class _SearchPanelState extends State<SearchPanel> {
                                         ),
                                         Text(snapshot.data.data[index]
                                             .listingDescription),
-                                        Padding(
-                                          padding: const EdgeInsets.only(
-                                              left: 10.0, right: 30),
-                                          child: MaterialButton(
-                                            onPressed: () {
-                                              getListingid(snapshot
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceEvenly,
+                                          children: [
+                                            MaterialButton(
+                                              onPressed: () {
+                                                getListingid(snapshot
+                                                        .data
+                                                        .data[index]
+                                                        .marketplaceId)
+                                                    .then((value) {
+                                                  Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              UserMarketPlaceDetails(
+                                                                market_id: snapshot
+                                                                    .data
+                                                                    .data[index]
+                                                                    .marketplaceId,
+                                                              )));
+                                                });
+                                              },
+                                              shape: RoundedRectangleBorder(
+                                                side: BorderSide(
+                                                    color: MyColor.mainColor),
+                                                borderRadius:
+                                                    BorderRadius.circular(20),
+                                              ),
+                                              child: Text(
+                                                'View',
+                                                style: TextStyle(
+                                                    color: MyColor.mainColor),
+                                              ),
+                                            ),
+                                            GestureDetector(
+                                                onTap: () {
+                                                  ReportMarketplace(snapshot
                                                       .data
                                                       .data[index]
-                                                      .marketplaceId)
-                                                  .then((value) {
-                                                Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            UserMarketPlaceDetails(
-                                                              market_id: snapshot
-                                                                  .data
-                                                                  .data[index]
-                                                                  .marketplaceId,
-                                                            )));
-                                              });
-                                            },
-                                            shape: RoundedRectangleBorder(
-                                              side: BorderSide(
-                                                  color: MyColor.mainColor),
-                                              borderRadius:
-                                                  BorderRadius.circular(20),
-                                            ),
-                                            child: Text(
-                                              'View',
-                                              style: TextStyle(
-                                                  color: MyColor.mainColor),
-                                            ),
-                                          ),
+                                                      .marketplaceId);
+                                                },
+                                                child: Container(
+                                                    decoration: BoxDecoration(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(10),
+                                                        border: Border.all(
+                                                            color: Colors.red)),
+                                                    child: Padding(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              8.0),
+                                                      child: Text(
+                                                        'Report!!!',
+                                                        style: TextStyle(
+                                                            color: Colors.red),
+                                                      ),
+                                                    )))
+                                          ],
                                         )
                                       ],
                                     ),

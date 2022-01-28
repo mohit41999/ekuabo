@@ -72,7 +72,7 @@ class _GroupDetailsState extends State<GroupDetails> {
   }
 
   void report(BuildContext context, feedId) {
-    GroupDetailsServices().reportgroupfeed(feedId).then((value) {
+    GroupDetailsServices().reportgroupfeed(context, feedId).then((value) {
       setState(() {
         groupinititalize();
       });
@@ -662,33 +662,22 @@ class _GroupDetailsState extends State<GroupDetails> {
                                                     )),
                                               ],
                                             ),
-                                            _groupModel.data.groupFeed[index]
-                                                        .isUserReported ==
-                                                    "n"
-                                                ? GestureDetector(
-                                                    onTap: () {
-                                                      report(
-                                                          context,
-                                                          _groupModel
-                                                              .data
-                                                              .groupFeed[index]
-                                                              .feedId);
-                                                    },
-                                                    child: EkuaboString
-                                                        .report.text
-                                                        .color(MyColor.mainColor
-                                                            .withOpacity(0.6))
-                                                        .size(10)
-                                                        .light
-                                                        .underline
-                                                        .make())
-                                                : EkuaboString.reported.text
-                                                    .color(MyColor.mainColor
-                                                        .withOpacity(0.6))
-                                                    .size(10)
+                                            GestureDetector(
+                                                onTap: () {
+                                                  report(
+                                                      context,
+                                                      _groupModel
+                                                          .data
+                                                          .groupFeed[index]
+                                                          .feedId);
+                                                },
+                                                child: EkuaboString.report.text
+                                                    .color(Colors.red)
+                                                    .size(11)
+                                                    .fontWeight(FontWeight.bold)
                                                     .light
                                                     .underline
-                                                    .make(),
+                                                    .make())
                                           ],
                                         ).pOnly(left: 10, right: 10),
                                       ),

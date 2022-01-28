@@ -57,7 +57,7 @@ class NewsFeedsViewAllController extends GetxController {
     getNewsFeeds();
   }
 
-  void report(BuildContext context, String feedId) async {
+  Future report(BuildContext context, String feedId) async {
     var loader = ProgressView(context);
     loader.show();
     userBean = await PrefManager.getUser();
@@ -72,6 +72,7 @@ class NewsFeedsViewAllController extends GetxController {
       Utils().showSnackBar(Get.context, baseBean.message);
     }
     getNewsFeeds();
+
     update();
   }
 

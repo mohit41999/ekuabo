@@ -20,6 +20,20 @@ class HomeViewRepository {
     _httpService = HttpServiceImpl();
     _httpService.init();
   }
+  Future<MarketPlaceBean> reportMarketplace(String marketplace_id) async {
+    try {
+      UserBean userBean = await PrefManager.getUser();
+      var response = await _httpService.postRequest(
+          'marketplace/add_marketplace_report.php',
+          {'user_id': userBean.data.id, 'marketplace_id': marketplace_id});
+      var jsonString = json.decode(response.data);
+      return MarketPlaceBean.fromJson(jsonString);
+    } on HttpException catch (e) {
+      Utils().showSnackBar(Get.context, e.response);
+    }
+    return null;
+  }
+
   Future<MarketPlaceBean> getHomeMarketPlace() async {
     try {
       UserBean userBean = await PrefManager.getUser();

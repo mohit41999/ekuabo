@@ -3,6 +3,9 @@ import 'dart:convert';
 import 'package:ekuabo/model/apimodel/group/GroupdetailsModel.dart';
 import 'package:ekuabo/model/apimodel/user_bean.dart';
 import 'package:ekuabo/utils/pref_manager.dart';
+import 'package:ekuabo/utils/utils.dart';
+import 'package:ekuabo/widgets/progress_view.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 
 class GroupDetailsServices {
@@ -71,17 +74,24 @@ class GroupDetailsServices {
     print(Response);
   }
 
-  Future reportgroupfeed(String feed_id) async {
+  Future reportgroupfeed(BuildContext context, String feed_id) async {
+    var loader = ProgressView(context);
+    loader.show();
     UserBean userBean = await PrefManager.getUser();
     var response = await http.post(
-        Uri.parse('https://eku-abo.com/api/group/add_reported_group_feed.php'),
+        Uri.parse('https://eku-abo.com/api/feed/feed_add_reported.php'),
         body: {
           'token': token,
           'user_id': userBean.data.id,
           'feed_id': feed_id,
         });
-
+    loader.dismiss();
     var Response = jsonDecode(response.body);
+    if (!Response['status']) {
+      Utils().showSnackBar(context, Response['message']);
+    } else {
+      Utils().showSnackBar(context, Response['message']);
+    }
     print(Response);
   }
 

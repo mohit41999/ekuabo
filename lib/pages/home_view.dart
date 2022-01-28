@@ -4,8 +4,10 @@ import 'package:ekuabo/controller/blog_controller.dart';
 import 'package:ekuabo/controller/home_controller.dart';
 import 'package:ekuabo/controller/home_view_controller.dart';
 import 'package:ekuabo/controller/market_place_controller.dart';
+import 'package:ekuabo/controller/news_feeds_view_all_controller.dart';
 import 'package:ekuabo/model/apimodel/banner/display_banner_ads.dart';
 import 'package:ekuabo/model/apimodel/market_place/category_bean.dart';
+import 'package:ekuabo/widgets/progress_view.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:ekuabo/model/uiModel/MostRecentFeedModel.dart';
 import 'package:ekuabo/pages/userShopMarket.dart';
@@ -213,7 +215,7 @@ class _HomeViewState extends State<HomeView> {
                         .objectTopLeft()
                         .pOnly(left: 16)
                     : Container(
-                        height: 200,
+                        height: 230,
                         child: ListView.builder(
                             physics: const BouncingScrollPhysics(),
                             shrinkWrap: true,
@@ -221,7 +223,7 @@ class _HomeViewState extends State<HomeView> {
                             itemCount: _con.newsFeeds.length,
                             itemBuilder: (ctx, index) {
                               return VxCard(Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   CachedNetworkImage(
                                     imageUrl: _con.newsFeeds[index]
@@ -273,6 +275,33 @@ class _HomeViewState extends State<HomeView> {
                                     //           left: 10,
                                     //         ),
                                   ),
+                                  5.heightBox,
+                                  GestureDetector(
+                                      onTap: () {
+                                        Get.find<NewsFeedsViewAllController>()
+                                            .report(context,
+                                                _con.newsFeeds[index].feedId)
+                                            .then((value) {
+                                          setState(() {
+                                            _con.getMostRecentNewsFeed();
+                                          });
+                                        });
+                                      },
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                            border:
+                                                Border.all(color: Colors.red)),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(2.0),
+                                          child: Text(
+                                            'Report!!!',
+                                            style: TextStyle(
+                                                fontSize: 11,
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.red),
+                                          ),
+                                        ),
+                                      )),
                                   5.heightBox,
                                   Expanded(
                                     child: Row(
@@ -389,6 +418,49 @@ class _HomeViewState extends State<HomeView> {
                                                   '...',
                                             ),
                                           ),
+                                    5.heightBox,
+                                    GestureDetector(
+                                        onTap: () {
+                                          Get.find<BlogController>()
+                                              .ReportBlog(
+                                                  context,
+                                                  _blogcon
+                                                      .mostRecentBlogs[index]
+                                                      .blogId)
+                                              .then((value) {
+                                            setState(() {
+                                              _blogcon
+                                                  .getMostRecent()
+                                                  .then((value) {
+                                                setState(() {});
+                                              });
+                                            });
+                                          });
+                                        },
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(
+                                              right: 16.0),
+                                          child: Align(
+                                            alignment: Alignment.centerRight,
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                  border: Border.all(
+                                                      color: Colors.red)),
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(2.0),
+                                                child: Text(
+                                                  'Report!!!',
+                                                  style: TextStyle(
+                                                      fontSize: 11,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: Colors.red),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        )),
                                     Row(
                                       children: [
                                         Icon(
@@ -533,6 +605,31 @@ class _HomeViewState extends State<HomeView> {
                                               .make()
                                               .pOnly(left: 10, top: 16)),
                                       10.heightBox,
+                                      GestureDetector(
+                                          onTap: () {
+                                            _con.reportMarketplace(context,
+                                                homeMarketPlace.marketplaceId);
+                                          },
+                                          child: Padding(
+                                              padding: const EdgeInsets.only(
+                                                  left: 10.0, bottom: 10),
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                    border: Border.all(
+                                                        color: Colors.red)),
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(2.0),
+                                                  child: Text(
+                                                    'Report!!!',
+                                                    style: TextStyle(
+                                                        fontSize: 11,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        color: Colors.red),
+                                                  ),
+                                                ),
+                                              ))),
                                       Row(
                                         children: [
                                           Row(

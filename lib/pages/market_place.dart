@@ -33,6 +33,7 @@ class _MarketPlaceState extends State<MarketPlace> {
   final _adcon = Get.find<AddBannerController>();
   List<BannerModelData> MarketHorizontalAd = [];
   List<BannerModelData> MarketVerticalAd = [];
+
   void callads() {
     _adcon.getslotads(context, '5').then((value) {
       setState(() {
@@ -339,6 +340,29 @@ class marketlistTile extends StatelessWidget {
               16.heightBox,
             ],
           ).pOnly(left: 10),
+          10.heightBox,
+          Padding(
+            padding: const EdgeInsets.only(left: 8.0),
+            child: GestureDetector(
+                onTap: () {
+                  _con.reportMarketplace(
+                      context, _con.marketPlaces[index].marketplaceId);
+                },
+                child: Container(
+                  decoration:
+                      BoxDecoration(border: Border.all(color: Colors.red)),
+                  child: Padding(
+                    padding: const EdgeInsets.all(2.0),
+                    child: Text(
+                      'Report!!!',
+                      style: TextStyle(
+                          fontSize: 11,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.red),
+                    ),
+                  ),
+                )),
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [

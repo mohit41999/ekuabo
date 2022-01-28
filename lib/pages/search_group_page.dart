@@ -9,6 +9,7 @@ import 'package:ekuabo/pages/home_view.dart';
 import 'package:ekuabo/utils/color.dart';
 import 'package:ekuabo/utils/ekuabo_asset.dart';
 import 'package:ekuabo/utils/pref_manager.dart';
+import 'package:ekuabo/utils/utils.dart';
 import 'package:ekuabo/widgets/UnderlineWidget.dart';
 import 'package:ekuabo/widgets/progress_view.dart';
 import 'package:flutter/cupertino.dart';
@@ -75,6 +76,31 @@ class _SearchGroupState extends State<SearchGroup> {
     var Response = jsonDecode(response.body);
     print(Response);
     loader.dismiss();
+    return Response;
+  }
+
+  Future ReportGroup(String group_id) async {
+    var loader = ProgressView(context);
+    UserBean userBean = await PrefManager.getUser();
+    loader.show();
+    var response = await http.post(
+        Uri.parse('https://eku-abo.com/api/group/add_report_group.php'),
+        body: {
+          'token': token,
+          'user_id': userBean.data.id,
+          'group_id': group_id
+        });
+    var Response = jsonDecode(response.body);
+    print(Response);
+    loader.dismiss();
+    if (Response['status']) {
+      Utils().showSnackBar(context, Response['message']);
+      setState(() {
+        searchmodel = SearchGroupServices().SearchGroupService('');
+      });
+    } else {
+      Utils().showSnackBar(context, Response['message']);
+    }
     return Response;
   }
 
@@ -316,79 +342,87 @@ class _SearchGroupState extends State<SearchGroup> {
                                                                         'Posts')
                                                               ],
                                                             ),
-                                                            Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                          .only(
-                                                                      left:
-                                                                          10.0,
-                                                                      right:
-                                                                          30),
-                                                              child:
-                                                                  MaterialButton(
-                                                                onPressed: () {
-                                                                  (snapshot.data.data[index].groupStatus ==
-                                                                          'n')
-                                                                      ? joinGrouprequest(snapshot
-                                                                              .data
-                                                                              .data[
-                                                                                  index]
-                                                                              .groupId)
-                                                                          .then(
-                                                                              (value) {
-                                                                          setState(
-                                                                              () {
-                                                                            searchmodel =
-                                                                                SearchGroupServices().SearchGroupService(_username.text);
+                                                            Row(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .spaceBetween,
+                                                              children: [
+                                                                GestureDetector(
+                                                                  onTap: () {
+                                                                    (snapshot.data.data[index].groupStatus ==
+                                                                            'n')
+                                                                        ? joinGrouprequest(snapshot.data.data[index].groupId).then(
+                                                                            (value) {
+                                                                            setState(() {
+                                                                              searchmodel = SearchGroupServices().SearchGroupService(_username.text);
+                                                                            });
+                                                                          })
+                                                                        : leaveGrouprequest(snapshot.data.data[index].groupId)
+                                                                            .then((value) {
+                                                                            setState(() {
+                                                                              searchmodel = SearchGroupServices().SearchGroupService(_username.text);
+                                                                            });
                                                                           });
-                                                                        })
-                                                                      : leaveGrouprequest(snapshot
-                                                                              .data
-                                                                              .data[index]
-                                                                              .groupId)
-                                                                          .then((value) {
-                                                                          setState(
-                                                                              () {
-                                                                            searchmodel =
-                                                                                SearchGroupServices().SearchGroupService(_username.text);
-                                                                          });
-                                                                        });
-                                                                },
-                                                                shape:
-                                                                    RoundedRectangleBorder(
-                                                                  side: BorderSide(
-                                                                      color: MyColor
-                                                                          .mainColor),
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .circular(
-                                                                              20),
-                                                                ),
-                                                                child: Row(
-                                                                  mainAxisAlignment:
-                                                                      MainAxisAlignment
-                                                                          .spaceEvenly,
-                                                                  children: [
-                                                                    Icon(
-                                                                      Icons
-                                                                          .logout,
-                                                                      color: MyColor
-                                                                          .mainColor,
+                                                                  },
+                                                                  child:
+                                                                      Container(
+                                                                    decoration: BoxDecoration(
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(
+                                                                                10),
+                                                                        border: Border.all(
+                                                                            color:
+                                                                                MyColor.mainColor)),
+                                                                    child:
+                                                                        Padding(
+                                                                      padding:
+                                                                          const EdgeInsets.all(
+                                                                              4.0),
+                                                                      child:
+                                                                          Row(
+                                                                        mainAxisAlignment:
+                                                                            MainAxisAlignment.spaceEvenly,
+                                                                        children: [
+                                                                          Icon(
+                                                                            Icons.logout,
+                                                                            color:
+                                                                                MyColor.mainColor,
+                                                                          ),
+                                                                          Text(
+                                                                            (snapshot.data.data[index].groupStatus == 'n')
+                                                                                ? 'Join Group'
+                                                                                : (snapshot.data.data[index].groupStatus == 'p')
+                                                                                    ? 'Pending'
+                                                                                    : 'Leave Group',
+                                                                            style:
+                                                                                TextStyle(color: MyColor.mainColor),
+                                                                          ),
+                                                                        ],
+                                                                      ),
                                                                     ),
-                                                                    Text(
-                                                                      (snapshot.data.data[index].groupStatus ==
-                                                                              'n')
-                                                                          ? 'Join Group'
-                                                                          : (snapshot.data.data[index].groupStatus == 'p')
-                                                                              ? 'Pending'
-                                                                              : 'Leave Group',
-                                                                      style: TextStyle(
-                                                                          color:
-                                                                              MyColor.mainColor),
-                                                                    ),
-                                                                  ],
+                                                                  ),
                                                                 ),
-                                                              ),
+                                                                GestureDetector(
+                                                                    onTap: () {
+                                                                      ReportGroup(snapshot
+                                                                          .data
+                                                                          .data[
+                                                                              index]
+                                                                          .groupId);
+                                                                    },
+                                                                    child: Container(
+                                                                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), border: Border.all(color: Colors.red)),
+                                                                        child: Padding(
+                                                                          padding:
+                                                                              const EdgeInsets.all(8.0),
+                                                                          child:
+                                                                              Text(
+                                                                            'Report!!!',
+                                                                            style:
+                                                                                TextStyle(color: Colors.red),
+                                                                          ),
+                                                                        )))
+                                                              ],
                                                             )
                                                           ],
                                                         ),
@@ -524,64 +558,77 @@ class _SearchGroupState extends State<SearchGroup> {
                                                                             'Posts')
                                                                   ],
                                                                 ),
-                                                                Padding(
-                                                                  padding: const EdgeInsets
-                                                                          .only(
-                                                                      left:
-                                                                          10.0,
-                                                                      right:
-                                                                          30),
-                                                                  child:
-                                                                      MaterialButton(
-                                                                    onPressed:
-                                                                        () {
-                                                                      (snapshot.data.data[index].groupStatus ==
-                                                                              'n')
-                                                                          ? joinGrouprequest(snapshot.data.data[index].groupId).then(
-                                                                              (value) {
-                                                                              setState(() {
-                                                                                searchmodel = SearchGroupServices().SearchGroupService(_username.text);
+                                                                Row(
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .spaceBetween,
+                                                                  children: [
+                                                                    GestureDetector(
+                                                                      onTap:
+                                                                          () {
+                                                                        (snapshot.data.data[index].groupStatus ==
+                                                                                'n')
+                                                                            ? joinGrouprequest(snapshot.data.data[index].groupId).then((value) {
+                                                                                setState(() {
+                                                                                  searchmodel = SearchGroupServices().SearchGroupService(_username.text);
+                                                                                });
+                                                                              })
+                                                                            : leaveGrouprequest(snapshot.data.data[index].groupId).then((value) {
+                                                                                setState(() {
+                                                                                  searchmodel = SearchGroupServices().SearchGroupService(_username.text);
+                                                                                });
                                                                               });
-                                                                            })
-                                                                          : leaveGrouprequest(snapshot.data.data[index].groupId)
-                                                                              .then((value) {
-                                                                              setState(() {
-                                                                                searchmodel = SearchGroupServices().SearchGroupService(_username.text);
-                                                                              });
-                                                                            });
-                                                                    },
-                                                                    shape:
-                                                                        RoundedRectangleBorder(
-                                                                      side: BorderSide(
-                                                                          color:
-                                                                              MyColor.mainColor),
-                                                                      borderRadius:
-                                                                          BorderRadius.circular(
-                                                                              20),
-                                                                    ),
-                                                                    child: Row(
-                                                                      mainAxisAlignment:
-                                                                          MainAxisAlignment
-                                                                              .spaceEvenly,
-                                                                      children: [
-                                                                        Icon(
-                                                                          Icons
-                                                                              .logout,
-                                                                          color:
-                                                                              MyColor.mainColor,
+                                                                      },
+                                                                      child:
+                                                                          Container(
+                                                                        decoration: BoxDecoration(
+                                                                            borderRadius:
+                                                                                BorderRadius.circular(10),
+                                                                            border: Border.all(color: MyColor.mainColor)),
+                                                                        child:
+                                                                            Padding(
+                                                                          padding:
+                                                                              const EdgeInsets.all(4.0),
+                                                                          child:
+                                                                              Row(
+                                                                            mainAxisAlignment:
+                                                                                MainAxisAlignment.spaceEvenly,
+                                                                            children: [
+                                                                              Icon(
+                                                                                Icons.logout,
+                                                                                color: MyColor.mainColor,
+                                                                              ),
+                                                                              Text(
+                                                                                (snapshot.data.data[index].groupStatus == 'n')
+                                                                                    ? 'Join Group'
+                                                                                    : (snapshot.data.data[index].groupStatus == 'p')
+                                                                                        ? 'Pending'
+                                                                                        : 'Leave Group',
+                                                                                style: TextStyle(color: MyColor.mainColor),
+                                                                              ),
+                                                                            ],
+                                                                          ),
                                                                         ),
-                                                                        Text(
-                                                                          (snapshot.data.data[index].groupStatus == 'n')
-                                                                              ? 'Join Group'
-                                                                              : (snapshot.data.data[index].groupStatus == 'p')
-                                                                                  ? 'Pending'
-                                                                                  : 'Leave Group',
-                                                                          style:
-                                                                              TextStyle(color: MyColor.mainColor),
-                                                                        ),
-                                                                      ],
+                                                                      ),
                                                                     ),
-                                                                  ),
+                                                                    GestureDetector(
+                                                                        onTap:
+                                                                            () {
+                                                                          ReportGroup(snapshot
+                                                                              .data
+                                                                              .data[index]
+                                                                              .groupId);
+                                                                        },
+                                                                        child: Container(
+                                                                            decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), border: Border.all(color: Colors.red)),
+                                                                            child: Padding(
+                                                                              padding: const EdgeInsets.all(8.0),
+                                                                              child: Text(
+                                                                                'Report!!!',
+                                                                                style: TextStyle(color: Colors.red),
+                                                                              ),
+                                                                            )))
+                                                                  ],
                                                                 )
                                                               ],
                                                             ),
@@ -714,79 +761,87 @@ class _SearchGroupState extends State<SearchGroup> {
                                                                         'Posts')
                                                               ],
                                                             ),
-                                                            Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                          .only(
-                                                                      left:
-                                                                          10.0,
-                                                                      right:
-                                                                          30),
-                                                              child:
-                                                                  MaterialButton(
-                                                                onPressed: () {
-                                                                  (snapshot.data.data[index].groupStatus ==
-                                                                          'n')
-                                                                      ? joinGrouprequest(snapshot
-                                                                              .data
-                                                                              .data[
-                                                                                  index]
-                                                                              .groupId)
-                                                                          .then(
-                                                                              (value) {
-                                                                          setState(
-                                                                              () {
-                                                                            searchmodel =
-                                                                                SearchGroupServices().SearchGroupService(_username.text);
+                                                            Row(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .spaceBetween,
+                                                              children: [
+                                                                GestureDetector(
+                                                                  onTap: () {
+                                                                    (snapshot.data.data[index].groupStatus ==
+                                                                            'n')
+                                                                        ? joinGrouprequest(snapshot.data.data[index].groupId).then(
+                                                                            (value) {
+                                                                            setState(() {
+                                                                              searchmodel = SearchGroupServices().SearchGroupService(_username.text);
+                                                                            });
+                                                                          })
+                                                                        : leaveGrouprequest(snapshot.data.data[index].groupId)
+                                                                            .then((value) {
+                                                                            setState(() {
+                                                                              searchmodel = SearchGroupServices().SearchGroupService(_username.text);
+                                                                            });
                                                                           });
-                                                                        })
-                                                                      : leaveGrouprequest(snapshot
-                                                                              .data
-                                                                              .data[index]
-                                                                              .groupId)
-                                                                          .then((value) {
-                                                                          setState(
-                                                                              () {
-                                                                            searchmodel =
-                                                                                SearchGroupServices().SearchGroupService(_username.text);
-                                                                          });
-                                                                        });
-                                                                },
-                                                                shape:
-                                                                    RoundedRectangleBorder(
-                                                                  side: BorderSide(
-                                                                      color: MyColor
-                                                                          .mainColor),
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .circular(
-                                                                              20),
-                                                                ),
-                                                                child: Row(
-                                                                  mainAxisAlignment:
-                                                                      MainAxisAlignment
-                                                                          .spaceEvenly,
-                                                                  children: [
-                                                                    Icon(
-                                                                      Icons
-                                                                          .logout,
-                                                                      color: MyColor
-                                                                          .mainColor,
+                                                                  },
+                                                                  child:
+                                                                      Container(
+                                                                    decoration: BoxDecoration(
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(
+                                                                                10),
+                                                                        border: Border.all(
+                                                                            color:
+                                                                                MyColor.mainColor)),
+                                                                    child:
+                                                                        Padding(
+                                                                      padding:
+                                                                          const EdgeInsets.all(
+                                                                              4.0),
+                                                                      child:
+                                                                          Row(
+                                                                        mainAxisAlignment:
+                                                                            MainAxisAlignment.spaceEvenly,
+                                                                        children: [
+                                                                          Icon(
+                                                                            Icons.logout,
+                                                                            color:
+                                                                                MyColor.mainColor,
+                                                                          ),
+                                                                          Text(
+                                                                            (snapshot.data.data[index].groupStatus == 'n')
+                                                                                ? 'Join Group'
+                                                                                : (snapshot.data.data[index].groupStatus == 'p')
+                                                                                    ? 'Pending'
+                                                                                    : 'Leave Group',
+                                                                            style:
+                                                                                TextStyle(color: MyColor.mainColor),
+                                                                          ),
+                                                                        ],
+                                                                      ),
                                                                     ),
-                                                                    Text(
-                                                                      (snapshot.data.data[index].groupStatus ==
-                                                                              'n')
-                                                                          ? 'Join Group'
-                                                                          : (snapshot.data.data[index].groupStatus == 'p')
-                                                                              ? 'Pending'
-                                                                              : 'Leave Group',
-                                                                      style: TextStyle(
-                                                                          color:
-                                                                              MyColor.mainColor),
-                                                                    ),
-                                                                  ],
+                                                                  ),
                                                                 ),
-                                                              ),
+                                                                GestureDetector(
+                                                                    onTap: () {
+                                                                      ReportGroup(snapshot
+                                                                          .data
+                                                                          .data[
+                                                                              index]
+                                                                          .groupId);
+                                                                    },
+                                                                    child: Container(
+                                                                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), border: Border.all(color: Colors.red)),
+                                                                        child: Padding(
+                                                                          padding:
+                                                                              const EdgeInsets.all(8.0),
+                                                                          child:
+                                                                              Text(
+                                                                            'Report!!!',
+                                                                            style:
+                                                                                TextStyle(color: Colors.red),
+                                                                          ),
+                                                                        )))
+                                                              ],
                                                             )
                                                           ],
                                                         ),
